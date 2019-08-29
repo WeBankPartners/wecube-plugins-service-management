@@ -33,7 +33,7 @@ public class ServiceRequestController {
 		return okayWithData(serviceRequestService.getAllServiceRequest());
 	}
 
-	@PostMapping("/query")
+//	@PostMapping("/query")
 	public JsonResponse queryServiceRequest() {
 		// TODO - query by filters
 		return okayWithData("TODO");
