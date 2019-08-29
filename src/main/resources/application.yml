@@ -1,0 +1,26 @@
+server: 
+  port: 21000
+  address: localhost
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://129.204.99.160:3306/service_management?characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/wecube_core_01?characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: Apps@123
+
+  banner:
+    location: classpath:/banner.txt
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    open-in-view: false
+service:
+  management: 
+    httpclient:
+      max-total-connections: 200
