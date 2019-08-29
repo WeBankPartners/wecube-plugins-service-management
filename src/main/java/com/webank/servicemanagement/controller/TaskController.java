@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webank.servicemanagement.dto.CreateTaskRequest;
 import com.webank.servicemanagement.dto.JsonResponse;
+import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.service.TaskService;
 
@@ -33,14 +34,14 @@ public class TaskController {
 	}
 
 	@PostMapping("/takeover")
-	public JsonResponse takeover(@RequestBody UpdateTaskRequest receiveTaskrequest) {
-		taskService.receiveTask(receiveTaskrequest);
+	public JsonResponse takeover(@RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
+		taskService.takeOverTask(takeOverTaskrequest);
 		return okay();
 	}
 
 	@PostMapping("/process")
-	public JsonResponse process(@RequestBody UpdateTaskRequest receiveTaskrequest) {
-		taskService.receiveTask(receiveTaskrequest);
+	public JsonResponse process(@RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
+		taskService.processTask(processTaskRequest);
 		return okay();
 	}
 }
