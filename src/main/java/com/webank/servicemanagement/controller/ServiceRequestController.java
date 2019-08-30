@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestResponse;
 import com.webank.servicemanagement.dto.JsonResponse;
+import com.webank.servicemanagement.dto.QueryRequest;
+import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
@@ -20,6 +23,9 @@ public class ServiceRequestController {
 
 	@Autowired
 	ServiceRequestService serviceRequestService;
+
+	@Autowired
+	EntityRepository entityRepository;
 
 	@PostMapping("/create")
 	public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest rquest) {
@@ -33,9 +39,8 @@ public class ServiceRequestController {
 		return okayWithData(serviceRequestService.getAllServiceRequest());
 	}
 
-//	@PostMapping("/query")
-	public JsonResponse queryServiceRequest() {
-		// TODO - query by filters
-		return okayWithData("TODO");
+	@PostMapping("/query")
+	public JsonResponse queryServiceRequest(@RequestBody QueryRequest queryRequest) throws Exception {
+		return okayWithData(entityRepository.query(ServiceRequest.class, queryRequest));
 	}
 }
