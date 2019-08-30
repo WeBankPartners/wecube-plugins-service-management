@@ -3,15 +3,14 @@ server:
   address: localhost
 
 spring:
-  profiles:
-    active: dev
-    
-spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db-server:port/database-name?characterEncoding=utf8&serverTimezone=UTC
-    username: db-user
-    password: db-password
+    #url: jdbc:mysql://129.204.99.160:3306/service_management?characterEncoding=utf8&serverTimezone=UTC
+    #username: sm
+    #password: Abcd1234
+    url: jdbc:mysql://localhost:3306/wecube_core_01?characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: Apps@123
 
   banner:
     location: classpath:/banner.txt
