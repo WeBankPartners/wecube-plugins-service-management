@@ -1,12 +1,10 @@
 server: 
   port: 21000
   address: localhost
-
+    
 spring:
   profiles:
     active: dev
-    
-spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://db-server:port/database-name?characterEncoding=utf8&serverTimezone=UTC
