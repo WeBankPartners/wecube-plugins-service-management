@@ -1,5 +1,7 @@
 package com.webank.servicemanagement.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,16 +21,18 @@ public class TaskService {
 	@Autowired
 	TaskRepository taskRepository;
 
-	private final static String STATUS_CREATED = "Created";
-	private final static String STATUS_RECEIVED = "Received";
-	private final static String STATUS_DONE = "Done";
+	private final static String STATUS_PENDING = "Pending";
+	private final static String STATUS_PROCESSING = "Processing";
+	private final static String STATUS_SUCCESSFUL = "Successful";
+	private final static String STATUS_FAILED = "Failed";
 
-	public Task createTask(CreateTaskRequest createTaskRequest) {
-		Task task = new Task(null, 1, "processInstanceId_test", "http://127.0.0.1/helloworld/test", "test-taksName",
-				"processDefinitionKey_test", "haha", "2019-08-29 14:52:38", "hehe", "2019-08-29 14:52:41", "input",
-				"description1", null, null, "active");
+	public void createTask(CreateTaskRequest createTaskRequest) {
+		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		Task task = new Task(createTaskRequest.getServiceRequestId(), createTaskRequest.getProcessInstanceId(),
+				createTaskRequest.getCallbackUrl(), createTaskRequest.getName(),
+				createTaskRequest.getProcessDefinitionKey(), createTaskRequest.getReporter(), currentTime,
+				createTaskRequest.getDescription(), STATUS_PENDING);
 		taskRepository.save(task);
-		return task;
 	}
 
 	public List<Task> getAllTask() {
@@ -53,8 +57,10 @@ public class TaskService {
 			throw new Exception("Can not found the specified task, please check !");
 		}
 		task = taskResult.get();
+		task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		task.setResult(processTaskRequest.getResult());
 		task.setResultMessage(processTaskRequest.getResultMessage());
+		task.setStatus(processTaskRequest.getResult());
 		taskRepository.save(task);
 	}
 
