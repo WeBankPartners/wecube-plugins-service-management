@@ -20,7 +20,7 @@ import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/tasks")
 public class TaskController {
 
 	@Autowired
@@ -30,8 +30,9 @@ public class TaskController {
 	EntityRepository entityRepository;
 
 	@PostMapping("/create")
-	public JsonResponse createTask() {
-		return okayWithData(taskService.createTask(new CreateTaskRequest()));
+	public JsonResponse createTask(@RequestBody CreateTaskRequest createTaskRequest) {
+		taskService.createTask(createTaskRequest);
+		return okay();
 	}
 
 	@GetMapping("/retrieve")

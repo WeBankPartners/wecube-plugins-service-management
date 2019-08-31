@@ -9,5 +9,4 @@ public class CreateServiceRequestRequest {
 	private String reporter;
 	private String emergency;
 	private String description;
-	private String attachFile;
 }

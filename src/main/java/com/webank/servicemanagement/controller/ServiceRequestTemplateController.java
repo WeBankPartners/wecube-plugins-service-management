@@ -11,7 +11,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServiceRequestTemplateService;
 
 @RestController
-@RequestMapping("/service-request-template")
+@RequestMapping("/service-request-templates")
 public class ServiceRequestTemplateController {
 
 	@Autowired
@@ -27,7 +27,7 @@ public class ServiceRequestTemplateController {
 		return okayWithData(serviceRequestTemplateService.getAllServiceRequestTemplate());
 	}
 
-	@GetMapping("/getAllAvailable")
+	@GetMapping("/available")
 	public JsonResponse getAllAvailableServiceTemplate() {
 		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceRequestTemplate());
 	}

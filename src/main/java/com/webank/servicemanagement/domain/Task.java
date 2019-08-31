@@ -6,13 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "task")
 public class Task {
@@ -20,6 +16,22 @@ public class Task {
 	@Id
 	@GeneratedValue
 	private Integer id;
+
+	public Task() {
+	}
+
+	public Task(int serviceRequestId, String processInstanceId, String callbackUrl, String name,
+			String processDefinitionKey, String reporter,String reportTime, String description, String status) {
+		this.serviceRequestId = serviceRequestId;
+		this.processInstanceId = processInstanceId;
+		this.callbackUrl = callbackUrl;
+		this.name = name;
+		this.processDefinitionKey = processDefinitionKey;
+		this.reporter = reporter;
+		this.reportTime = reportTime;
+		this.description = description;
+		this.status = status;
+	}
 
 	@Column(name = "service_request_id")
 	private int serviceRequestId;
