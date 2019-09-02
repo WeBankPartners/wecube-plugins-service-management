@@ -1,9 +1,22 @@
-HELP.md
+# !.mvn/wrapper/maven-wrapper.jar
+# !**/src/main/**
+# !**/src/test/**
 target/
-*/application-dev.yml
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+*/target/
+*/bin/
+*/node_modules/
+*/dist/
+*.log
+*.log.*.gz
+*/package-lock.json
+*/node/
+
+# Ignore the generated front-end resource
+**/resources/static/
+# Ignore the generated index.html
+**/resources/templates/index.html
+# Ignore the developer's config file
+**/resources/application-dev.yml
 
 ### STS ###
 .apt_generated
@@ -30,3 +43,12 @@ build/
 
 ### VS Code ###
 .vscode/
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*dist
+*dist.zip
+
+.DS_Store
