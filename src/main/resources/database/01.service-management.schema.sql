@@ -14,7 +14,7 @@ CREATE TABLE `service_request` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`template_id` INT(11) NOT NULL ,
 	`name` VARCHAR(255) NOT NULL,
-	`reporter_role_id` INT(11) NULL DEFAULT NULL,
+	`reporter_role_id` INT(11) NOT NULL DEFAULT '0',
 	`reporter` VARCHAR(64) NULL DEFAULT NULL,
 	`report_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`emergency` VARCHAR(32) NULL,
