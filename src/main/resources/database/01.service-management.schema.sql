@@ -19,11 +19,18 @@ CREATE TABLE `service_request` (
 	`report_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`emergency` VARCHAR(32) NULL,
 	`description` VARCHAR(255) NOT NULL,
-	`attach_file_name` VARCHAR(255) NULL,
-	`attach_file` MEDIUMTEXT NULL,
+	`attach_file_id` INT(11) NULL DEFAULT NULL,
 	`result` VARCHAR(32) NULL,
 	`process_instance_id` VARCHAR(255) NULL DEFAULT NULL,
 	`status` VARCHAR(32) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+);
+
+drop table if exists `attach_file`;
+CREATE TABLE `attach_file` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`attach_file_name` VARCHAR(255) NULL,
+	`attach_file` MEDIUMTEXT NULL,
 	PRIMARY KEY (`id`)
 );
 
