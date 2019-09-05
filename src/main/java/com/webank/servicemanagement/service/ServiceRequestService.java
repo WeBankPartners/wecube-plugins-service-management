@@ -48,16 +48,18 @@ public class ServiceRequestService {
 
 	public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
 
-		checkUserAuthority(currentUserName, request.getTemplateId());
-
 		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
 				.findById(request.getTemplateId());
 		if (!serviceRequestTemplate.isPresent())
 			throw new Exception("Invalid service request template ID !");
+
+		Optional<AttachFile> attachFile = attachFileRepository.findById(request.getAttachFileId());
+		if (!attachFile.isPresent())
+			throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
 		ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
 				request.getRoleId(), request.getReporter(), currentTime, request.getEmergency(),
-				request.getDescription(), STATUS_SUBMITTED);
+				request.getDescription(), STATUS_SUBMITTED, attachFile.get());
 		serviceRequestRepository.save(serviceRequest);
 
 		StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
@@ -67,11 +69,6 @@ public class ServiceRequestService {
 
 		serviceRequest.setStatus(STATUS_PROCESSING);
 		serviceRequestRepository.save(serviceRequest);
-	}
-
-	private void checkUserAuthority(String userName, int serviceTemplateId) {
-		// TODO - check user whether has authority to use the specified
-		// template ID
 	}
 
 	public List<ServiceRequest> getAllServiceRequest() {

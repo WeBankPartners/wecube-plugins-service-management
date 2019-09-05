@@ -2,9 +2,10 @@ package com.webank.servicemanagement.controller;
 
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +28,9 @@ public class UserController {
 	@Autowired
 	MockCoreServiceStub coreServiceStub;
 
-	@GetMapping("/{user-name}/roles")
-	public JsonResponse createServiceRequest(@PathVariable(value = "user-name") String userName) {
-		return okayWithData(coreServiceStub.getRolesByUserName(userName));
+	@GetMapping("/current-user/roles")
+	public JsonResponse getRolesByCurrentUser(HttpServletRequest httpRequest) {
+		return okayWithData(coreServiceStub.getRolesByUserName(httpRequest.getHeader("Current_User")));
 	}
 
 }
