@@ -21,7 +21,10 @@ spring:
       ddl-auto: none
       use-new-id-generator-mappings: false
     open-in-view: false
+
 service:
   management: 
     httpclient:
       max-total-connections: 200
+    wecube-core-address: localhost:8080
+    user-name: umadmin
