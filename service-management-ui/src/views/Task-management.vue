@@ -9,6 +9,8 @@
           :pagination="requestPagination"
           @actionFun="actionFun"
           @handleSubmit="handleSubmit"
+          @pageChange="requestPageChange"
+          @pageSizeChange="requestPageSizeChange"
         />
       </TabPane>
       <TabPane :closable="false" name="handler" label="本组处理">
@@ -19,6 +21,8 @@
           :pagination="handlerPagination"
           @actionFun="actionFun"
           @handleSubmit="handleSubmitForprocess"
+          @pageChange="handlerPageChange"
+          @pageSizeChange="handlerPageSizeChange"
         />
       </TabPane>
     </Tabs>
@@ -441,21 +445,28 @@ export default {
           break;
       }
     },
-
+    requestPageChange(current) {
+      this.requestPagination.currentPage = current;
+      this.getData();
+    },
+    requestPageSizeChange(size) {
+      this.requestPagination.pageSize = size;
+      this.getData();
+    },
+    handlerPageChange(current) {
+      this.handlerPagination.currentPage = current;
+      this.getProcessData();
+    },
+    handlerPageSizeChange(size) {
+      this.handlerPagination.pageSize = size;
+      this.getProcessData();
+    },
     handleSubmit(filters) {
       this.requestPayload.filters = filters;
-      this.requestPayload.pageable.pageSize = this.requestPagination.pageSize;
-      this.requestPayload.pageable.startIndex =
-        this.requestPagination.pageSize *
-        (this.requestPagination.currentPage - 1);
       this.getData();
     },
     handleSubmitForprocess(filters) {
       this.handlerPayload.filters = filters;
-      this.handlerPayload.pageable.pageSize = this.handlerPagination.pageSize;
-      this.handlerPayload.pageable.startIndex =
-        this.handlerPagination.pageSize *
-        (this.handlerPagination.currentPage - 1);
       this.getProcessData();
     },
     handleTabClick(tab) {
@@ -466,6 +477,10 @@ export default {
       }
     },
     async getProcessData() {
+      this.handlerPayload.pageable.pageSize = this.handlerPagination.pageSize;
+      this.handlerPayload.pageable.startIndex =
+        this.handlerPagination.pageSize *
+        (this.handlerPagination.currentPage - 1);
       const { status, message, data } = await queryTask(
         this.handlerPayload
       );
@@ -475,6 +490,10 @@ export default {
       }
     },
     async getData() {
+      this.requestPayload.pageable.pageSize = this.requestPagination.pageSize;
+      this.requestPayload.pageable.startIndex =
+        this.requestPagination.pageSize *
+        (this.requestPagination.currentPage - 1);
       const { status, message, data } = await queryServiceRequest(
         this.requestPayload
       );
