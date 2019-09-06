@@ -39,6 +39,11 @@
           <FormItem label="服务请求名称">
             <Input v-model="requestForm.name" placeholder="name"></Input>
           </FormItem>
+          <FormItem label="服务请求角色">
+            <Select v-model="requestForm.roleId">
+              <Option v-for="role in currentUserRoles" :value="role.roleId">{{role.description}}</Option>
+            </Select>
+          </FormItem>
           <FormItem label="紧急程度">
             <Select v-model="requestForm.emergency">
               <Option value="normal">一般</Option>
@@ -49,7 +54,7 @@
             <Input v-model="requestForm.description" placeholder="description"></Input>
           </FormItem>
           <FormItem label="请求附件">
-            <Upload @on-success="uploadSuccess" action="/service-requests/1/attach-file/upload">
+            <Upload :on-success="uploadSuccess" action="/service-requests/1/attach-file/upload">
                 <Button icon="ios-cloud-upload-outline">Upload files</Button>
             </Upload>
           </FormItem>
@@ -98,7 +103,8 @@ import {
   getAllAvailableServiceTemplate,
   taskProcess,
   queryTask,
-  taskTakeover
+  taskTakeover,
+  getCurrentUserRoles
 } from "../api/server";
 
 export default {
@@ -115,7 +121,8 @@ export default {
         emergency: "",
         description: "",
         attachFileId: null,
-        templateId:''
+        templateId:'',
+        roleId:'',
       },
       handlerForm: {
         result: '',
@@ -126,13 +133,6 @@ export default {
       requestModalVisible: false,
       currentTab: "requset",
       requestColumns: [
-        {
-          title: "模板ID",
-          key: "templateId",
-          inputKey: "templateId",
-          component: "Input",
-          isNotFilterable: true
-        },
         {
           title: "服务请求名称",
           key: "name",
@@ -214,7 +214,7 @@ export default {
                   size="small"
                   onClick={() => this.downloadFile(params.row.id)}
                 >
-                  详情
+                  附件下载
                 </Button>
               </div>
             );
@@ -399,6 +399,7 @@ export default {
       body.removeChild(document.getElementById("downloadFile"));
     },
     uploadSuccess(res, file, fileList) {
+      console.log(res)
       this.requestForm.attachFileId = res.data
     },
     requestModalHide() {
@@ -413,11 +414,13 @@ export default {
       this.requestForm.emergency = ''
       this.requestForm.description = ''
       this.requestForm.templateId = ''
+      this.requestForm.roleId = ''
     },
     async requestSubmit() {
       const {status} = await createServiceRequest(this.requestForm)
       if(status === 'OK') {
         this.requestCancel()
+        this.getData();
       }
     },
     handlerCancel() {
@@ -483,12 +486,20 @@ export default {
     async taskTakeOver(id) {
       await taskTakeover({taskId:id});
       this.getProcessData();
-    }
+    },
+    async getTemplates() {
+      const {data} = await getAllAvailableServiceTemplate()
+      this.allTemplates = data
+    },
+    async getRolesByCurrentUser() {
+      const {data} = await getCurrentUserRoles()
+      this.currentUserRoles = data
+    },
   },
   async mounted() {
     this.getData();
-    const {data} = await getAllAvailableServiceTemplate()
-    this.allTemplates = data
+    this.getTemplates();
+    this.getRolesByCurrentUser()
   }
 };
 </script>

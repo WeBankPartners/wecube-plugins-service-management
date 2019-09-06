@@ -11,6 +11,9 @@ module.exports = {
       "/tasks": {
         target: " http://localhost:21000"
       },
+      "/users": {
+        target: " http://localhost:21000"
+      },
     }
   },
   runtimeCompiler: true,

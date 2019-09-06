@@ -8,6 +8,7 @@ export const getAllAvailableServiceTemplate = () => req.get(`/service-request-te
 export const taskProcess = data => req.post(`/tasks/process`, data);
 export const queryTask = data => req.post(`/tasks/query`, data);
 export const taskTakeover = data => req.post(`/tasks/takeover`, data);
+export const getCurrentUserRoles = () => req.get(`/users/current-user/roles`);
 
 
 
