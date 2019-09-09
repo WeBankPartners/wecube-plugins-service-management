@@ -42,7 +42,7 @@ public class TaskController {
 
 	@PostMapping("/takeover")
 	public JsonResponse takeover(@RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
-		taskService.takeOverTask(takeOverTaskrequest);
+		taskService.takeoverTask(takeOverTaskrequest);
 		return okay();
 	}
 

@@ -31,31 +31,29 @@ public abstract class DatabaseBasedTest extends ServiceManagementApplicationTest
 		cleanUpDatabase();
 	}
 
-    private void prepareDatabase() {
-        executeSqlScripts(newArrayList(
-                new ClassPathResource("/database/01.service-management.schema.sql")
-//                ,new ClassPathResource("/database/03.service-management.test.data.sql")
-        ));
-    }
+	private void prepareDatabase() {
+		executeSqlScripts(newArrayList(new ClassPathResource("/database/01.service-management.schema.sql"),
+				new ClassPathResource("/database/03.service-management.test.data.sql")));
+	}
 
-    private void cleanUpDatabase() {
-        executeSqlScript("/database/00.drop.all.sql");
-    }
+	private void cleanUpDatabase() {
+		executeSqlScript("/database/00.drop.all.sql");
+	}
 
-    protected void executeSql(String sql) {
-        executeSqlScripts(newArrayList(new ByteArrayResource(sql.getBytes())));
-    }
+	protected void executeSql(String sql) {
+		executeSqlScripts(newArrayList(new ByteArrayResource(sql.getBytes())));
+	}
 
-    protected void executeSqlScript(String sqlScript) {
-        executeSqlScripts(newArrayList(new ClassPathResource(sqlScript)));
-    }
+	protected void executeSqlScript(String sqlScript) {
+		executeSqlScripts(newArrayList(new ClassPathResource(sqlScript)));
+	}
 
-    private void executeSqlScripts(List<Resource> scipts) {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.setContinueOnError(false);
-        populator.setIgnoreFailedDrops(false);
-        populator.setSeparator(";");
-        scipts.forEach(populator::addScript);
-        populator.execute(dataSource);
-    }
+	private void executeSqlScripts(List<Resource> scipts) {
+		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+		populator.setContinueOnError(false);
+		populator.setIgnoreFailedDrops(false);
+		populator.setSeparator(";");
+		scipts.forEach(populator::addScript);
+		populator.execute(dataSource);
+	}
 }

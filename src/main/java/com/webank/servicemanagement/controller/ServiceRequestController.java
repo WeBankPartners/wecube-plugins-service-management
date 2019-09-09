@@ -1,5 +1,6 @@
 package com.webank.servicemanagement.controller;
 
+import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -61,10 +62,14 @@ public class ServiceRequestController {
 		return okayWithData(entityRepository.query(ServiceRequest.class, queryRequest));
 	}
 
-	@PutMapping("/{service-request-id}/update")
+	@PutMapping("/{service-request-id}/done")
 	public JsonResponse updateServiceRequest(@PathVariable(value = "service-request-id") int serviceRequestId,
 			@RequestBody CompletedServiceRequestRequest request, HttpServletRequest httpRequest) throws Exception {
-		serviceRequestService.completedServiceRequest(serviceRequestId, request);
+		try {
+		serviceRequestService.doneServiceRequest(serviceRequestId, request);
+		}catch (Exception e) {
+			return error(e.getMessage());
+		}
 		return okay();
 	}
 

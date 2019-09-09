@@ -39,7 +39,7 @@ public class TaskService {
 		return Lists.newArrayList(taskRepository.findAll());
 	}
 
-	public void takeOverTask(UpdateTaskRequest receiveTaskrequest) throws Exception {
+	public void takeoverTask(UpdateTaskRequest receiveTaskrequest) throws Exception {
 		Task task;
 		Optional<Task> taskResult = taskRepository.findById(receiveTaskrequest.getTaskId());
 		if (!taskResult.isPresent()) {
@@ -47,15 +47,26 @@ public class TaskService {
 		}
 		task = taskResult.get();
 		task.setOperator(receiveTaskrequest.getOperator());
+		task.setStatus(STATUS_PROCESSING);
 		taskRepository.save(task);
 	}
 
 	public void processTask(ProcessTaskRequest processTaskRequest) throws Exception {
+		if (!checkResultIsAvailable(processTaskRequest.getResult()))
+			throw new Exception(String.format("Result[%s] is invalid", processTaskRequest.getResult()));
+		updateTaskByProcessTaskRequest(processTaskRequest);
+	}
+
+	private boolean checkResultIsAvailable(String result) {
+		return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
+	}
+
+	private void updateTaskByProcessTaskRequest(ProcessTaskRequest processTaskRequest) throws Exception {
 		Task task;
 		Optional<Task> taskResult = taskRepository.findById(processTaskRequest.getTaskId());
-		if (!taskResult.isPresent()) {
+		if (!taskResult.isPresent())
 			throw new Exception("Can not found the specified task, please check !");
-		}
+
 		task = taskResult.get();
 		task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		task.setResult(processTaskRequest.getResult());
