@@ -49,6 +49,7 @@ public class ServiceRequestService {
 	public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
 
 		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		log.info("request.getTemplateId()={}",request.getTemplateId());
 		Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
 				.findById(request.getTemplateId());
 		if (!serviceRequestTemplate.isPresent())
@@ -81,7 +82,7 @@ public class ServiceRequestService {
 		return Lists.newArrayList();
 	}
 
-	public void completedServiceRequest(int serviceRequestId, CompletedServiceRequestRequest completedRequest)
+	public void doneServiceRequest(int serviceRequestId, CompletedServiceRequestRequest completedRequest)
 			throws Exception {
 		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
 		if (!serviceRequestResult.isPresent())
@@ -93,10 +94,7 @@ public class ServiceRequestService {
 	}
 
 	public int uploadServiceRequestAttachFile(InputStream attachFileStream, String attachFileName) throws Exception {
-
-		String attachFileBase64String = FileUtils.streamToBase64String(attachFileStream);
-
-		AttachFile attachFileObject = new AttachFile(attachFileName, attachFileBase64String);
+		AttachFile attachFileObject = new AttachFile(attachFileName, FileUtils.streamToByteArray(attachFileStream));
 		attachFileRepository.save(attachFileObject);
 
 		return attachFileObject.getId();
@@ -108,7 +106,7 @@ public class ServiceRequestService {
 			throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
 		ServiceRequest serviceRequest = serviceRequestResult.get();
 
-		ResponseEntity<byte[]> responseEntity = FileUtils.base64StringToFileResponseEntity(
+		ResponseEntity<byte[]> responseEntity = FileUtils.byteArrayToFileResponseEntity(
 				serviceRequest.getAttachFile().getAttachFileName(), serviceRequest.getAttachFile().getAttachFile());
 		if (responseEntity == null) {
 			throw new Exception("File object not found for service-request-id: " + serviceRequestId);

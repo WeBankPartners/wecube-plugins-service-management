@@ -14,8 +14,8 @@ CREATE TABLE `service_request` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`template_id` INT(11) NOT NULL ,
 	`name` VARCHAR(255) NOT NULL,
-	`reporter_role_id` INT(11) NOT NULL DEFAULT '0',
 	`reporter` VARCHAR(64) NULL DEFAULT NULL,
+	`reporter_role_id` INT(11) NOT NULL DEFAULT '0',
 	`report_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`emergency` VARCHAR(32) NULL,
 	`description` VARCHAR(255) NOT NULL,
@@ -30,7 +30,7 @@ drop table if exists `attach_file`;
 CREATE TABLE `attach_file` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`attach_file_name` VARCHAR(255) NULL,
-	`attach_file` MEDIUMTEXT NULL,
+	`attach_file` MEDIUMBLOB NULL,
 	PRIMARY KEY (`id`)
 );
 

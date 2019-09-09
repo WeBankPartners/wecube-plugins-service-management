@@ -1,9 +1,7 @@
 package com.webank.servicemanagement.controller;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -18,10 +16,11 @@ public class TaskControllerTest extends AbstractControllerTest {
 				"{\"callbackUrl\":\"callbackUrl-test\",\"description\":\"description-test\",\"name\":\"name-createTaskTest\",\"processDefinitionKey\":\"processDefinitionKey-test\",\"processInstanceId\":\"processInstanceId-test\",\"reporter\":\"reporter-test\",\"serviceRequestId\": 1}"))
 				.andExpect(jsonPath("$.status", is("OK")));
 
-		mvc.perform(get("/tasks/retrieve").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.status", is("OK")))
-				.andExpect(jsonPath("$.data.length()", greaterThan(0)))
-				.andExpect(jsonPath("$.data[*].name", contains("name-createTaskTest")));
+		mvc.perform(post("/tasks/query").contentType(MediaType.APPLICATION_JSON)
+				.content("{\r\n" + "  \"filters\": [\r\n" + "    {\r\n" + "      \"name\": \"name\",\r\n"
+						+ "      \"operator\": \"eq\",\r\n" + "      \"value\": \"name-createTaskTest\"\r\n"
+						+ "    }\r\n" + "  ]\r\n" + "}"))
+				.andExpect(jsonPath("$.status", is("OK"))).andExpect(jsonPath("$.data.length()", greaterThan(0)));
 	}
 
 }

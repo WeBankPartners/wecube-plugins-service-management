@@ -21,12 +21,12 @@ public class AttachFile {
 	@Column(name = "attach_file_name")
 	private String attachFileName;
 	@Column(name = "attach_file")
-	private String attachFile;
+	private byte[] attachFile;
 
 	public AttachFile() {
 	}
 
-	public AttachFile(String attachFileName, String attachFile) {
+	public AttachFile(String attachFileName, byte[] attachFile) {
 		this.attachFileName = attachFileName;
 		this.attachFile = attachFile;
 	}
