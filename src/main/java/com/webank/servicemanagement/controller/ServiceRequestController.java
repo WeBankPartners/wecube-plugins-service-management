@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
 import com.webank.servicemanagement.domain.ServiceRequest;
-import com.webank.servicemanagement.dto.CompletedServiceRequestRequest;
+import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
 import com.webank.servicemanagement.dto.JsonResponse;
@@ -32,7 +32,7 @@ import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
-@RequestMapping("/service-requests")
+@RequestMapping("/service-management/service-requests")
 public class ServiceRequestController {
 
 	private final static long ATTACH_FILE_MAX_SIZE = 16 * 1024 * 1024;
@@ -44,14 +44,15 @@ public class ServiceRequestController {
 	@Autowired
 	AppProperties appProperties;
 
-	@PostMapping("/create")
+	@PostMapping
 	public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request,
 			HttpServletRequest httpRequest) throws Exception {
 		serviceRequestService.createNewServiceRequest(httpRequest.getHeader("Current_User"), request);
 		return okay();
 	}
 
-	@GetMapping("/retrieve")
+	@Deprecated
+	@GetMapping
 	public JsonResponse getAllServiceRequest(HttpServletRequest httpRequest) {
 		return okayWithData(serviceRequestService.getAllServiceRequest());
 	}
@@ -64,10 +65,10 @@ public class ServiceRequestController {
 
 	@PutMapping("/{service-request-id}/done")
 	public JsonResponse updateServiceRequest(@PathVariable(value = "service-request-id") int serviceRequestId,
-			@RequestBody CompletedServiceRequestRequest request, HttpServletRequest httpRequest) throws Exception {
+			@RequestBody DoneServiceRequestRequest request, HttpServletRequest httpRequest) throws Exception {
 		try {
-		serviceRequestService.doneServiceRequest(serviceRequestId, request);
-		}catch (Exception e) {
+			serviceRequestService.doneServiceRequest(serviceRequestId, request);
+		} catch (Exception e) {
 			return error(e.getMessage());
 		}
 		return okay();
@@ -108,7 +109,6 @@ public class ServiceRequestController {
 					serviceRequestId, e.getMessage());
 			throw new Exception(errorMessage);
 		}
-
 	}
 
 }

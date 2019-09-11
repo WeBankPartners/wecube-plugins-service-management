@@ -39,9 +39,9 @@ public class TaskService {
 		return Lists.newArrayList(taskRepository.findAll());
 	}
 
-	public void takeoverTask(UpdateTaskRequest receiveTaskrequest) throws Exception {
+	public void takeoverTask(int taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
 		Task task;
-		Optional<Task> taskResult = taskRepository.findById(receiveTaskrequest.getTaskId());
+		Optional<Task> taskResult = taskRepository.findById(taskId);
 		if (!taskResult.isPresent()) {
 			throw new Exception("Can not found the specified task, please check !");
 		}
@@ -51,19 +51,19 @@ public class TaskService {
 		taskRepository.save(task);
 	}
 
-	public void processTask(ProcessTaskRequest processTaskRequest) throws Exception {
+	public void processTask(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
 		if (!checkResultIsAvailable(processTaskRequest.getResult()))
 			throw new Exception(String.format("Result[%s] is invalid", processTaskRequest.getResult()));
-		updateTaskByProcessTaskRequest(processTaskRequest);
+		updateTaskByProcessTaskRequest(taskId, processTaskRequest);
 	}
 
 	private boolean checkResultIsAvailable(String result) {
 		return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
 	}
 
-	private void updateTaskByProcessTaskRequest(ProcessTaskRequest processTaskRequest) throws Exception {
+	private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
 		Task task;
-		Optional<Task> taskResult = taskRepository.findById(processTaskRequest.getTaskId());
+		Optional<Task> taskResult = taskRepository.findById(taskId);
 		if (!taskResult.isPresent())
 			throw new Exception("Can not found the specified task, please check !");
 

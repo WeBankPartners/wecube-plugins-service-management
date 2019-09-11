@@ -24,13 +24,13 @@ public class ServiceRequestControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void createServiceRequestTest() throws Exception {
-		mvc.perform(post("/service-requests/create").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/service-management/service-requests").contentType(MediaType.APPLICATION_JSON)
 				.content("{" + "  \"description\": \"desc-test\",\"emergency\": \"emergency-test\","
 						+ "  \"name\": \"name-createServiceRequestTest\"," + "  \"reporter\": \"reporter-test\","
-						+ "\"templateId\": 1," + "\"attachFileId\":1 } "))
+						+ "\"templateId\": 999," + "\"attachFileId\":999 } "))
 				.andExpect(jsonPath("$.status", is("OK")));
 
-		mvc.perform(post("/service-requests/query").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/service-management/service-requests/query").contentType(MediaType.APPLICATION_JSON)
 				.content("{\r\n" + "  \"filters\": [\r\n" + "    {\r\n" + "      \"name\": \"name\",\r\n"
 						+ "      \"operator\": \"eq\",\r\n" + "      \"value\": \"name-createServiceRequestTest\"\r\n"
 						+ "    }\r\n" + "  ]\r\n" + "}"))
@@ -39,13 +39,13 @@ public class ServiceRequestControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void updateServiceRequestWithValidDataTest() throws Exception {
-		mvc.perform(put("/service-requests/9999/done").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(put("/service-management/service-requests/999/done").contentType(MediaType.APPLICATION_JSON)
 				.content("{\"result\": \"Approved\"}")).andExpect(jsonPath("$.status", is("OK")));
 	}
 
 	@Test
 	public void updateServiceRequestWithInvalidDataTest() throws Exception {
-		mvc.perform(put("/service-requests/9998/done").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(put("/service-management/service-requests/998/done").contentType(MediaType.APPLICATION_JSON)
 				.content("{\"result\": \"Approved\"}")).andExpect(jsonPath("$.status", is("ERROR")));
 	}
 }

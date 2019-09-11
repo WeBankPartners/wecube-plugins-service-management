@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class UpdateTaskRequest {
-	private Integer taskId;
 	private String operator;
 }
