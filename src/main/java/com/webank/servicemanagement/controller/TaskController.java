@@ -5,7 +5,9 @@ import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +22,7 @@ import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/service-management/tasks")
 public class TaskController {
 
 	@Autowired
@@ -29,26 +31,29 @@ public class TaskController {
 	@Autowired
 	EntityRepository entityRepository;
 
-	@PostMapping("/create")
+	@PostMapping
 	public JsonResponse createTask(@RequestBody CreateTaskRequest createTaskRequest) {
 		taskService.createTask(createTaskRequest);
 		return okay();
 	}
 
-	@GetMapping("/retrieve")
+	@Deprecated
+	@GetMapping
 	public JsonResponse getAllTask() {
 		return okayWithData(taskService.getAllTask());
 	}
 
-	@PostMapping("/takeover")
-	public JsonResponse takeover(@RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
-		taskService.takeoverTask(takeOverTaskrequest);
+	@PutMapping("/{task-id}/takeover")
+	public JsonResponse takeoverTask(@PathVariable(value = "task-id") int taskId,
+			@RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
+		taskService.takeoverTask(taskId, takeOverTaskrequest);
 		return okay();
 	}
 
-	@PostMapping("/process")
-	public JsonResponse process(@RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
-		taskService.processTask(processTaskRequest);
+	@PutMapping("/{task-id}/process")
+	public JsonResponse processTask(@PathVariable(value = "task-id") int taskId,
+			@RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
+		taskService.processTask(taskId, processTaskRequest);
 		return okay();
 	}
 

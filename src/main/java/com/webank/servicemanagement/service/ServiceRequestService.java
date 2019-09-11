@@ -14,8 +14,8 @@ import com.google.common.collect.Lists;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
-import com.webank.servicemanagement.dto.CompletedServiceRequestRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
+import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
 import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
@@ -47,9 +47,7 @@ public class ServiceRequestService {
 	private final static String STATUS_DONE = "Done";
 
 	public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
-
 		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		log.info("request.getTemplateId()={}",request.getTemplateId());
 		Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
 				.findById(request.getTemplateId());
 		if (!serviceRequestTemplate.isPresent())
@@ -82,7 +80,7 @@ public class ServiceRequestService {
 		return Lists.newArrayList();
 	}
 
-	public void doneServiceRequest(int serviceRequestId, CompletedServiceRequestRequest completedRequest)
+	public void doneServiceRequest(int serviceRequestId, DoneServiceRequestRequest completedRequest)
 			throws Exception {
 		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
 		if (!serviceRequestResult.isPresent())

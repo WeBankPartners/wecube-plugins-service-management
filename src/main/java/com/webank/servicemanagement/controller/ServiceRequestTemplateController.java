@@ -1,34 +1,44 @@
 package com.webank.servicemanagement.controller;
 
+import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webank.servicemanagement.dto.CreateServiceRequestTemplateRequest;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServiceRequestTemplateService;
 
 @RestController
-@RequestMapping("/service-request-templates")
+@RequestMapping("/service-management/service-request-templates")
 public class ServiceRequestTemplateController {
 
 	@Autowired
 	ServiceRequestTemplateService serviceRequestTemplateService;
 
-//	@PostMapping("/create")
-	public JsonResponse create() {
-		return okayWithData("TODO");
+	@PostMapping
+	public JsonResponse createServiceRequestTemplate(@RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest)
+			throws Exception {
+		serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
+		return okay();
 	}
 
-//	@GetMapping("/retrieve")
-	public JsonResponse getAllServiceRequestTemplate() {
-		return okayWithData(serviceRequestTemplateService.getAllServiceRequestTemplate());
-	}
-
+	@Deprecated
 	@GetMapping("/available")
 	public JsonResponse getAllAvailableServiceTemplate() {
 		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceRequestTemplate());
 	}
+
+	@GetMapping("/service-pipelines/{service-pipeline-id}")
+	public JsonResponse getServiceRequestTemplateByPipelineId(
+			@PathVariable(value = "service-pipeline-id") int servicePipelinId) {
+		return okayWithData(serviceRequestTemplateService.getServiceRequestTemplateByPipelineId(servicePipelinId));
+	}
+
 }
