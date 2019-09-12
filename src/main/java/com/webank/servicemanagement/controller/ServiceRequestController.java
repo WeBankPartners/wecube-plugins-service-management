@@ -74,7 +74,7 @@ public class ServiceRequestController {
 		return okay();
 	}
 
-	@PostMapping("/{service-request-id}/attach-file")
+	@PostMapping("/attach-file")
 	public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
 			throws Exception {
 		if (attachFile == null || attachFile.isEmpty())
