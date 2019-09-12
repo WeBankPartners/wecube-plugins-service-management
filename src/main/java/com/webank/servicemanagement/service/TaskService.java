@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequest;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
+import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
 
 @Service
@@ -20,13 +22,21 @@ public class TaskService {
 
 	@Autowired
 	TaskRepository taskRepository;
+	@Autowired
+	ServiceRequestRepository serviceRequestRepository;
 
 	private final static String STATUS_PENDING = "Pending";
 	private final static String STATUS_PROCESSING = "Processing";
 	private final static String STATUS_SUCCESSFUL = "Successful";
 	private final static String STATUS_FAILED = "Failed";
 
-	public void createTask(CreateTaskRequest createTaskRequest) {
+	public void createTask(CreateTaskRequest createTaskRequest) throws Exception {
+		Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
+				.findById(createTaskRequest.getServiceRequestId());
+		if (!serviceRequestOptional.isPresent())
+			throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
+					createTaskRequest.getServiceRequestId()));
+
 		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		Task task = new Task(createTaskRequest.getServiceRequestId(), createTaskRequest.getProcessInstanceId(),
 				createTaskRequest.getCallbackUrl(), createTaskRequest.getName(),

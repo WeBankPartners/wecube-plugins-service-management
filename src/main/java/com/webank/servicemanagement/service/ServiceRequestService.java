@@ -74,12 +74,6 @@ public class ServiceRequestService {
 		return Lists.newArrayList(serviceRequestRepository.findAll());
 	}
 
-	public List<ServiceRequest> getServiceRequestByUserName(String currentUserName) {
-
-		// TODO - getServiceRequestByUserName
-		return Lists.newArrayList();
-	}
-
 	public void doneServiceRequest(int serviceRequestId, DoneServiceRequestRequest completedRequest)
 			throws Exception {
 		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);

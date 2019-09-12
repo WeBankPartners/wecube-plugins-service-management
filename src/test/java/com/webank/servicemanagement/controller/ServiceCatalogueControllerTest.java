@@ -22,4 +22,11 @@ public class ServiceCatalogueControllerTest extends AbstractControllerTest {
 				.andExpect(jsonPath("$.status", is("OK"))).andExpect(jsonPath("$.data.length()", greaterThan(0)))
 				.andExpect(jsonPath("$.data[*].name", hasItem("test-service-catalogue")));
 	}
+
+	@Test
+	public void createServiceCatalogueWhenNameAlreadyExistsTest() throws Exception {
+		mvc.perform(post("/service-management/service-catalogues").contentType(MediaType.APPLICATION_JSON)
+				.content("{\"name\":\"catalogue001\",\"description\": \"test-description\"}"))
+				.andExpect(jsonPath("$.status", is("ERROR")));
+	}
 }
