@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
 import com.webank.servicemanagement.domain.ServiceRequest;
-import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
+import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.QueryRequest;
@@ -74,7 +74,7 @@ public class ServiceRequestController {
 		return okay();
 	}
 
-	@PostMapping("/{service-request-id}/attach-file/upload")
+	@PostMapping("/{service-request-id}/attach-file")
 	public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
 			throws Exception {
 		if (attachFile == null || attachFile.isEmpty())
@@ -87,7 +87,7 @@ public class ServiceRequestController {
 		return okayWithData(attachFileId);
 	}
 
-	@GetMapping("/{service-request-id}/attach-file/download")
+	@GetMapping("/{service-request-id}/attach-file")
 	public void downloadServiceRequestAttachFile(@PathVariable(value = "service-request-id") int serviceRequestId,
 			HttpServletResponse response) throws Exception {
 		if (serviceRequestId <= 0)
