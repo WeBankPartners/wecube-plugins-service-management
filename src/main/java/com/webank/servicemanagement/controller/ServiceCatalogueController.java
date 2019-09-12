@@ -1,5 +1,6 @@
 package com.webank.servicemanagement.controller;
 
+import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -24,7 +25,11 @@ public class ServiceCatalogueController {
 	@PostMapping
 	public JsonResponse createServiceCatalogue(@RequestBody CreateServiceCatalogueRequest createServiceCatalogueRequest)
 			throws Exception {
+		try {
 		serviceCatalogueService.createServiceCatalogue(createServiceCatalogueRequest);
+		}catch (Exception e) {
+			return error(e.getMessage());
+		}
 		return okay();
 	}
 
