@@ -1,5 +1,6 @@
 package com.webank.servicemanagement.controller;
 
+import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -25,7 +26,11 @@ public class ServicePipelineController {
 	@PostMapping
 	public JsonResponse createServicePipeline(@RequestBody CreateServicePipelineRequest createServicePipelineRequest)
 			throws Exception {
-		servicePipelineService.createServicePipeline(createServicePipelineRequest);
+		try {
+			servicePipelineService.createServicePipeline(createServicePipelineRequest);
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
 		return okay();
 	}
 

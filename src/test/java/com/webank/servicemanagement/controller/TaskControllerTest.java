@@ -23,4 +23,11 @@ public class TaskControllerTest extends AbstractControllerTest {
 				.andExpect(jsonPath("$.status", is("OK"))).andExpect(jsonPath("$.data.length()", greaterThan(0)));
 	}
 
+	@Test
+	public void createTaskWhenServiceRequestIdDoesNotExistTest() throws Exception {
+		mvc.perform(post("/service-management/tasks").contentType(MediaType.APPLICATION_JSON).content(
+				"{\"callbackUrl\":\"callbackUrl-test\",\"description\":\"description-test\",\"name\":\"name-createTaskTest\",\"processDefinitionKey\":\"processDefinitionKey-test\",\"processInstanceId\":\"processInstanceId-test\",\"reporter\":\"reporter-test\",\"serviceRequestId\": 111}"))
+				.andExpect(jsonPath("$.status", is("ERROR")));
+	}
+
 }
