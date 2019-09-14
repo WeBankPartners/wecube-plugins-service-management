@@ -1,5 +1,6 @@
 package com.webank.servicemanagement.controller;
 
+import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -23,9 +24,13 @@ public class ServiceRequestTemplateController {
 	ServiceRequestTemplateService serviceRequestTemplateService;
 
 	@PostMapping
-	public JsonResponse createServiceRequestTemplate(@RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest)
-			throws Exception {
-		serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
+	public JsonResponse createServiceRequestTemplate(
+			@RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest) throws Exception {
+		try {
+			serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
 		return okay();
 	}
 

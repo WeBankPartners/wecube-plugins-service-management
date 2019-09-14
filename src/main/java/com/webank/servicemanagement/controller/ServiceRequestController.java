@@ -47,7 +47,11 @@ public class ServiceRequestController {
 	@PostMapping
 	public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request,
 			HttpServletRequest httpRequest) throws Exception {
-		serviceRequestService.createNewServiceRequest(httpRequest.getHeader("Current_User"), request);
+		try {
+			serviceRequestService.createNewServiceRequest(httpRequest.getHeader("Current_User"), request);
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
 		return okay();
 	}
 
@@ -74,7 +78,7 @@ public class ServiceRequestController {
 		return okay();
 	}
 
-	@PostMapping("/{service-request-id}/attach-file")
+	@PostMapping("/attach-file")
 	public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
 			throws Exception {
 		if (attachFile == null || attachFile.isEmpty())
@@ -82,8 +86,14 @@ public class ServiceRequestController {
 		if (attachFile.getSize() > ATTACH_FILE_MAX_SIZE)
 			throw new IllegalArgumentException("File greater than 16Mb are not supported");
 
-		int attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile.getInputStream(),
-				attachFile.getOriginalFilename());
+		int attachFileId;
+		try {
+			attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile.getInputStream(),
+					attachFile.getOriginalFilename());
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
+
 		return okayWithData(attachFileId);
 	}
 
