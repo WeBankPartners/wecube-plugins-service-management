@@ -41,7 +41,7 @@
             </Select>
           </FormItem>
           <FormItem label="服务请求名称">
-            <Input v-model="requestForm.name" placeholder="name"></Input>
+            <Input v-model="requestForm.name" placeholder="服务请求名称"></Input>
           </FormItem>
           <FormItem label="服务请求角色">
             <Select v-model="requestForm.roleId">
@@ -55,16 +55,16 @@
             </Select>
           </FormItem>
           <FormItem label="描述">
-            <Input v-model="requestForm.description" placeholder="description"></Input>
+            <Input type="textarea" v-model="requestForm.description" placeholder="描述"></Input>
           </FormItem>
           <FormItem label="请求附件">
-            <Upload :on-success="uploadSuccess" action="/service-requests/1/attach-file/upload">
-                <Button icon="ios-cloud-upload-outline">Upload files</Button>
+            <Upload :on-success="uploadSuccess" action="/service-management/service-requests/attach-file">
+                <Button icon="ios-cloud-upload-outline">上传附件</Button>
             </Upload>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="requestSubmit">Submit</Button>
-            <Button style="margin-left: 8px" @click="requestCancel">Cancel</Button>
+            <Button type="primary" @click="requestSubmit">提交</Button>
+            <Button style="margin-left: 8px" @click="requestCancel">取消</Button>
           </FormItem>
         </Form>
       </div>
@@ -79,17 +79,17 @@
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem label="处理结果">
-            <Select v-model="requestForm.result">
+            <Select v-model="handlerForm.result">
               <Option value="failed">处理失败/拒绝</Option>
               <Option value="Successful">处理完成/通过</Option>
             </Select>
           </FormItem>
           <FormItem label="描述">
-            <Input v-model="requestForm.resultMessage" placeholder="description"></Input>
+            <Input v-model="handlerForm.resultMessage" placeholder="描述"></Input>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="handlerSubmit">Submit</Button>
-            <Button style="margin-left: 8px" @click="handlerCancel">Cancel</Button>
+            <Button type="primary" @click="handlerSubmit">提交</Button>
+            <Button style="margin-left: 8px" @click="handlerCancel">取消</Button>
           </FormItem>
         </Form>
       </div>
@@ -396,7 +396,7 @@ export default {
     downloadFile(id) {
       let a = document.createElement("a");
       const body = document.body;
-      a.setAttribute("href", `/service-requests/${id}/attach-file/download`);
+      a.setAttribute("href", `/service-management/service-requests/${id}/attach-file`);
       a.setAttribute("id", "downloadFile");
       body.appendChild(a);
       a.click();
@@ -436,6 +436,7 @@ export default {
       const {status} = await taskProcess(this.handlerForm)
       if(status === 'OK') {
         this.handlerCancel()
+        this.getProcessData();
       }
     },
     actionFun(type, data) {
