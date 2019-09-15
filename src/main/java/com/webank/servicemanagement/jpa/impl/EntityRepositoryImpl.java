@@ -36,8 +36,10 @@ public class EntityRepositoryImpl implements EntityRepository {
 	public <T> QueryResponse query(Class<T> domainClzz, QueryRequest queryRequest) throws Exception {
 
 		List<Field> fieldList = getDomainAttrFields(domainClzz);
+		List<Object> countResult = doQuery(domainClzz, queryRequest, true, fieldList);
+        int totalRow = convertResultToInteger(countResult);
+
 		List<Object> resultObjs = doQuery(domainClzz, queryRequest, false, fieldList);
-		int totalRow = resultObjs.size();
 
 		List<Object> domainObjs = new LinkedList<>();
 
@@ -95,6 +97,12 @@ public class EntityRepositoryImpl implements EntityRepository {
 		List<Object> resultObjs = typedQuery.getResultList();
 		return resultObjs;
 	}
+	
+
+    private int convertResultToInteger(List rawResults) {
+        String strVal = rawResults.get(0).toString();
+        return Integer.valueOf(strVal);
+    }
 
 	private List<Field> getDomainAttrFields(Class domainClazz) {
 		Field[] fields = domainClazz.getDeclaredFields();
