@@ -53,12 +53,16 @@ public class ServiceRequestService {
 		if (!serviceRequestTemplate.isPresent())
 			throw new Exception("Invalid service request template ID !");
 
-		Optional<AttachFile> attachFile = attachFileRepository.findById(request.getAttachFileId());
-		if (!attachFile.isPresent())
-			throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
+		AttachFile attachFile = null;
+		if (request.getAttachFileId() != 0) {
+			Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
+			if (!attachFileOptional.isPresent())
+				throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
+			attachFile = attachFileOptional.get();
+		}
 		ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
 				request.getRoleId(), request.getReporter(), currentTime, request.getEmergency(),
-				request.getDescription(), STATUS_SUBMITTED, attachFile.get());
+				request.getDescription(), STATUS_SUBMITTED, attachFile);
 		serviceRequestRepository.save(serviceRequest);
 
 		StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
@@ -74,8 +78,7 @@ public class ServiceRequestService {
 		return Lists.newArrayList(serviceRequestRepository.findAll());
 	}
 
-	public void doneServiceRequest(int serviceRequestId, DoneServiceRequestRequest completedRequest)
-			throws Exception {
+	public void doneServiceRequest(int serviceRequestId, DoneServiceRequestRequest completedRequest) throws Exception {
 		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
 		if (!serviceRequestResult.isPresent())
 			throw new Exception(String.format("Service Request [%d] not found", serviceRequestId));
