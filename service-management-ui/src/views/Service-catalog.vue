@@ -59,15 +59,6 @@
           <FormItem label="模板名称" prop="attrName">
             <Input v-model="form.name"></Input>
           </FormItem>
-          <FormItem label="审批流程" prop="attrName">
-            <Select v-model="form.processDefinitionKey">
-              <Option
-                v-for="process in allProcessDefinitionKeys"
-                :key="process.processDefinitionKey"
-                :value="process.processDefinitionKey"
-              >{{process.processDefinitionKey}}</Option>
-            </Select>
-          </FormItem>
           <FormItem label="服务目录" prop="attrName">
             <Select v-model="form.serviceCatalogId" @on-change="serviceCatalogChangeHandler" >
               <Option
@@ -84,6 +75,15 @@
                 :key="pipeline.id"
                 :value="pipeline.id"
               >{{pipeline.name}}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="流程" prop="attrName">
+            <Select v-model="form.processDefinitionKey">
+              <Option
+                v-for="process in allProcessDefinitionKeys"
+                :key="process.processDefinitionKey"
+                :value="process.processDefinitionKey"
+              >{{process.processDefinitionKey}}</Option>
             </Select>
           </FormItem>
           <FormItem label="描述" prop="attrName">
