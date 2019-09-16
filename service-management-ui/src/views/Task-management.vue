@@ -213,13 +213,13 @@ export default {
           render: (h, params) => {
             return (
               <div>
-                <Button
+                {params.row.attachFile && <Button
                   type="primary"
                   size="small"
                   onClick={() => this.downloadFile(params.row.id)}
                 >
                   附件下载
-                </Button>
+                </Button>}
               </div>
             );
           }
