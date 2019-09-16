@@ -58,7 +58,7 @@
             <Input type="textarea" v-model="requestForm.description" placeholder="描述"></Input>
           </FormItem>
           <FormItem label="请求附件">
-            <Upload :on-success="uploadSuccess" action="/service-management/service-requests/attach-file">
+            <Upload :on-success="uploadSuccess" ref="upload" action="/service-management/service-requests/attach-file">
                 <Button icon="ios-cloud-upload-outline">上传附件</Button>
             </Upload>
           </FormItem>
@@ -403,7 +403,6 @@ export default {
       body.removeChild(document.getElementById("downloadFile"));
     },
     uploadSuccess(res, file, fileList) {
-      console.log(res)
       this.requestForm.attachFileId = res.data
     },
     requestModalHide() {
@@ -425,6 +424,8 @@ export default {
       if(status === 'OK') {
         this.requestCancel()
         this.getData();
+        this.requestForm.attachFileId = null
+        this.$refs.upload.clearFiles()
       }
     },
     handlerCancel() {

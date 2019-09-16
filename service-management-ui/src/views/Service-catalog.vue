@@ -113,7 +113,7 @@
           </Row>
           <Collapse accordion @on-change="getPipelineByCatalogueId">
             <Panel v-for="(item, index) in serviceCatalogues" :key="item.id" :name="item.id.toString()">
-              <span>{{ item.name }}</span>
+              <span><strong>{{ item.name }}</strong> - - {{ item.description }}</span>
               <span class="serviceCatalog-margin-right">
                 <Tooltip content="删除服务目录" placement="top-start">
                   <Button
