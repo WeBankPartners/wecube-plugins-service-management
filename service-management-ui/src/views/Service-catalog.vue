@@ -68,6 +68,15 @@
               >{{process.processDefinitionKey}}</Option>
             </Select>
           </FormItem>
+          <FormItem label="服务目录" prop="attrName">
+            <Select v-model="form.serviceCatalogId" @on-change="serviceCatalogChangeHandler" >
+              <Option
+                v-for="item in serviceCatalogues"
+                :key="item.id"
+                :value="item.id"
+              >{{item.name}}</Option>
+            </Select>
+          </FormItem>
           <FormItem label="服务通道" prop="attrName">
             <Select v-model="form.servicePipelineId">
               <Option
@@ -127,7 +136,7 @@
                 </Tooltip>
               </span>
               <div slot="content">
-                <Tag type="dot" color="primary" v-for="pipeline in item.pipelines" :key="pipeline.id">{{pipeline.name}}</Tag>
+                <Table border :columns="pipelineColumns" :data="item.pipelines"></Table>
               </div>
             </Panel>
           </Collapse>
@@ -243,6 +252,20 @@ export default {
           type: "text"
         }
       ],
+      pipelineColumns: [
+        {
+          title: '通道名称',
+          key: 'name'
+        },
+        {
+          title: '状态',
+          key: 'status'
+        },
+        {
+          title: '描述',
+          key: 'description'
+        },
+      ],
       allRoles:[],
       serviceCatalogList: [],
       servicePipeline: [],
@@ -339,6 +362,12 @@ export default {
         this.servicePipeline = data;
       }
     },
+    serviceCatalogChangeHandler(v) {
+      if(v){
+        this.getServicePipelineByCatalogueId(v)
+        this.form.servicePipelineId = ''
+      }
+    },
     async getPipelineByCatalogueId(id) {
       if(id.length === 0) return
       const { data, status } = await getServicePipelineByCatalogueId(id[0]*1);
@@ -368,7 +397,6 @@ export default {
   },
   mounted() {
     this.getAllProcessDefinitionKeys();
-    this.getServicePipelineByCatalogueId(999);
     this.getAllAvailableServiceCatalogues();
     this.getAllRoles()
   }
