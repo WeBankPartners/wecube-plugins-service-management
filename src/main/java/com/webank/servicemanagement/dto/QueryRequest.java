@@ -8,6 +8,8 @@ import java.util.Map;
 public class QueryRequest {
     protected boolean paging = false;
     protected Pageable pageable = new Pageable();
+    
+    private Sorting sorting = new Sorting();
     protected List<Filter> filters = new LinkedList<>();
 
     public Pageable getPageable() {
@@ -24,6 +26,14 @@ public class QueryRequest {
 
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
+    }
+    
+    public Sorting getSorting() {
+        return sorting;
+    }
+
+    public void setSorting(Sorting sorting) {
+        this.sorting = sorting;
     }
 
     public boolean isPaging() {

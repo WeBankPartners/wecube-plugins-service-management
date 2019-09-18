@@ -22,13 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
-import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.QueryRequest;
-import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
@@ -39,8 +37,7 @@ public class ServiceRequestController {
 
 	@Autowired
 	ServiceRequestService serviceRequestService;
-	@Autowired
-	EntityRepository entityRepository;
+
 	@Autowired
 	AppProperties appProperties;
 
@@ -64,7 +61,7 @@ public class ServiceRequestController {
 	@PostMapping("/query")
 	public JsonResponse queryServiceRequest(@RequestBody QueryRequest queryRequest, HttpServletRequest httpRequest)
 			throws Exception {
-		return okayWithData(entityRepository.query(ServiceRequest.class, queryRequest));
+		return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
 	}
 
 	@PutMapping("/{service-request-id}/done")
