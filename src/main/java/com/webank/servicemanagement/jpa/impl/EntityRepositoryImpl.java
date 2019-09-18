@@ -37,7 +37,7 @@ public class EntityRepositoryImpl implements EntityRepository {
 
 		List<Field> fieldList = getDomainAttrFields(domainClzz);
 		List<Object> countResult = doQuery(domainClzz, queryRequest, true, fieldList);
-        int totalRow = convertResultToInteger(countResult);
+		int totalRow = convertResultToInteger(countResult);
 
 		List<Object> resultObjs = doQuery(domainClzz, queryRequest, false, fieldList);
 
@@ -86,6 +86,9 @@ public class EntityRepositoryImpl implements EntityRepository {
 			if (ciRequest.getFilters() != null && ciRequest.getFilters().size() > 0) {
 				JpaQueryUtils.applyFilter(cb, query, ciRequest.getFilters(), selectionMap, fieldTypeMap, null, null);
 			}
+			if (isSelRowCount == false) {
+				JpaQueryUtils.applySorting(ciRequest.getSorting(), cb, query, selectionMap);
+			}
 		}
 
 		TypedQuery typedQuery = entityManager.createQuery(query);
@@ -97,12 +100,11 @@ public class EntityRepositoryImpl implements EntityRepository {
 		List<Object> resultObjs = typedQuery.getResultList();
 		return resultObjs;
 	}
-	
 
-    private int convertResultToInteger(List rawResults) {
-        String strVal = rawResults.get(0).toString();
-        return Integer.valueOf(strVal);
-    }
+	private int convertResultToInteger(List rawResults) {
+		String strVal = rawResults.get(0).toString();
+		return Integer.valueOf(strVal);
+	}
 
 	private List<Field> getDomainAttrFields(Class domainClazz) {
 		Field[] fields = domainClazz.getDeclaredFields();

@@ -17,7 +17,11 @@ import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
+import com.webank.servicemanagement.dto.QueryRequest;
+import com.webank.servicemanagement.dto.QueryResponse;
+import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.jpa.AttachFileRepository;
+import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
 import com.webank.servicemanagement.mock.MockCoreServiceStub;
@@ -36,6 +40,8 @@ public class ServiceRequestService {
 	ServiceRequestTemplateRepository serviceRequestTemplateRepository;
 	@Autowired
 	AttachFileRepository attachFileRepository;
+	@Autowired
+	EntityRepository entityRepository;
 
 	// TODO - modify "MockCoreServiceStub" to "CoreServiceStub" when Core API is
 	// ready
@@ -108,6 +114,21 @@ public class ServiceRequestService {
 		}
 		return new DownloadAttachFileResponse(responseEntity, serviceRequest.getAttachFile().getAttachFileName());
 
+	}
+
+	public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {
+		queryRequest.setSorting(new Sorting(false, "reportTime"));
+		
+		QueryResponse<ServiceRequest> queryResult;
+		try {
+			queryResult = entityRepository.query(ServiceRequest.class, queryRequest);
+			if (queryResult.getContents().size() == 0) {
+				return new QueryResponse<>();
+			}
+			return queryResult;
+		} catch (Exception e) {
+			return new QueryResponse<>();
+		}
 	}
 
 }

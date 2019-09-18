@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequest;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
-import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
@@ -28,9 +26,6 @@ public class TaskController {
 
 	@Autowired
 	TaskService taskService;
-
-	@Autowired
-	EntityRepository entityRepository;
 
 	@PostMapping
 	public JsonResponse createTask(@RequestBody CreateTaskRequest createTaskRequest) {
@@ -72,6 +67,6 @@ public class TaskController {
 
 	@PostMapping("/query")
 	public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
-		return okayWithData(entityRepository.query(Task.class, queryRequest));
+		return okayWithData(taskService.queryTask(queryRequest));
 	}
 }

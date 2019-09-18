@@ -13,7 +13,11 @@ import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequest;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
+import com.webank.servicemanagement.dto.QueryRequest;
+import com.webank.servicemanagement.dto.QueryResponse;
+import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
+import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
 
@@ -24,6 +28,8 @@ public class TaskService {
 	TaskRepository taskRepository;
 	@Autowired
 	ServiceRequestRepository serviceRequestRepository;
+	@Autowired
+	EntityRepository entityRepository;
 
 	private final static String STATUS_PENDING = "Pending";
 	private final static String STATUS_PROCESSING = "Processing";
@@ -83,6 +89,21 @@ public class TaskService {
 		task.setResultMessage(processTaskRequest.getResultMessage());
 		task.setStatus(processTaskRequest.getResult());
 		taskRepository.save(task);
+	}
+	
+	public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
+		queryRequest.setSorting(new Sorting(false, "reportTime"));
+
+		QueryResponse<Task> queryResult;
+		try {
+			queryResult = entityRepository.query(Task.class, queryRequest);
+			if (queryResult.getContents().size() == 0) {
+				return new QueryResponse<>();
+			}
+			return queryResult;
+		} catch (Exception e) {
+			return new QueryResponse<>();
+		}
 	}
 
 }
