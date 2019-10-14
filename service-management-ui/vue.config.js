@@ -8,7 +8,7 @@ module.exports = {
       "/service-request": {
         target: " http://localhost:21000"
       },
-      "/tasks": {
+      "/service-management": {
         target: " http://localhost:21000"
       },
       "/users": {
