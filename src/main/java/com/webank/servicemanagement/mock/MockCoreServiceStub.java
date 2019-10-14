@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.webank.servicemanagement.support.core.dto.ProcessDefinitionKeyDataResponse;
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
 import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
 
@@ -71,6 +72,18 @@ public class MockCoreServiceStub {
 		String mockDataString = "ThisIsAMockProcessInstanceId";
 
 		return mockDataString;
+	}
+
+	public List<String> getAllProcessDefinitionKeys() {
+		log.info("[Mock] send request [getAllRoles] to wecube_core...");
+
+		String mockDataString = "[{\"processDefinitionKey\": \"key001\"},{\"processDefinitionKey\": \"key002\"}]";
+		JSONArray json = JSONArray.fromObject(mockDataString);
+
+		@SuppressWarnings("unchecked")
+		List<String> mockData = (List<String>) JSONArray.toCollection(json, ProcessDefinitionKeyDataResponse.class);
+
+		return mockData;
 	}
 
 }

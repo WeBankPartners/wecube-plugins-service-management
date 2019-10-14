@@ -15,9 +15,11 @@ import javax.persistence.criteria.Predicate;
 
 import org.hibernate.proxy.HibernateProxy;
 
+import com.google.common.base.Strings;
 import com.webank.servicemanagement.dto.Filter;
 import com.webank.servicemanagement.dto.FilterOperator;
 import com.webank.servicemanagement.dto.Pageable;
+import com.webank.servicemanagement.dto.Sorting;
 
 public class JpaQueryUtils {
 
@@ -83,6 +85,22 @@ public class JpaQueryUtils {
 			query.where(mergedFilterPredicate);
 		}
 	}
+	
+    public static void applySorting(Sorting sorting, CriteriaBuilder cb, CriteriaQuery query, Map<String, Expression> selectionMap) {
+        if (sorting != null && sorting.getField() != null && selectionMap.get(sorting.getField()) == null) {
+            throw new IllegalArgumentException(String.format("Sorting field name [%s] is invalid.", sorting.getField()));
+        }
+
+        if (sorting != null && (!Strings.isNullOrEmpty(sorting.getField()))) {
+            boolean asc = sorting.getAsc();
+            String sortField = sorting.getField();
+            if (asc) {
+                query.orderBy(cb.asc(selectionMap.get(sortField)));
+            } else {
+                query.orderBy(cb.desc(selectionMap.get(sortField)));
+            }
+        }
+    }
 
 	public static void processNotEqualsOperator(CriteriaBuilder cb, List<Predicate> predicates, Filter filter,
 			Expression filterExpr) throws Exception {
