@@ -5,7 +5,7 @@ project_name=$(shell basename "${current_dir}")
 remote_docker_image_registry=ccr.ccs.tencentyun.com/webankpartners/wecube-app
 
 clean:
-	rm -rf $(current_dir)/service-management/target
+	rm -rf $(current_dir)/target
 
 .PHONY:build
 build:
