@@ -8,10 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
-
-@Data
-
 @Entity
 @Table(name = "service_pipeline")
 public class ServicePipeline {
@@ -40,6 +36,54 @@ public class ServicePipeline {
 		this.name = name;
 		this.description = description;
 		this.ownerRoleId = ownerRoleId;
+		this.status = status;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public ServiceCatalogue getServiceCatalogue() {
+		return serviceCatalogue;
+	}
+
+	public void setServiceCatalogue(ServiceCatalogue serviceCatalogue) {
+		this.serviceCatalogue = serviceCatalogue;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getOwnerRoleId() {
+		return ownerRoleId;
+	}
+
+	public void setOwnerRoleId(int ownerRoleId) {
+		this.ownerRoleId = ownerRoleId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

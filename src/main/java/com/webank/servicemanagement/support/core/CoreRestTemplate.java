@@ -1,16 +1,17 @@
 package com.webank.servicemanagement.support.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.webank.servicemanagement.dto.JsonResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Component
 public class CoreRestTemplate {
+
+	private static final Logger log = LoggerFactory.getLogger(CoreRestTemplate.class);
 
 	@Autowired
 	private RestTemplate restTemplate;
