@@ -9,9 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
-
-@Data
 @Entity
 @Table(name = "service_request")
 public class ServiceRequest {
@@ -64,4 +61,100 @@ public class ServiceRequest {
 	private String ProcessInstanceId;
 	@Column(name = "status")
 	private String status;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public ServiceRequestTemplate getServiceRequestTemplate() {
+		return serviceRequestTemplate;
+	}
+
+	public void setServiceRequestTemplate(ServiceRequestTemplate serviceRequestTemplate) {
+		this.serviceRequestTemplate = serviceRequestTemplate;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getReporterRoleId() {
+		return reporterRoleId;
+	}
+
+	public void setReporterRoleId(int reporterRoleId) {
+		this.reporterRoleId = reporterRoleId;
+	}
+
+	public String getReporter() {
+		return reporter;
+	}
+
+	public void setReporter(String reporter) {
+		this.reporter = reporter;
+	}
+
+	public String getReportTime() {
+		return reportTime;
+	}
+
+	public void setReportTime(String reportTime) {
+		this.reportTime = reportTime;
+	}
+
+	public String getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(String emergency) {
+		this.emergency = emergency;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public AttachFile getAttachFile() {
+		return attachFile;
+	}
+
+	public void setAttachFile(AttachFile attachFile) {
+		this.attachFile = attachFile;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getProcessInstanceId() {
+		return ProcessInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		ProcessInstanceId = processInstanceId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

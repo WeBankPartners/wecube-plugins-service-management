@@ -44,7 +44,7 @@ public class TaskService {
 					createTaskRequest.getServiceRequestId()));
 
 		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		Task task = new Task(createTaskRequest.getServiceRequestId(), createTaskRequest.getProcessInstanceId(),
+		Task task = new Task(serviceRequestOptional.get(), createTaskRequest.getProcessInstanceId(),
 				createTaskRequest.getCallbackUrl(), createTaskRequest.getName(),
 				createTaskRequest.getProcessDefinitionKey(), createTaskRequest.getReporter(), currentTime,
 				createTaskRequest.getDescription(), STATUS_PENDING);
@@ -90,7 +90,7 @@ public class TaskService {
 		task.setStatus(processTaskRequest.getResult());
 		taskRepository.save(task);
 	}
-	
+
 	public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
 		queryRequest.setSorting(new Sorting(false, "reportTime"));
 

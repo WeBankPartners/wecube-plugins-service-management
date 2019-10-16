@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import lombok.Data;
-
 public class FileUtils {
 
 	public static String streamToBase64String(InputStream inputStream) throws IOException, Exception {
@@ -97,9 +95,24 @@ public class FileUtils {
 		return entity;
 	}
 
-	@Data
 	public static class FileInfo {
 		private String fileName;
 		private String fileBase64String;
+
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
+		public String getFileBase64String() {
+			return fileBase64String;
+		}
+
+		public void setFileBase64String(String fileBase64String) {
+			this.fileBase64String = fileBase64String;
+		}
 	}
 }
