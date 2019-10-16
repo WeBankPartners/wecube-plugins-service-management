@@ -7,9 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
-
-@Data
 @Entity
 @Table(name = "attach_file")
 public class AttachFile {
@@ -28,6 +25,30 @@ public class AttachFile {
 
 	public AttachFile(String attachFileName, byte[] attachFile) {
 		this.attachFileName = attachFileName;
+		this.attachFile = attachFile;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAttachFileName() {
+		return attachFileName;
+	}
+
+	public void setAttachFileName(String attachFileName) {
+		this.attachFileName = attachFileName;
+	}
+
+	public byte[] getAttachFile() {
+		return attachFile;
+	}
+
+	public void setAttachFile(byte[] attachFile) {
 		this.attachFile = attachFile;
 	}
 

@@ -3,6 +3,8 @@ package com.webank.servicemanagement.mock;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -11,12 +13,11 @@ import com.webank.servicemanagement.support.core.dto.ProcessDefinitionKeyDataRes
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
 import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
 
-import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 
-@Slf4j
 @Service
 public class MockCoreServiceStub {
+	private static final Logger log = LoggerFactory.getLogger(MockCoreServiceStub.class);
 
 	public List<RolesDataResponse> getAllRoles() throws JsonParseException, JsonMappingException, IOException {
 		log.info("[Mock] send request [getAllRoles] to wecube_core...");

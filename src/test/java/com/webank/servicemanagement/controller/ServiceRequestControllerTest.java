@@ -13,9 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.webank.servicemanagement.mock.MockCoreServiceStub;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @ActiveProfiles("test")
 public class ServiceRequestControllerTest extends AbstractControllerTest {
 
