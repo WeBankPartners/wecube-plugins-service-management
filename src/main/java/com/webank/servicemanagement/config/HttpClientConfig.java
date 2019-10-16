@@ -22,6 +22,8 @@ import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
@@ -32,13 +34,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import com.webank.servicemanagement.commons.AppProperties.HttpClientProperties;
-
-import lombok.extern.slf4j.Slf4j;
+import com.webank.servicemanagement.support.core.CoreRestTemplate;
 
 @Configuration
 @EnableScheduling
-@Slf4j
 public class HttpClientConfig {
+	private static final Logger log = LoggerFactory.getLogger(CoreRestTemplate.class);
 
 	@Autowired
 	private HttpClientProperties httpClientProperties;

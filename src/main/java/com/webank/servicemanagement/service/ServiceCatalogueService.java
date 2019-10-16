@@ -24,7 +24,7 @@ public class ServiceCatalogueService {
 	public void createServiceCatalogue(CreateServiceCatalogueRequest createServiceCatalogueRequest) throws Exception {
 		if (serviceCatalogueRepository.findAllByName(createServiceCatalogueRequest.getName()).size() > 0)
 			throw new Exception(
-					String.format("Service catalogue [%s] already exists", createServiceCatalogueRequest.getName()));
+					String.format("Service catalogue [%d] already exists", createServiceCatalogueRequest.getName()));
 
 		ServiceCatalogue serviceCatalogue = new ServiceCatalogue(createServiceCatalogueRequest.getName(),
 				createServiceCatalogueRequest.getDescription(), AVAILABLE_STATU_STRING);
