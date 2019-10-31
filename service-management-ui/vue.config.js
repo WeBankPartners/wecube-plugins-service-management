@@ -18,4 +18,21 @@ module.exports = {
   },
   runtimeCompiler: true,
   publicPath: "/",
+  productionSourceMap: false,
+  chainWebpack: config => {
+    const img = config.module.rule("images");
+      img.uses.clear();
+      img
+        .use("url-loader")
+        .loader("url-loader")
+        .options({ limit: 1000000 });
+
+      const svg = config.module.rule("svg");
+      svg.uses.clear();
+      svg.uses.clear();
+      svg
+        .use("url-loader")
+        .loader("url-loader")
+        .options({ limit: 1000000 });
+  }
 };

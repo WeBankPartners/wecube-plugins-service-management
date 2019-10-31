@@ -9,8 +9,11 @@ Vue.use(iView);
 
 Vue.config.productionTip = false
 Vue.component("PluginSelect", PluginSelect);
+window.component && window.component("PluginSelect", PluginSelect)
+window.addRoutes && window.addRoutes(router, "itsm");
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+
+// new Vue({
+//   router,
+//   render: h => h(App)
+// }).$mount('#qqqqqq')

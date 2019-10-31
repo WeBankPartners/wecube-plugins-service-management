@@ -18,7 +18,6 @@ const DEFAULT_TAG_NUMBER = 2;
 import { queryReferenceEnumCodes } from "@/api/server";
 export default {
   name: "PluginSelect",
-
   props: {
     value: {},
     isMultiple: { default: () => false },
