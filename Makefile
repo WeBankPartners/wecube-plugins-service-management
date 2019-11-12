@@ -1,5 +1,5 @@
-project_name=service-management
-version=v0.1
+project_name=service-mgmt
+version=$1
 current_dir=$(shell pwd)
 date=$(shell date +%Y%m%d%H%M%S)
 remote_docker_image_registry=ccr.ccs.tencentyun.com/webankpartners/wecube-app
