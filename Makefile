@@ -1,5 +1,5 @@
 project_name=service-mgmt
-version=$1
+version=v1.0
 current_dir=$(shell pwd)
 date=$(shell date +%Y%m%d%H%M%S)
 remote_docker_image_registry=ccr.ccs.tencentyun.com/webankpartners/wecube-app
@@ -14,6 +14,9 @@ build:
 
 image:
 	docker build -t $(project_name):$(version) .
+package:
+	docker build -t $(project_name):$(version) .
+	docker save -o $(project_name)-$(version).tar $(project_name):$(version)
 
 push:
 	docker tag  $(project_name):$(version) $(remote_docker_image_registry):$(date)-$(version)
