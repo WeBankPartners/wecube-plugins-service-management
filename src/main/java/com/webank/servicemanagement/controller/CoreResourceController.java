@@ -17,7 +17,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.mock.MockCoreServiceStub;
 
 @RestController
-@RequestMapping("/service-management/core-resources")
+@RequestMapping("/v1/core-resources")
 public class CoreResourceController {
 	
 	// TODO - modify "MockCoreServiceStub" to "CoreServiceStub" when Core API is
