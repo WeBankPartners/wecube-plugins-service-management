@@ -17,7 +17,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServiceRequestTemplateService;
 
 @RestController
-@RequestMapping("/service-management/service-request-templates")
+@RequestMapping("/v1/service-request-templates")
 public class ServiceRequestTemplateController {
 
 	@Autowired
