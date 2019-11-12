@@ -21,7 +21,7 @@ import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
-@RequestMapping("/service-management/tasks")
+@RequestMapping("/v1/tasks")
 public class TaskController {
 
 	@Autowired

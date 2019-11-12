@@ -17,7 +17,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServicePipelineService;
 
 @RestController
-@RequestMapping("/service-management/service-pipelines")
+@RequestMapping("/v1/service-pipelines")
 public class ServicePipelineController {
 
 	@Autowired

@@ -25,7 +25,7 @@ import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.service.DataModelService;
 
 @RestController
-@RequestMapping("/data-models")
+@RequestMapping("/v1/data-models")
 public class DataModelController {
 
 	@Autowired
