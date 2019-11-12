@@ -30,7 +30,7 @@ import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
-@RequestMapping("/service-management/service-requests")
+@RequestMapping("/v1/service-requests")
 public class ServiceRequestController {
 
 	private final static long ATTACH_FILE_MAX_SIZE = 16 * 1024 * 1024;

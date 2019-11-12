@@ -16,7 +16,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServiceCatalogueService;
 
 @RestController
-@RequestMapping("/service-management/service-catalogues")
+@RequestMapping("/v1/service-catalogues")
 public class ServiceCatalogueController {
 
 	@Autowired
