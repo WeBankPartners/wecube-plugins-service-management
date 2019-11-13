@@ -40,5 +40,10 @@ module.exports = {
         .clear()
         .add("./src/main-plugin.js"); //作为插件时
     });
+  },
+  configureWebpack: config => {
+    if (process.env.PLUGIN === "plugin") {
+      config.optimization.splitChunks = {}
+    }
   }
 };
