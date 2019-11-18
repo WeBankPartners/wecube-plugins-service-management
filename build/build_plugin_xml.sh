@@ -9,4 +9,4 @@ fi
 version=$1
 current_path=`pwd`
 echo pwd
-sed -i 's/{{VERSION}}/$version/g' ${current_path}/../register.xml
+sed -i 's/{{VERSION}}/$version/g' ${current_path}/register.xml
