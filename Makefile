@@ -35,7 +35,7 @@ package:
 	cd package && cp ../register.xml .
 	
 	cd package && rm -f service-mgmt-$(version).zip
-	cd package && zip service-mgmt-$(version).zip package/*
+	cd package && zip -r service-mgmt-$(version).zip .
 	
 	docker run --name minio-client-service-mgmt -v `pwd`/package:/package -itd --entrypoint=/bin/sh minio/mc
 	docker exec minio-client-service-mgmt mc config host add wecubeS3 $(s3_server_url) $(s3_access_key) $(s3_secret_key) wecubeS3
