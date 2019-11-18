@@ -1,7 +1,6 @@
 project_name=service-mgmt
 version=v1.0
 current_dir=$(shell pwd)
-date=$(shell date +%Y%m%d%H%M%S)
 remote_docker_image_registry=ccr.ccs.tencentyun.com/webankpartners/wecube-app
 s3_server_url=http://10.10.10.1:9000
 s3_access_key=access_key
@@ -25,7 +24,6 @@ package:
 	mkdir -p package
 	cd package && docker save -o image.tar $(project_name):$(version) 
 	
-	git checkout 38_build_ci_flow && git pull
 	rm -rf service-management-ui/dist/*
 	cd service-management-ui && npm install && npm run plugin
 	cd package && zip -r ui.zip ../service-management-ui/dist/
