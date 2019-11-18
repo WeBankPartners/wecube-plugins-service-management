@@ -25,9 +25,6 @@ package:
 	mkdir -p package
 	cd package && docker save -o image.tar $(project_name):$(version) 
 	
-	sh build/build_plugin_xml.sh $(version)
-	cd package && cp ../register.xml .
-	
 	git checkout master && git pull
 	rm -rf service-management-ui/dist/*
 	cd service-management-ui && npm install && npm run plugin
@@ -35,6 +32,8 @@ package:
 	cp service-management-ui/ui.zip package/ui.zip
 	
 	cp src/main/resources/database/init.sql package/init.sql
+	sh build/build_plugin_xml.sh $(version)
+	cd package && cp ../register.xml .
 	
 	cd package && rm -f service-mgmt-$(version).zip
 	cd package && zip service-mgmt-$(version).zip package/*
