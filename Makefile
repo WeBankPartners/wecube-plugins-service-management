@@ -25,7 +25,7 @@ package:
 	mkdir -p package
 	cd package && docker save -o image.tar $(project_name):$(version) 
 	
-	git checkout master && git pull
+	git checkout 38_build_ci_flow && git pull
 	rm -rf service-management-ui/dist/*
 	cd service-management-ui && npm install && npm run plugin
 	cd package && zip -r ui.zip ../service-management-ui/dist/
