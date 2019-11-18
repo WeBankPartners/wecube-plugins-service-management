@@ -28,8 +28,7 @@ package:
 	git checkout master && git pull
 	rm -rf service-management-ui/dist/*
 	cd service-management-ui && npm install && npm run plugin
-	cd service-management-ui && zip -r ui.zip service-management-ui/dist/
-	cp service-management-ui/ui.zip package/ui.zip
+	cd package && zip -r ui.zip ../service-management-ui/dist/
 	
 	cp src/main/resources/database/init.sql package/init.sql
 	sh build/build_plugin_xml.sh $(version)
