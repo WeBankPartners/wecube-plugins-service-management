@@ -3,12 +3,12 @@ import ServiceCatalog from "./views/Service-catalog.vue"
 
 export default [
     {
-      path: '/task-management',
+      path: '/service-mgmt/task-management',
       name: 'TaskManagement',
       component: TaskManagement
     },
     {
-      path: '/service-catalog',
+      path: '/service-mgmt/service-catalog',
       name: 'ServiceCatalog',
       component: ServiceCatalog
     }
