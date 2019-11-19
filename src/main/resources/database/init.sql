@@ -26,13 +26,13 @@ drop table if exists `service_request_template`;
 CREATE TABLE `service_request_template` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`service_pipeline_id` INT(11) NOT NULL,
-	`name` VARCHAR(255) NOT NULL,
+	`name` VARCHAR(100) NOT NULL,
 	`description` VARCHAR(255) NULL,
 	`process_definition_key`  VARCHAR(255) NOT NULL,
 	`status` VARCHAR(32) NULL DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `service_pipeline_and_name` (`service_pipeline_id`, `name`)
-);
+)  COLLATE='utf8_general_ci' ;
 
 drop table if exists `attach_file`;
 CREATE TABLE `attach_file` (
