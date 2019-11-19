@@ -6,7 +6,7 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
-version=$1
+plugin_version=$1
 current_path=`pwd`
 echo pwd
-sed -i 's/{{VERSION}}/${version}/g' ${current_path}/register.xml
+sed -i "s/{{VERSION}}/$(plugin_version)/g" ${current_path}/register.xml
