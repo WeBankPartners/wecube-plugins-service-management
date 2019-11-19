@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<package name="service-mgmt" version={{VERSION}} xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<package name="service-mgmt" version="{{VERSION}}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="plugin-config-v2.xsd">
 
     <!-- 1.依赖分析 - 描述运行本插件包需要的其他插件包 -->
