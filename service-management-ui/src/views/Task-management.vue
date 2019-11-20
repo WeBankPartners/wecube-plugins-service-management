@@ -396,7 +396,7 @@ export default {
     downloadFile(id) {
       let a = document.createElement("a");
       const body = document.body;
-      a.setAttribute("href", `/service-management/service-requests/${id}/attach-file`);
+      a.setAttribute("href", `/service-mgmt/v1/service-requests/${id}/attach-file`);
       a.setAttribute("id", "downloadFile");
       body.appendChild(a);
       a.click();
