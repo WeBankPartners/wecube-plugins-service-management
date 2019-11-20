@@ -3,8 +3,9 @@ package com.webank.servicemanagement.dto;
 public class PageInfo extends Pageable {
 	private int totalRows;
 
-	public PageInfo() {
-	}
+    public PageInfo() {
+        this.totalRows = 0;
+    }
 
 	public PageInfo(int totalRows, int startIndex, int pageSize) {
 		super(startIndex, pageSize);
