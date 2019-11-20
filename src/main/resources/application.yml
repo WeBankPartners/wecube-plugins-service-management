@@ -2,7 +2,7 @@ server:
   port: 21000
   address: localhost
   servlet:
-    context-path: /service-mgmt
+    context-path: /servicemgmt
     
 spring:
   profiles:
