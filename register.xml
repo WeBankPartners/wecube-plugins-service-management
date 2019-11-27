@@ -84,16 +84,16 @@
 
     <!-- 6.运行资源 - 描述部署运行本插件包需要的基础资源(如主机、虚拟机、容器、数据库等) -->
     <resourceDependencies>
-        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{host_port}}:21000" volumeBindings="{{base_mount_path}}/service-mgmt/log:/log" envVariables="DB_HOST={{db_host}},DB_PORT={{db_port}},DB_SCHEMA={{db_schema}},DB_USER={{db_user}},DB_PWD={{db_password}},CORE_ADDR={{core_addr}}"/>
+        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{ALLOCATE_PORT}}:21000" volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log" envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}}"/>
         <mysql schema="service_mgmt" initFileName="init.sql" upgradeFileName="upgrade.sql"/>
     </resourceDependencies>
 
     <!-- 7.插件列表 - 描述插件包中单个插件的输入和输出 -->
     <plugins>
         <plugin name="task" entity="task">
-            <interface action="create" path="/service-mgmt/v1/tasks" httpMethod='POST'>
+            <interface action="create" path="/service-mgmt/v1/tasks" httpMethod='POST' isAsyncProcessing="Y">
                 <inputParameters>
-                    <parameter datatype="string" mappingType='system_variable' mappingSystemVariableId='1' required='Y'>
+                    <parameter datatype="string" mappingType='system_variable' mappingSystemVariableName='CALLBACK_URL' required='Y'>
                         callbackUrl
                     </parameter>
                     <parameter datatype="string" mappingType='context' required='N'>description</parameter>
@@ -113,10 +113,10 @@
             </interface>
         </plugin>
         <plugin name="service_request" entity="service_request">
-            <interface action="update" path="/service-mgmt/v1/service-requests/{service-request-id}/done"
+            <interface action="update" path="/service-mgmt/v1/service-requests/done"
                        httpMethod='PUT'>
                 <inputParameters>
-                    <parameter datatype="string" mappingType='system_variable' mappingSystemVariableId='1' required='Y'>
+                    <parameter datatype="string" mappingType='context' required='Y'>
                         service-request-id
                     </parameter>
                     <parameter datatype="string" mappingType='context' required='Y'>result</parameter>

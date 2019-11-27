@@ -75,7 +75,6 @@ public class AppProperties {
 	@ConfigurationProperties(prefix = "service.management")
 	public class ServiceManagementProperties {
 		private String wecubeCoreAddress;
-		private String userName;
 
 		public String getWecubeCoreAddress() {
 			return wecubeCoreAddress;
@@ -83,14 +82,6 @@ public class AppProperties {
 
 		public void setWecubeCoreAddress(String wecubeCoreAddress) {
 			this.wecubeCoreAddress = wecubeCoreAddress;
-		}
-
-		public String getUserName() {
-			return userName;
-		}
-
-		public void setUserName(String userName) {
-			this.userName = userName;
 		}
 	}
 
