@@ -12,11 +12,11 @@ public class TaskControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void createTaskTest() throws Exception {
-		mvc.perform(post("/service-management/tasks").contentType(MediaType.APPLICATION_JSON).content(
+		mvc.perform(post("/v1/tasks").contentType(MediaType.APPLICATION_JSON).content(
 				"{\"callbackUrl\":\"callbackUrl-test\",\"description\":\"description-test\",\"name\":\"name-createTaskTest\",\"processDefinitionKey\":\"processDefinitionKey-test\",\"processInstanceId\":\"processInstanceId-test\",\"reporter\":\"reporter-test\",\"serviceRequestId\": 999}"))
 				.andExpect(jsonPath("$.status", is("OK")));
 
-		mvc.perform(post("/service-management/tasks/query").contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post("/v1/tasks/query").contentType(MediaType.APPLICATION_JSON)
 				.content("{\r\n" + "  \"filters\": [\r\n" + "    {\r\n" + "      \"name\": \"name\",\r\n"
 						+ "      \"operator\": \"eq\",\r\n" + "      \"value\": \"name-createTaskTest\"\r\n"
 						+ "    }\r\n" + "  ]\r\n" + "}"))
@@ -25,7 +25,7 @@ public class TaskControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void createTaskWhenServiceRequestIdDoesNotExistTest() throws Exception {
-		mvc.perform(post("/service-management/tasks").contentType(MediaType.APPLICATION_JSON).content(
+		mvc.perform(post("/v1/tasks").contentType(MediaType.APPLICATION_JSON).content(
 				"{\"callbackUrl\":\"callbackUrl-test\",\"description\":\"description-test\",\"name\":\"name-createTaskTest\",\"processDefinitionKey\":\"processDefinitionKey-test\",\"processInstanceId\":\"processInstanceId-test\",\"reporter\":\"reporter-test\",\"serviceRequestId\": 111}"))
 				.andExpect(jsonPath("$.status", is("ERROR")));
 	}

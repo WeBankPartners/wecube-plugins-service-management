@@ -11,15 +11,15 @@ public class CoreResourceControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void getAllRolesTest() throws Exception {
-		mvc.perform(get("/service-management/core-resources/roles").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
+		mvc.perform(get("/v1/core-resources/roles").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
 	}
 	@Test
 	public void getRolesByCurrentUser() throws Exception {
-		mvc.perform(get("/service-management/core-resources/users/current-user/roles").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
+		mvc.perform(get("/v1/core-resources/users/current-user/roles").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
 	}
 	@Test
 	public void createServiceCatalogueTest() throws Exception {
-		mvc.perform(get("/service-management/core-resources/workflow/process-definition-keys").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
+		mvc.perform(get("/v1/core-resources/workflow/process-definition-keys").contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.status", is("OK")));
 	}
 
 }
