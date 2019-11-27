@@ -1,4 +1,6 @@
-
+server: 
+  servlet:
+    context-path: /service-mgmt
 spring:
   datasource:
     driver-class-name: org.h2.Driver
