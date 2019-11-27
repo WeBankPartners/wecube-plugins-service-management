@@ -33,101 +33,103 @@ import com.webank.servicemanagement.utils.FileUtils;
 @Service
 public class ServiceRequestService {
 
-	@Autowired
-	ServiceRequestRepository serviceRequestRepository;
-	@Autowired
-	ServiceRequestTemplateRepository serviceRequestTemplateRepository;
-	@Autowired
-	AttachFileRepository attachFileRepository;
-	@Autowired
-	EntityRepository entityRepository;
+    @Autowired
+    ServiceRequestRepository serviceRequestRepository;
+    @Autowired
+    ServiceRequestTemplateRepository serviceRequestTemplateRepository;
+    @Autowired
+    AttachFileRepository attachFileRepository;
+    @Autowired
+    EntityRepository entityRepository;
 
-	// TODO - modify "MockCoreServiceStub" to "CoreServiceStub" when Core API is
-	// ready
-	@Autowired
-	MockCoreServiceStub coreServiceStub;
+    // TODO - modify "MockCoreServiceStub" to "CoreServiceStub" when Core API is
+    // ready
+    @Autowired
+    MockCoreServiceStub coreServiceStub;
 
-	private final static String STATUS_SUBMITTED = "Submitted";
-	private final static String STATUS_PROCESSING = "Processing";
-	private final static String STATUS_DONE = "Done";
+    private final static String STATUS_SUBMITTED = "Submitted";
+    private final static String STATUS_PROCESSING = "Processing";
+    private final static String STATUS_DONE = "Done";
 
-	public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
-		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
-				.findById(request.getTemplateId());
-		if (!serviceRequestTemplate.isPresent())
-			throw new Exception("Invalid service request template ID !");
+    public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
+                .findById(request.getTemplateId());
+        if (!serviceRequestTemplate.isPresent())
+            throw new Exception("Invalid service request template ID !");
 
-		AttachFile attachFile = null;
-		if (request.getAttachFileId() != 0) {
-			Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
-			if (!attachFileOptional.isPresent())
-				throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
-			attachFile = attachFileOptional.get();
-		}
-		ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
-				request.getRoleId(), request.getReporter(), currentTime, request.getEmergency(),
-				request.getDescription(), STATUS_SUBMITTED, attachFile);
-		serviceRequestRepository.save(serviceRequest);
+        AttachFile attachFile = null;
+        if (request.getAttachFileId() != 0) {
+            Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
+            if (!attachFileOptional.isPresent())
+                throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
+            attachFile = attachFileOptional.get();
+        }
+        ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
+                request.getRoleId(), request.getReporter(), currentTime, request.getEmergency(),
+                request.getDescription(), STATUS_SUBMITTED, attachFile);
+        serviceRequestRepository.save(serviceRequest);
 
-		StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
-				serviceRequestTemplate.get().getProcessDefinitionKey());
-		serviceRequest.setProcessInstanceId(
-				coreServiceStub.startWorkflowInstanceByProcessDefinitionKey(startWorkflowInstanceRequest));
+        StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
+                serviceRequestTemplate.get().getProcessDefinitionKey());
+        serviceRequest.setProcessInstanceId(
+                coreServiceStub.startWorkflowInstanceByProcessDefinitionKey(startWorkflowInstanceRequest));
 
-		serviceRequest.setStatus(STATUS_PROCESSING);
-		serviceRequestRepository.save(serviceRequest);
-	}
+        serviceRequest.setStatus(STATUS_PROCESSING);
+        serviceRequestRepository.save(serviceRequest);
+    }
 
-	public List<ServiceRequest> getAllServiceRequest() {
-		return Lists.newArrayList(serviceRequestRepository.findAll());
-	}
+    public List<ServiceRequest> getAllServiceRequest() {
+        return Lists.newArrayList(serviceRequestRepository.findAll());
+    }
 
-	public void doneServiceRequest(int serviceRequestId, DoneServiceRequestRequest completedRequest) throws Exception {
-		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
-		if (!serviceRequestResult.isPresent())
-			throw new Exception(String.format("Service Request [%d] not found", serviceRequestId));
-		ServiceRequest serviceRequest = serviceRequestResult.get();
-		serviceRequest.setResult(completedRequest.getResult());
-		serviceRequest.setStatus(STATUS_DONE);
-		serviceRequestRepository.save(serviceRequest);
-	}
+    public void doneServiceRequest(DoneServiceRequestRequest completedRequest) throws Exception {
+        Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository
+                .findById(completedRequest.getServiceRequestId());
+        if (!serviceRequestResult.isPresent())
+            throw new Exception(
+                    String.format("Service Request [%d] not found", completedRequest.getServiceRequestId()));
+        ServiceRequest serviceRequest = serviceRequestResult.get();
+        serviceRequest.setResult(completedRequest.getResult());
+        serviceRequest.setStatus(STATUS_DONE);
+        serviceRequestRepository.save(serviceRequest);
+    }
 
-	public int uploadServiceRequestAttachFile(InputStream attachFileStream, String attachFileName) throws Exception {
-		AttachFile attachFileObject = new AttachFile(attachFileName, FileUtils.streamToByteArray(attachFileStream));
-		attachFileRepository.save(attachFileObject);
+    public int uploadServiceRequestAttachFile(InputStream attachFileStream, String attachFileName) throws Exception {
+        AttachFile attachFileObject = new AttachFile(attachFileName, FileUtils.streamToByteArray(attachFileStream));
+        attachFileRepository.save(attachFileObject);
 
-		return attachFileObject.getId();
-	}
+        return attachFileObject.getId();
+    }
 
-	public DownloadAttachFileResponse downloadServiceRequestAttachFile(int serviceRequestId) throws Exception {
-		Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
-		if (!serviceRequestResult.isPresent())
-			throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
-		ServiceRequest serviceRequest = serviceRequestResult.get();
+    public DownloadAttachFileResponse downloadServiceRequestAttachFile(int serviceRequestId) throws Exception {
+        Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
+        if (!serviceRequestResult.isPresent())
+            throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
+        ServiceRequest serviceRequest = serviceRequestResult.get();
 
-		ResponseEntity<byte[]> responseEntity = FileUtils.byteArrayToFileResponseEntity(
-				serviceRequest.getAttachFile().getAttachFileName(), serviceRequest.getAttachFile().getAttachFile());
-		if (responseEntity == null) {
-			throw new Exception("File object not found for service-request-id: " + serviceRequestId);
-		}
-		return new DownloadAttachFileResponse(responseEntity, serviceRequest.getAttachFile().getAttachFileName());
+        ResponseEntity<byte[]> responseEntity = FileUtils.byteArrayToFileResponseEntity(
+                serviceRequest.getAttachFile().getAttachFileName(), serviceRequest.getAttachFile().getAttachFile());
+        if (responseEntity == null) {
+            throw new Exception("File object not found for service-request-id: " + serviceRequestId);
+        }
+        return new DownloadAttachFileResponse(responseEntity, serviceRequest.getAttachFile().getAttachFileName());
 
-	}
+    }
 
-	public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {
-		queryRequest.setSorting(new Sorting(false, "reportTime"));
+    public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {
+        queryRequest.setSorting(new Sorting(false, "reportTime"));
 
-		QueryResponse<ServiceRequest> queryResult;
-		try {
-			queryResult = entityRepository.query(ServiceRequest.class, queryRequest);
-			if (queryResult.getContents().size() == 0) {
-				return new QueryResponse<>();
-			}
-			return queryResult;
-		} catch (Exception e) {
-			return new QueryResponse<>();
-		}
-	}
+        QueryResponse<ServiceRequest> queryResult;
+        try {
+            queryResult = entityRepository.query(ServiceRequest.class, queryRequest);
+            if (queryResult.getContents().size() == 0) {
+                return new QueryResponse<>();
+            }
+            return queryResult;
+        } catch (Exception e) {
+            return new QueryResponse<>();
+        }
+    }
 
 }
