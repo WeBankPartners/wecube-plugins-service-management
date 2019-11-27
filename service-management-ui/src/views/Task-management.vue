@@ -58,7 +58,7 @@
             <Input type="textarea" v-model="requestForm.description" placeholder="描述"></Input>
           </FormItem>
           <FormItem label="请求附件">
-            <Upload :on-success="uploadSuccess" ref="upload" action="/servicemgmt/v1/service-requests/attach-file">
+            <Upload :on-success="uploadSuccess" ref="upload" action="/service-mgmt/v1/service-requests/attach-file">
                 <Button icon="ios-cloud-upload-outline">上传附件</Button>
             </Upload>
           </FormItem>
@@ -396,7 +396,7 @@ export default {
     downloadFile(id) {
       let a = document.createElement("a");
       const body = document.body;
-      a.setAttribute("href", `/servicemgmt/v1/service-requests/${id}/attach-file`);
+      a.setAttribute("href", `/service-mgmt/v1/service-requests/${id}/attach-file`);
       a.setAttribute("id", "downloadFile");
       body.appendChild(a);
       a.click();
