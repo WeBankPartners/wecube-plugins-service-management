@@ -1,13 +1,21 @@
 package com.webank.servicemanagement.support.core.dto;
 
 public class ProcessDefinitionKeyDataResponse {
-	private String processDefinitionKey;
+    private String processDefinitionKey;
 
-	public String getProcessDefinitionKey() {
-		return processDefinitionKey;
-	}
+    public ProcessDefinitionKeyDataResponse(String processDefinitionKey) {
+        super();
+        this.processDefinitionKey = processDefinitionKey;
+    }
 
-	public void setProcessDefinitionKey(String processDefinitionKey) {
-		this.processDefinitionKey = processDefinitionKey;
-	}
+    public ProcessDefinitionKeyDataResponse() {
+    }
+
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
+
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
+    }
 }

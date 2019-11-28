@@ -26,7 +26,8 @@ import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
-import com.webank.servicemanagement.mock.MockCoreServiceStub;
+import com.webank.servicemanagement.support.core.MockCoreServiceStub;
+import com.webank.servicemanagement.support.core.dto.StartProcessInstanceDto;
 import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
 import com.webank.servicemanagement.utils.FileUtils;
 
@@ -72,8 +73,10 @@ public class ServiceRequestService {
 
         StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
                 serviceRequestTemplate.get().getProcessDefinitionKey());
+        StartProcessInstanceDto startProcessInstanceRequest= new StartProcessInstanceDto();
+        
         serviceRequest.setProcessInstanceId(
-                coreServiceStub.startWorkflowInstanceByProcessDefinitionKey(startWorkflowInstanceRequest));
+                coreServiceStub.startWorkflowInstanceByProcessDefinitionId(startWorkflowInstanceRequest));
 
         serviceRequest.setStatus(STATUS_PROCESSING);
         serviceRequestRepository.save(serviceRequest);
