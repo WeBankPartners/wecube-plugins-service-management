@@ -1,4 +1,4 @@
-package com.webank.servicemanagement.mock;
+package com.webank.servicemanagement.support.core;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,7 +65,7 @@ public class MockCoreServiceStub {
 		return mockData;
 	}
 
-	public String startWorkflowInstanceByProcessDefinitionKey(
+	public String startWorkflowInstanceByProcessDefinitionId(
 			StartWorkflowInstanceRequest startWorkflowInstanceRequest) {
 		log.info("[Mock] send request [startWorkflowInstanceByProcessDefinitionKey] with [{}] to wecube_core...",
 				startWorkflowInstanceRequest.toString());
@@ -76,7 +76,7 @@ public class MockCoreServiceStub {
 	}
 
 	public List<String> getAllProcessDefinitionKeys() {
-		log.info("[Mock] send request [getAllRoles] to wecube_core...");
+		log.info("[Mock] send request [getAllProcessDefinitionKeys] to wecube_core...");
 
 		String mockDataString = "[{\"processDefinitionKey\": \"key001\"},{\"processDefinitionKey\": \"key002\"}]";
 		JSONArray json = JSONArray.fromObject(mockDataString);

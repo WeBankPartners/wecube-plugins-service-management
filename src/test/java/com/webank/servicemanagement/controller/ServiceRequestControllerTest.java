@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.webank.servicemanagement.mock.MockCoreServiceStub;
+import com.webank.servicemanagement.support.core.MockCoreServiceStub;
 
 @ActiveProfiles("test")
 public class ServiceRequestControllerTest extends AbstractControllerTest {

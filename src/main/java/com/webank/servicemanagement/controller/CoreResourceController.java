@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.webank.servicemanagement.dto.JsonResponse;
-import com.webank.servicemanagement.mock.MockCoreServiceStub;
+import com.webank.servicemanagement.support.core.MockCoreServiceStub;
 
 @RestController
 @RequestMapping("/v1/core-resources")
