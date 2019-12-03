@@ -12,173 +12,199 @@ import javax.persistence.Table;
 @Table(name = "task")
 public class Task {
 
-	@Id
-	@GeneratedValue
-	private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-	public Task() {
-	}
+    public Task() {
+    }
 
-	public Task(ServiceRequest serviceRequest, String processInstanceId, String callbackUrl, String name,
-			String processDefinitionKey, String reporter, String reportTime, String description, String status) {
-		this.serviceRequest = serviceRequest;
-		this.processInstanceId = processInstanceId;
-		this.callbackUrl = callbackUrl;
-		this.name = name;
-		this.processDefinitionKey = processDefinitionKey;
-		this.reporter = reporter;
-		this.reportTime = reportTime;
-		this.description = description;
-		this.status = status;
-	}
+    public Task(ServiceRequest serviceRequest, String processInstanceId, String callbackUrl, String name,
+            String processDefinitionKey, String reporter, String reportTime, String description, String status,
+            String requestId) {
+        this.serviceRequest = serviceRequest;
+        this.processInstanceId = processInstanceId;
+        this.callbackUrl = callbackUrl;
+        this.name = name;
+        this.processDefinitionKey = processDefinitionKey;
+        this.reporter = reporter;
+        this.reportTime = reportTime;
+        this.description = description;
+        this.status = status;
+        this.requestId = requestId;
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "service_request_id")
-	private ServiceRequest serviceRequest;
-	@Column(name = "process_instance_id")
-	private String processInstanceId;
-	@Column(name = "callback_url")
-	private String callbackUrl;
-	@Column(name = "name")
-	private String name;
-	@Column(name = "process_definition_key")
-	private String processDefinitionKey;
-	@Column(name = "reporter")
-	private String reporter;
-	@Column(name = "report_time")
-	private String reportTime;
-	@Column(name = "operator")
-	private String operator;
-	@Column(name = "operate_time")
-	private String operateTime;
-	@Column(name = "input_parameters")
-	private String inputParameters;
-	@Column(name = "description")
-	private String description;
-	@Column(name = "result")
-	private String result;
-	@Column(name = "result_message")
-	private String resultMessage;
-	@Column(name = "status")
-	private String status;
+    @ManyToOne
+    @JoinColumn(name = "service_request_id")
+    private ServiceRequest serviceRequest;
 
-	public Integer getId() {
-		return id;
-	}
+    @Column(name = "process_instance_id")
+    private String processInstanceId;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    @Column(name = "callback_url")
+    private String callbackUrl;
 
-	public ServiceRequest getServiceRequest() {
-		return serviceRequest;
-	}
+    @Column(name = "name")
+    private String name;
 
-	public void setServiceRequest(ServiceRequest serviceRequest) {
-		this.serviceRequest = serviceRequest;
-	}
+    @Column(name = "process_definition_key")
+    private String processDefinitionKey;
 
-	public String getProcessInstanceId() {
-		return processInstanceId;
-	}
+    @Column(name = "reporter")
+    private String reporter;
 
-	public void setProcessInstanceId(String processInstanceId) {
-		this.processInstanceId = processInstanceId;
-	}
+    @Column(name = "report_time")
+    private String reportTime;
 
-	public String getCallbackUrl() {
-		return callbackUrl;
-	}
+    @Column(name = "operator")
+    private String operator;
 
-	public void setCallbackUrl(String callbackUrl) {
-		this.callbackUrl = callbackUrl;
-	}
+    @Column(name = "operate_time")
+    private String operateTime;
 
-	public String getName() {
-		return name;
-	}
+    @Column(name = "input_parameters")
+    private String inputParameters;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Column(name = "description")
+    private String description;
 
-	public String getProcessDefinitionKey() {
-		return processDefinitionKey;
-	}
+    @Column(name = "result")
+    private String result;
 
-	public void setProcessDefinitionKey(String processDefinitionKey) {
-		this.processDefinitionKey = processDefinitionKey;
-	}
+    @Column(name = "result_message")
+    private String resultMessage;
 
-	public String getReporter() {
-		return reporter;
-	}
+    @Column(name = "status")
+    private String status;
 
-	public void setReporter(String reporter) {
-		this.reporter = reporter;
-	}
+    @Column(name = "requeset_id")
+    private String requestId;
 
-	public String getReportTime() {
-		return reportTime;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setReportTime(String reportTime) {
-		this.reportTime = reportTime;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getOperator() {
-		return operator;
-	}
+    public ServiceRequest getServiceRequest() {
+        return serviceRequest;
+    }
 
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
+    public void setServiceRequest(ServiceRequest serviceRequest) {
+        this.serviceRequest = serviceRequest;
+    }
 
-	public String getOperateTime() {
-		return operateTime;
-	}
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
 
-	public void setOperateTime(String operateTime) {
-		this.operateTime = operateTime;
-	}
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
 
-	public String getInputParameters() {
-		return inputParameters;
-	}
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
 
-	public void setInputParameters(String inputParameters) {
-		this.inputParameters = inputParameters;
-	}
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
+    }
 
-	public String getResultMessage() {
-		return resultMessage;
-	}
+    public String getReporter() {
+        return reporter;
+    }
 
-	public void setResultMessage(String resultMessage) {
-		this.resultMessage = resultMessage;
-	}
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getReportTime() {
+        return reportTime;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setReportTime(String reportTime) {
+        this.reportTime = reportTime;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getOperateTime() {
+        return operateTime;
+    }
+
+    public void setOperateTime(String operateTime) {
+        this.operateTime = operateTime;
+    }
+
+    public String getInputParameters() {
+        return inputParameters;
+    }
+
+    public void setInputParameters(String inputParameters) {
+        this.inputParameters = inputParameters;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getResultMessage() {
+        return resultMessage;
+    }
+
+    public void setResultMessage(String resultMessage) {
+        this.resultMessage = resultMessage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 }
