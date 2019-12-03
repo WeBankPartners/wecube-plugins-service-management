@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
+import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CoreProcessDefinitionDto;
+import com.webank.servicemanagement.support.core.dto.CoreResponse.DefaultCoreResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllProcessKeysResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllRolesResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.StringCoreResponse;
@@ -22,8 +24,8 @@ public class CoreServiceStub {
 
     private static final String GET_ALL_ROLES = "/admin/roles";
     private static final String GET_ROLES_BY_USER_NAME = "/admin/users/%s/roles";
-    private static final String START_WORKFLOW_INSTANCE = "/process-definition-keys/%s/start";
-    private static final String GET_ALL_PEOCESS_KEYS = "/v1/process/definitions?includeDraft=%d";
+    private static final String START_WORKFLOW_INSTANCE = "/platform/process-definition-keys/%s/start";
+    private static final String GET_ALL_PEOCESS_KEYS = "/platform/v1/process/definitions?includeDraft=%d";
 
     @Autowired
     private CoreRestTemplate template;
@@ -43,6 +45,10 @@ public class CoreServiceStub {
             StartWorkflowInstanceRequest startWorkflowInstanceRequest) {
         return template.get(asCoreUrl(START_WORKFLOW_INSTANCE, startWorkflowInstanceRequest.getProcessDefinitionId()),
                 StringCoreResponse.class);
+    }
+
+    public Object callback(String callbackUrl, CallbackRequestDto callbackRequest) {
+        return template.postForResponse(asCoreUrl(callbackUrl), callbackRequest, DefaultCoreResponse.class);
     }
 
     private String asCoreUrl(String path, Object... pathVariables) {

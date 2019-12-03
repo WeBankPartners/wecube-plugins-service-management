@@ -20,90 +20,99 @@ import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
+import com.webank.servicemanagement.support.core.CoreServiceStub;
+import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 
 @Service
 public class TaskService {
 
-	@Autowired
-	TaskRepository taskRepository;
-	@Autowired
-	ServiceRequestRepository serviceRequestRepository;
-	@Autowired
-	EntityRepository entityRepository;
+    @Autowired
+    TaskRepository taskRepository;
+    @Autowired
+    ServiceRequestRepository serviceRequestRepository;
+    @Autowired
+    EntityRepository entityRepository;
+    @Autowired
+    CoreServiceStub coreServiceStub;
 
-	private final static String STATUS_PENDING = "Pending";
-	private final static String STATUS_PROCESSING = "Processing";
-	private final static String STATUS_SUCCESSFUL = "Successful";
-	private final static String STATUS_FAILED = "Failed";
+    private final static String STATUS_PENDING = "Pending";
+    private final static String STATUS_PROCESSING = "Processing";
+    private final static String STATUS_SUCCESSFUL = "Successful";
+    private final static String STATUS_FAILED = "Failed";
 
-	public void createTask(CreateTaskRequest createTaskRequest) throws Exception {
-		Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
-				.findById(createTaskRequest.getServiceRequestId());
-		if (!serviceRequestOptional.isPresent())
-			throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
-					createTaskRequest.getServiceRequestId()));
+    public void createTask(CreateTaskRequest createTaskRequest) throws Exception {
+        Task task = new Task(null, createTaskRequest.getProcessInstanceId(), createTaskRequest.getCallbackUrl(),
+                createTaskRequest.getName(), createTaskRequest.getProcessDefinitionKey(),
+                createTaskRequest.getReporter(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+                createTaskRequest.getDescription(), STATUS_PENDING, createTaskRequest.getRequestId());
 
-		String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-		Task task = new Task(serviceRequestOptional.get(), createTaskRequest.getProcessInstanceId(),
-				createTaskRequest.getCallbackUrl(), createTaskRequest.getName(),
-				createTaskRequest.getProcessDefinitionKey(), createTaskRequest.getReporter(), currentTime,
-				createTaskRequest.getDescription(), STATUS_PENDING);
-		taskRepository.save(task);
-	}
+        if (createTaskRequest.getServiceRequestId() != 0) {
+            Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
+                    .findById(createTaskRequest.getServiceRequestId());
+            if (!serviceRequestOptional.isPresent())
+                throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
+                        createTaskRequest.getServiceRequestId()));
+            task.setServiceRequest(serviceRequestOptional.get());
+        }
+        taskRepository.save(task);
+    }
 
-	public List<Task> getAllTask() {
-		return Lists.newArrayList(taskRepository.findAll());
-	}
+    public List<Task> getAllTask() {
+        return Lists.newArrayList(taskRepository.findAll());
+    }
 
-	public void takeoverTask(int taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
-		Task task;
-		Optional<Task> taskResult = taskRepository.findById(taskId);
-		if (!taskResult.isPresent()) {
-			throw new Exception("Can not found the specified task, please check !");
-		}
-		task = taskResult.get();
-		task.setOperator(receiveTaskrequest.getOperator());
-		task.setStatus(STATUS_PROCESSING);
-		taskRepository.save(task);
-	}
+    public void takeoverTask(int taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
+        Task task;
+        Optional<Task> taskResult = taskRepository.findById(taskId);
+        if (!taskResult.isPresent()) {
+            throw new Exception("Can not found the specified task, please check !");
+        }
+        task = taskResult.get();
+        task.setOperator(receiveTaskrequest.getOperator());
+        task.setStatus(STATUS_PROCESSING);
+        taskRepository.save(task);
+    }
 
-	public void processTask(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
-		if (!checkResultIsAvailable(processTaskRequest.getResult()))
-			throw new Exception(String.format("Result[%s] is invalid", processTaskRequest.getResult()));
-		updateTaskByProcessTaskRequest(taskId, processTaskRequest);
-	}
+    public void processTask(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
+        if (!checkResultIsAvailable(processTaskRequest.getResult()))
+            throw new Exception(String.format("Result[%s] is invalid", processTaskRequest.getResult()));
+        updateTaskByProcessTaskRequest(taskId, processTaskRequest);
+    }
 
-	private boolean checkResultIsAvailable(String result) {
-		return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
-	}
+    private boolean checkResultIsAvailable(String result) {
+        return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
+    }
 
-	private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
-		Task task;
-		Optional<Task> taskResult = taskRepository.findById(taskId);
-		if (!taskResult.isPresent())
-			throw new Exception("Can not found the specified task, please check !");
+    private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
+        Optional<Task> taskResult = taskRepository.findById(taskId);
+        if (!taskResult.isPresent())
+            throw new Exception("Can not found the specified task, please check !");
+        Task task = taskResult.get();
 
-		task = taskResult.get();
-		task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		task.setResult(processTaskRequest.getResult());
-		task.setResultMessage(processTaskRequest.getResultMessage());
-		task.setStatus(processTaskRequest.getResult());
-		taskRepository.save(task);
-	}
+        //TODO - build callback request dto
+        CallbackRequestDto callbackRequest = new CallbackRequestDto();
+        coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
 
-	public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
-		queryRequest.setSorting(new Sorting(false, "reportTime"));
+        task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        task.setResult(processTaskRequest.getResult());
+        task.setResultMessage(processTaskRequest.getResultMessage());
+        task.setStatus(processTaskRequest.getResult());
+        taskRepository.save(task);
+    }
 
-		QueryResponse<Task> queryResult;
-		try {
-			queryResult = entityRepository.query(Task.class, queryRequest);
-			if (queryResult.getContents().size() == 0) {
-				return new QueryResponse<>();
-			}
-			return queryResult;
-		} catch (Exception e) {
-			return new QueryResponse<>();
-		}
-	}
+    public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
+        queryRequest.setSorting(new Sorting(false, "reportTime"));
+
+        QueryResponse<Task> queryResult;
+        try {
+            queryResult = entityRepository.query(Task.class, queryRequest);
+            if (queryResult.getContents().size() == 0) {
+                return new QueryResponse<>();
+            }
+            return queryResult;
+        } catch (Exception e) {
+            return new QueryResponse<>();
+        }
+    }
 
 }

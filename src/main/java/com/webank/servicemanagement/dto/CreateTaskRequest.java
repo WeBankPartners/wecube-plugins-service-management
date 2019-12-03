@@ -8,7 +8,8 @@ public class CreateTaskRequest {
 	private String reporter;
 	private String operatorRoleId;
 	private String description;
-	private String processDefinitionKey;
+    private String processDefinitionKey;
+    private String requestId;
 
 	public int getServiceRequestId() {
 		return serviceRequestId;
@@ -73,4 +74,12 @@ public class CreateTaskRequest {
 	public void setProcessDefinitionKey(String processDefinitionKey) {
 		this.processDefinitionKey = processDefinitionKey;
 	}
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 }

@@ -5,7 +5,7 @@ module.exports = {
     open: true,
     port: 3000,
     proxy: {
-      "/service-request": {
+      "/service-mgmt": {
         target: " http://localhost:21000"
       },
       "/service-management": {
