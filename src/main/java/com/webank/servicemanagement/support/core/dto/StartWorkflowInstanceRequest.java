@@ -1,22 +1,22 @@
 package com.webank.servicemanagement.support.core.dto;
 
 public class StartWorkflowInstanceRequest {
-	private String processDefinitionKey;
+	private String processDefinitionId;
 
-	public String getProcessDefinitionKey() {
-		return processDefinitionKey;
+	public String getProcessDefinitionId() {
+		return processDefinitionId;
 	}
 
-	public void setProcessDefinitionKey(String processDefinitionKey) {
-		this.processDefinitionKey = processDefinitionKey;
+	public void setProcessDefinitionId(String processDefinitionId) {
+		this.processDefinitionId = processDefinitionId;
 	}
 
 	public StartWorkflowInstanceRequest() {
 		super();
 	}
 
-	public StartWorkflowInstanceRequest(String processDefinitionKey) {
+	public StartWorkflowInstanceRequest(String processDefinitionId) {
 		super();
-		this.processDefinitionKey = processDefinitionKey;
+		this.processDefinitionId = processDefinitionId;
 	}
 }

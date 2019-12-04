@@ -22,6 +22,9 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
 	public static class ListDataResponse extends CoreResponse<List> {
 	}
 	
-	public static class GetAllRolesResponse extends CoreResponse<List<RolesDataResponse>> {
-	}
+    public static class GetAllRolesResponse extends CoreResponse<List<RolesDataResponse>> {
+    }   
+    
+    public static class GetAllProcessKeysResponse extends CoreResponse<List<CoreProcessDefinitionDto>> {
+    }
 }
