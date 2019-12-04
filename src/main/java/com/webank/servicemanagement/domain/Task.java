@@ -19,14 +19,11 @@ public class Task {
     public Task() {
     }
 
-    public Task(ServiceRequest serviceRequest, String processInstanceId, String callbackUrl, String name,
-            String processDefinitionKey, String reporter, String reportTime, String description, String status,
-            String requestId) {
-        this.serviceRequest = serviceRequest;
-        this.processInstanceId = processInstanceId;
+    public Task(String callbackUrl, String name, String operatorRole, String reporter, String reportTime,
+            String description, String status, String requestId) {
         this.callbackUrl = callbackUrl;
         this.name = name;
-        this.processDefinitionKey = processDefinitionKey;
+        this.operatorRole = operatorRole;
         this.reporter = reporter;
         this.reportTime = reportTime;
         this.description = description;
@@ -38,23 +35,20 @@ public class Task {
     @JoinColumn(name = "service_request_id")
     private ServiceRequest serviceRequest;
 
-    @Column(name = "process_instance_id")
-    private String processInstanceId;
-
     @Column(name = "callback_url")
     private String callbackUrl;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "process_definition_key")
-    private String processDefinitionKey;
-
     @Column(name = "reporter")
     private String reporter;
 
     @Column(name = "report_time")
     private String reportTime;
+
+    @Column(name = "operator_role")
+    private String operatorRole;
 
     @Column(name = "operator")
     private String operator;
@@ -96,14 +90,6 @@ public class Task {
         this.serviceRequest = serviceRequest;
     }
 
-    public String getProcessInstanceId() {
-        return processInstanceId;
-    }
-
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
-    }
-
     public String getCallbackUrl() {
         return callbackUrl;
     }
@@ -118,14 +104,6 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getProcessDefinitionKey() {
-        return processDefinitionKey;
-    }
-
-    public void setProcessDefinitionKey(String processDefinitionKey) {
-        this.processDefinitionKey = processDefinitionKey;
     }
 
     public String getReporter() {
@@ -206,5 +184,13 @@ public class Task {
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
+    }
+
+    public String getOperatorRole() {
+        return operatorRole;
+    }
+
+    public void setOperatorRole(String operatorRole) {
+        this.operatorRole = operatorRole;
     }
 }

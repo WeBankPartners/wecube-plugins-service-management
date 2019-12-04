@@ -96,15 +96,8 @@
                     <parameter datatype="string" mappingType='system_variable' mappingSystemVariableName='CALLBACK_URL' required='Y'>
                         callbackUrl
                     </parameter>
-                    <parameter datatype="string" mappingType='context' required='N'>description</parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>name</parameter>
-                    <parameter datatype="string" mappingType='entity' mappingEntityExpression='name_xxx' required='Y'>
-                        operatorRoleId
-                    </parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>processDefinitionKey</parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>processInstanceId</parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>reporter</parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>serviceRequestId</parameter>
+                    <parameter datatype="string" mappingType='constant' required='Y'>taskName</parameter>
+                    <parameter datatype="string" mappingType='constant' required='Y'>roleName</parameter>
                 </inputParameters>
                 <outputParameters>
                     <parameter datatype="string">status</parameter>
