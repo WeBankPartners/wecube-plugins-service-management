@@ -1,50 +1,37 @@
 package com.webank.servicemanagement.support.core.dto;
 
-import java.util.List;
-
 public class CallbackRequestDto {
-    private String requestId;
-    private List<Result> results;
+    private String resultCode;
+    private String resultMessage;
+    private CallbackRequestResultDto results;
 
-    class Result {
-        private String resultCode;
-        private String resultMessage;
-
-        public String getResultCode() {
-            return resultCode;
-        }
-
-        public void setResultCode(String resultCode) {
-            this.resultCode = resultCode;
-        }
-
-        public String getResultMessage() {
-            return resultMessage;
-        }
-
-        public void setResultMessage(String resultMessage) {
-            this.resultMessage = resultMessage;
-        }
+    public String getResultCode() {
+        return resultCode;
     }
 
-    public String getRequestId() {
-        return requestId;
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public String getResultMessage() {
+        return resultMessage;
     }
 
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setResultMessage(String resultMessage) {
+        this.resultMessage = resultMessage;
     }
 
     @Override
     public String toString() {
-        return "CallbackRequestDto [requestId=" + requestId + ", results=" + results + "]";
+        return "CallbackRequestDto [resultCode=" + resultCode + ", resultMessage=" + resultMessage + ", results="
+                + results + "]";
+    }
+
+    public CallbackRequestResultDto getResults() {
+        return results;
+    }
+
+    public void setResults(CallbackRequestResultDto results) {
+        this.results = results;
     }
 }
