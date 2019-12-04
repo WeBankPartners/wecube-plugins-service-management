@@ -45,15 +45,6 @@ public class TaskService {
                 createTaskRequest.getRoleName(), createTaskRequest.getOperator(),
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), createTaskRequest.getTaskName(),
                 STATUS_PENDING, createTaskRequest.getRequestId());
-
-//        if (createTaskRequest.getServiceRequestId() != 0) {
-//            Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
-//                    .findById(createTaskRequest.getServiceRequestId());
-//            if (!serviceRequestOptional.isPresent())
-//                throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
-//                        createTaskRequest.getServiceRequestId()));
-//            task.setServiceRequest(serviceRequestOptional.get());
-//        }
         taskRepository.save(task);
     }
 
