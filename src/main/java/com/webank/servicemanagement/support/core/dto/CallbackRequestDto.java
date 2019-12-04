@@ -42,4 +42,9 @@ public class CallbackRequestDto {
     public void setResults(List<Result> results) {
         this.results = results;
     }
+
+    @Override
+    public String toString() {
+        return "CallbackRequestDto [requestId=" + requestId + ", results=" + results + "]";
+    }
 }
