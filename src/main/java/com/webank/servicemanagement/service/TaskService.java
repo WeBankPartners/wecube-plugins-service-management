@@ -41,19 +41,19 @@ public class TaskService {
     private final static String STATUS_FAILED = "Failed";
 
     public void createTask(CreateTaskRequest createTaskRequest) throws Exception {
-        Task task = new Task(null, createTaskRequest.getProcessInstanceId(), createTaskRequest.getCallbackUrl(),
-                createTaskRequest.getName(), createTaskRequest.getProcessDefinitionKey(),
-                createTaskRequest.getReporter(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
-                createTaskRequest.getDescription(), STATUS_PENDING, createTaskRequest.getRequestId());
+        Task task = new Task(createTaskRequest.getCallbackUrl(), createTaskRequest.getTaskName(),
+                createTaskRequest.getRoleName(), createTaskRequest.getOperator(),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), createTaskRequest.getTaskName(),
+                STATUS_PENDING, createTaskRequest.getRequestId());
 
-        if (createTaskRequest.getServiceRequestId() != 0) {
-            Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
-                    .findById(createTaskRequest.getServiceRequestId());
-            if (!serviceRequestOptional.isPresent())
-                throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
-                        createTaskRequest.getServiceRequestId()));
-            task.setServiceRequest(serviceRequestOptional.get());
-        }
+//        if (createTaskRequest.getServiceRequestId() != 0) {
+//            Optional<ServiceRequest> serviceRequestOptional = serviceRequestRepository
+//                    .findById(createTaskRequest.getServiceRequestId());
+//            if (!serviceRequestOptional.isPresent())
+//                throw new Exception(String.format("ServiceRequest request Id [%d] does not exist",
+//                        createTaskRequest.getServiceRequestId()));
+//            task.setServiceRequest(serviceRequestOptional.get());
+//        }
         taskRepository.save(task);
     }
 
@@ -89,7 +89,7 @@ public class TaskService {
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
-        //TODO - build callback request dto
+        // TODO - build callback request dto
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
         coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
 
