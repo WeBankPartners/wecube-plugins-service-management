@@ -7,7 +7,7 @@ CREATE TABLE `service_catalogue` (
     `description` VARCHAR(255) NULL,
     `status` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 
 drop table if exists `service_pipeline`;
@@ -20,7 +20,7 @@ CREATE TABLE `service_pipeline` (
     `status` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_service_catalogue_service_pipeline` FOREIGN KEY (`service_catalogue_id`) REFERENCES `service_catalogue` (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists `service_request_template`;
 CREATE TABLE `service_request_template` (
@@ -32,7 +32,7 @@ CREATE TABLE `service_request_template` (
     `status` VARCHAR(32) NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `service_pipeline_and_name` (`service_pipeline_id`, `name`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists `attach_file`;
 CREATE TABLE `attach_file` (
@@ -40,7 +40,7 @@ CREATE TABLE `attach_file` (
     `attach_file_name` VARCHAR(255) NULL,
     `attach_file` MEDIUMBLOB NULL,
     PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists `service_request`;
 CREATE TABLE `service_request` (
@@ -60,7 +60,7 @@ CREATE TABLE `service_request` (
     INDEX `idx_template_id` (`template_id`),
     CONSTRAINT `fk_service_request_template_service_request` FOREIGN KEY (`template_id`) REFERENCES `service_request_template` (`id`),
     CONSTRAINT `fk_attach_file_service_request` FOREIGN KEY (`attach_file_id`) REFERENCES `attach_file` (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists `task`;
 CREATE TABLE `task` (
@@ -80,6 +80,6 @@ CREATE TABLE `task` (
     `status` VARCHAR(32) NULL DEFAULT NULL,
     `request_id` INT(11) NULL ,
     PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 SET FOREIGN_KEY_CHECKS = 1;
