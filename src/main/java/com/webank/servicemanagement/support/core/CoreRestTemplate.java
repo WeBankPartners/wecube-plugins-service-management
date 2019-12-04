@@ -17,7 +17,7 @@ public class CoreRestTemplate {
     private RestTemplate restTemplate;
 
     @SuppressWarnings("unchecked")
-    public <D, R extends JsonResponse> D get(String targetUrl, Class<R> responseType) {
+    public <D, R extends JsonResponse> D get(String targetUrl, Class<R> responseType) throws CoreRemoteCallException {
         log.info("About to call {} ", targetUrl);
         R jsonResponse = restTemplate.getForObject(targetUrl, responseType);
         log.info("Core response: {} ", jsonResponse);
@@ -25,12 +25,14 @@ public class CoreRestTemplate {
         return (D) jsonResponse.getData();
     }
 
-    public <D, R extends JsonResponse> D postForResponse(String targetUrl, Class<R> responseType) {
+    public <D, R extends JsonResponse> D postForResponse(String targetUrl, Class<R> responseType)
+            throws CoreRemoteCallException {
         return postForResponse(targetUrl, null, responseType);
     }
 
     @SuppressWarnings("unchecked")
-    public <D, R extends JsonResponse> D postForResponse(String targetUrl, Object postObject, Class<R> responseType) {
+    public <D, R extends JsonResponse> D postForResponse(String targetUrl, Object postObject, Class<R> responseType)
+            throws CoreRemoteCallException {
         log.info("About to POST {} with postObject {}", targetUrl, postObject.toString());
         R jsonResponse = restTemplate.postForObject(targetUrl, postObject, responseType);
         log.info("Core response: {} ", jsonResponse.toString());
@@ -38,11 +40,11 @@ public class CoreRestTemplate {
         return (D) jsonResponse.getData();
     }
 
-    private void validateJsonResponse(JsonResponse jsonResponse) {
+    private void validateJsonResponse(JsonResponse jsonResponse) throws CoreRemoteCallException {
         validateJsonResponse(jsonResponse, true);
     }
 
-    private void validateJsonResponse(JsonResponse jsonResponse, boolean dataRequired) {
+    private void validateJsonResponse(JsonResponse jsonResponse, boolean dataRequired) throws CoreRemoteCallException {
         if (jsonResponse == null) {
             throw new CoreRemoteCallException("Call WeCube-Core failed due to no response.");
         }
