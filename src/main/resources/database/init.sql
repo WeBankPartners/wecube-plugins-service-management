@@ -78,7 +78,7 @@ CREATE TABLE `task` (
     `result` VARCHAR(32) NULL DEFAULT NULL,
     `result_message` VARCHAR(255) NULL DEFAULT NULL,
     `status` VARCHAR(32) NULL DEFAULT NULL,
-    `request_id` INT(11) NULL ,
+    `request_id` VARCHAR(255) NULL ,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 

@@ -31,9 +31,9 @@ public class CoreRestTemplate {
 
     @SuppressWarnings("unchecked")
     public <D, R extends JsonResponse> D postForResponse(String targetUrl, Object postObject, Class<R> responseType) {
-        log.info("About to POST {} with postObject {}", targetUrl, postObject);
+        log.info("About to POST {} with postObject {}", targetUrl, postObject.toString());
         R jsonResponse = restTemplate.postForObject(targetUrl, postObject, responseType);
-        log.info("Core response: {} ", jsonResponse);
+        log.info("Core response: {} ", jsonResponse.toString());
         validateJsonResponse(jsonResponse, false);
         return (D) jsonResponse.getData();
     }
