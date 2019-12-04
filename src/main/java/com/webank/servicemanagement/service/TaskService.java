@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,15 @@ import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
+import com.webank.servicemanagement.support.core.CoreRemoteCallException;
+import com.webank.servicemanagement.support.core.CoreRestTemplate;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
+import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDto;
 
 @Service
 public class TaskService {
+    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
 
     @Autowired
     TaskRepository taskRepository;
@@ -74,15 +80,28 @@ public class TaskService {
         return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
     }
 
-    private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
+    private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest)
+            throws Exception, CoreRemoteCallException {
         Optional<Task> taskResult = taskRepository.findById(taskId);
         if (!taskResult.isPresent())
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
-        // TODO - build callback request dto
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
-        coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
+        callbackRequest.setResults(new CallbackRequestResultDto(task.getRequestId()));
+        callbackRequest.setResultMessage(processTaskRequest.getResultMessage());
+        if (processTaskRequest.getResult() == "Successful") {
+            callbackRequest.setResultCode("0");
+        } else {
+            callbackRequest.setResultCode("1");
+        }
+        
+        try {
+            coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
+        } catch (CoreRemoteCallException e) {
+            log.error(String.format("Callback wecube meet error: %s", e.getMessage()));
+            throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
+        }
 
         task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         task.setResult(processTaskRequest.getResult());
