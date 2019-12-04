@@ -32,12 +32,12 @@ public abstract class DatabaseBasedTest extends ServiceManagementApplicationTest
 	}
 
 	private void prepareDatabase() {
-		executeSqlScripts(newArrayList(new ClassPathResource("/database/01.service-management.schema.sql"),
-				new ClassPathResource("/database/03.service-management.test.data.sql")));
+		executeSqlScripts(newArrayList(new ClassPathResource("/database/init.sql"),
+				new ClassPathResource("/database/test.data.sql")));
 	}
 
 	private void cleanUpDatabase() {
-		executeSqlScript("/database/00.drop.all.sql");
+		executeSqlScript("/database/drop.all.sql");
 	}
 
 	protected void executeSql(String sql) {

@@ -71,7 +71,7 @@ public class Task {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "requeset_id")
+    @Column(name = "request_id")
     private String requestId;
 
     public Integer getId() {
