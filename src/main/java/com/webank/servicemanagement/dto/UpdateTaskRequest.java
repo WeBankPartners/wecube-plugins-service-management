@@ -23,20 +23,12 @@ public class UpdateTaskRequest {
 			task = new Task();
 		}
 
-		if (updateTaskRequest.getProcessInstanceId() != null) {
-			task.setProcessInstanceId(updateTaskRequest.getProcessInstanceId());
-		}
-
 		if (updateTaskRequest.getCallbackUrl() != null) {
 			task.setCallbackUrl(updateTaskRequest.getCallbackUrl());
 		}
 
 		if (updateTaskRequest.getName() != null) {
 			task.setName(updateTaskRequest.getName());
-		}
-
-		if (updateTaskRequest.getProcessDefinitionKey() != null) {
-			task.setProcessDefinitionKey(updateTaskRequest.getProcessDefinitionKey());
 		}
 
 		if (updateTaskRequest.getReporter() != null) {
