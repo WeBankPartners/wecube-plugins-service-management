@@ -1,7 +1,11 @@
 package com.webank.servicemanagement.support.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CallbackRequestDto {
+    @JsonProperty(value = "result_code")
     private String resultCode;
+    @JsonProperty(value = "result_message")
     private String resultMessage;
     private CallbackRequestResultDto results;
 

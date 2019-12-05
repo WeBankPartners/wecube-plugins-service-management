@@ -50,9 +50,9 @@ public class TaskService {
     public void createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         for (CreateTaskRequestInputDto input : inputs) {
-            Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(), input.getOperator(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), input.getTaskName(), STATUS_PENDING,
-                    createTaskRequest.getRequestId());
+            Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
+                    createTaskRequest.getOperator(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+                    input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId());
             taskRepository.save(task);
         }
     }

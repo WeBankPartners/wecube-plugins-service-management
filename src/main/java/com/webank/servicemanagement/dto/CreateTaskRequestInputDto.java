@@ -4,7 +4,6 @@ public class CreateTaskRequestInputDto {
     private String callbackUrl;
     private String taskName;
     private String roleName;
-    private String operator;
 
     public String getCallbackUrl() {
         return callbackUrl;
@@ -20,14 +19,6 @@ public class CreateTaskRequestInputDto {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
     }
 
     public String getRoleName() {
