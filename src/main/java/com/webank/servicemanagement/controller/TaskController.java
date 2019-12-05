@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webank.servicemanagement.dto.CreateTaskRequest;
+import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
@@ -28,7 +28,7 @@ public class TaskController {
 	TaskService taskService;
 
 	@PostMapping
-	public JsonResponse createTask(@RequestBody CreateTaskRequest createTaskRequest) {
+	public JsonResponse createTask(@RequestBody CreateTaskRequestDto createTaskRequest) {
 		try {
 			taskService.createTask(createTaskRequest);
 		} catch (Exception e) {

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
-import com.webank.servicemanagement.dto.CreateTaskRequest;
+import com.webank.servicemanagement.dto.CreateTaskRequestDto;
+import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
@@ -46,12 +47,14 @@ public class TaskService {
     private final static String STATUS_SUCCESSFUL = "Successful";
     private final static String STATUS_FAILED = "Failed";
 
-    public void createTask(CreateTaskRequest createTaskRequest) throws Exception {
-        Task task = new Task(createTaskRequest.getCallbackUrl(), createTaskRequest.getTaskName(),
-                createTaskRequest.getRoleName(), createTaskRequest.getOperator(),
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), createTaskRequest.getTaskName(),
-                STATUS_PENDING, createTaskRequest.getRequestId());
-        taskRepository.save(task);
+    public void createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
+        List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
+        for (CreateTaskRequestInputDto input : inputs) {
+            Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(), input.getOperator(),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), input.getTaskName(), STATUS_PENDING,
+                    createTaskRequest.getRequestId());
+            taskRepository.save(task);
+        }
     }
 
     public List<Task> getAllTask() {
