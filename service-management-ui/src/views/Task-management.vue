@@ -80,7 +80,7 @@
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem label="处理结果">
             <Select v-model="handlerForm.result">
-              <Option value="failed">处理失败/拒绝</Option>
+              <Option value="Failed">处理失败/拒绝</Option>
               <Option value="Successful">处理完成/通过</Option>
             </Select>
           </FormItem>
