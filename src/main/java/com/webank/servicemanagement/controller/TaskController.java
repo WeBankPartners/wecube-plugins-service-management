@@ -18,6 +18,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
+import com.webank.servicemanagement.dto.WorkflowJsonResponse;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
@@ -28,13 +29,13 @@ public class TaskController {
 	TaskService taskService;
 
 	@PostMapping
-	public JsonResponse createTask(@RequestBody CreateTaskRequestDto createTaskRequest) {
+	public WorkflowJsonResponse createTask(@RequestBody CreateTaskRequestDto createTaskRequest) {
 		try {
 			taskService.createTask(createTaskRequest);
 		} catch (Exception e) {
-			return error(e.getMessage());
+			return WorkflowJsonResponse.error(e.getMessage());
 		}
-		return okay();
+		return WorkflowJsonResponse.okay();
 	}
 
 	@Deprecated
