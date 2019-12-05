@@ -98,6 +98,7 @@
                     </parameter>
                     <parameter datatype="string" mappingType='constant' required='Y'>taskName</parameter>
                     <parameter datatype="string" mappingType='constant' required='Y'>roleName</parameter>
+                    <parameter datatype="string" mappingType='constant' required='Y'>operator</parameter>
                 </inputParameters>
                 <outputParameters>
                     <parameter datatype="string">status</parameter>
