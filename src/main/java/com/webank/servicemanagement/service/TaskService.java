@@ -72,12 +72,13 @@ public class TaskService {
 
     public void processTask(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
         if (!checkResultIsAvailable(processTaskRequest.getResult()))
-            throw new Exception(String.format("Result[%s] is invalid", processTaskRequest.getResult()));
+            throw new Exception(String.format("Result[%s] is invalid, Only support 'Successful' and 'Failed'",
+                    processTaskRequest.getResult()));
         updateTaskByProcessTaskRequest(taskId, processTaskRequest);
     }
 
     private boolean checkResultIsAvailable(String result) {
-        return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result) ? true : false;
+        return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result);
     }
 
     private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest)
@@ -90,12 +91,12 @@ public class TaskService {
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
         callbackRequest.setResults(new CallbackRequestResultDto(task.getRequestId()));
         callbackRequest.setResultMessage(processTaskRequest.getResultMessage());
-        if (processTaskRequest.getResult() == "Successful") {
+        if ("Successful".equals(processTaskRequest.getResult())) {
             callbackRequest.setResultCode("0");
         } else {
             callbackRequest.setResultCode("1");
         }
-        
+
         try {
             coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
         } catch (CoreRemoteCallException e) {
