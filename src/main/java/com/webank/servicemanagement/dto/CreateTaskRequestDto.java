@@ -5,6 +5,7 @@ import java.util.List;
 public class CreateTaskRequestDto {
     private List<CreateTaskRequestInputDto> inputs;
     private String requestId;
+    private String operator;
 
     public List<CreateTaskRequestInputDto> getInputs() {
         return inputs;
@@ -20,5 +21,13 @@ public class CreateTaskRequestDto {
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 }
