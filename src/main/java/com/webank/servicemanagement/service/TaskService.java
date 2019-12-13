@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
@@ -24,7 +23,6 @@ import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
 import com.webank.servicemanagement.support.core.CoreRemoteCallException;
-import com.webank.servicemanagement.support.core.CoreRestTemplate;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDto;
@@ -52,7 +50,8 @@ public class TaskService {
         for (CreateTaskRequestInputDto input : inputs) {
             Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
                     createTaskRequest.getOperator(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
-                    input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId());
+                    input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId(),
+                    input.getCallbackParameter());
             taskRepository.save(task);
         }
     }
@@ -91,10 +90,16 @@ public class TaskService {
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
+        String errorCode = processTaskRequest.getResult().equals(STATUS_SUCCESSFUL)
+                ? CallbackRequestResultDto.ERROR_CODE_SUCCESSFUL
+                : CallbackRequestResultDto.ERROR_CODE_FAILED;
+
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
-        callbackRequest.setResults(new CallbackRequestResultDto(task.getRequestId()));
+        callbackRequest.setResults(Lists.newArrayList(
+                new CallbackRequestResultDto(task.getRequestId(), errorCode, processTaskRequest.getResultMessage(),
+                        processTaskRequest.getResultMessage(), task.getCallbackParameter())));
         callbackRequest.setResultMessage(processTaskRequest.getResultMessage());
-        if ("Successful".equals(processTaskRequest.getResult())) {
+        if (ProcessTaskRequest.RESULT_SUCCESSFUL.equals(processTaskRequest.getResult())) {
             callbackRequest.setResultCode("0");
         } else {
             callbackRequest.setResultCode("1");
