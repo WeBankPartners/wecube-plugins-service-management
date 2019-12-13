@@ -4,6 +4,7 @@ public class CreateTaskRequestInputDto {
     private String callbackUrl;
     private String taskName;
     private String roleName;
+    private String callbackParameter;
 
     public String getCallbackUrl() {
         return callbackUrl;
@@ -27,5 +28,13 @@ public class CreateTaskRequestInputDto {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getCallbackParameter() {
+        return callbackParameter;
+    }
+
+    public void setCallbackParameter(String callbackParameter) {
+        this.callbackParameter = callbackParameter;
     }
 }

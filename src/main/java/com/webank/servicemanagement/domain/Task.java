@@ -20,7 +20,7 @@ public class Task {
     }
 
     public Task(String callbackUrl, String name, String operatorRole, String reporter, String reportTime,
-            String description, String status, String requestId) {
+            String description, String status, String requestId, String callbackParameter) {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.operatorRole = operatorRole;
@@ -29,6 +29,7 @@ public class Task {
         this.description = description;
         this.status = status;
         this.requestId = requestId;
+        this.callbackParameter = callbackParameter;
     }
 
     @ManyToOne
@@ -73,6 +74,9 @@ public class Task {
 
     @Column(name = "request_id")
     private String requestId;
+
+    @Column(name = "callback_parameter")
+    private String callbackParameter;
 
     public Integer getId() {
         return id;
@@ -192,5 +196,13 @@ public class Task {
 
     public void setOperatorRole(String operatorRole) {
         this.operatorRole = operatorRole;
+    }
+
+    public String getCallbackParameter() {
+        return callbackParameter;
+    }
+
+    public void setCallbackParameter(String callbackParameter) {
+        this.callbackParameter = callbackParameter;
     }
 }

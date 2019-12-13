@@ -98,10 +98,14 @@
                     </parameter>
                     <parameter datatype="string" mappingType='constant' required='Y'>taskName</parameter>
                     <parameter datatype="string" mappingType='constant' required='Y'>roleName</parameter>
+                    <parameter datatype="string" mappingType='context' required='Y'>callbackParameter</parameter>
                 </inputParameters>
                 <outputParameters>
-                    <parameter datatype="string">status</parameter>
-                    <parameter datatype="string">message</parameter>
+                     <parameter datatype="string" mappingType='context' required='Y'>callbackParameter</parameter>
+                     <parameter datatype="string" mappingType='context'>requestId</parameter>
+                     <parameter datatype="string" mappingType='context'>errorCode</parameter>
+                     <parameter datatype="string" mappingType='context'>errorMessage</parameter>
+                     <parameter datatype="string" mappingType='context'>comment</parameter>
                 </outputParameters>
             </interface>
         </plugin>
