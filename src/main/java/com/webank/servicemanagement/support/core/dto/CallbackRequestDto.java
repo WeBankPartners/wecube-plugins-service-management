@@ -1,13 +1,15 @@
 package com.webank.servicemanagement.support.core.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CallbackRequestDto {
-    @JsonProperty(value = "result_code")
+    @JsonProperty(value = "resultCode")
     private String resultCode;
-    @JsonProperty(value = "result_message")
+    @JsonProperty(value = "resultMessage")
     private String resultMessage;
-    private CallbackRequestResultDto results;
+    private List<CallbackRequestResultDto> results;
 
     public String getResultCode() {
         return resultCode;
@@ -31,11 +33,12 @@ public class CallbackRequestDto {
                 + results + "]";
     }
 
-    public CallbackRequestResultDto getResults() {
+    public List<CallbackRequestResultDto> getResults() {
         return results;
     }
 
-    public void setResults(CallbackRequestResultDto results) {
+    public void setResults(List<CallbackRequestResultDto> results) {
         this.results = results;
     }
+
 }
