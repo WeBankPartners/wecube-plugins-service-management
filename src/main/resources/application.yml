@@ -29,3 +29,7 @@ service:
     httpclient:
       max-total-connections: 200
     wecube-core-address: localhost:8080
+
+logging:
+  level:
+    root: info
