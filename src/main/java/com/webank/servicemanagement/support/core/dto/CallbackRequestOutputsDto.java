@@ -1,29 +1,15 @@
 package com.webank.servicemanagement.support.core.dto;
 
-public class CallbackRequestResultDto {
+public class CallbackRequestOutputsDto {
     public static final String ERROR_CODE_SUCCESSFUL = "0";
     public static final String ERROR_CODE_FAILED = "1";
 
-    private String requestId;
     private String errorCode;
     private String errorMessage;
     private String comment;
     private String callbackParameter;
 
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    @Override
-    public String toString() {
-        return "CallbackRequestResultDto [requestId=" + requestId + "]";
-    }
-
-    public CallbackRequestResultDto() {
+    public CallbackRequestOutputsDto() {
     }
 
     public String getErrorCode() {
@@ -50,10 +36,8 @@ public class CallbackRequestResultDto {
         this.comment = comment;
     }
 
-    public CallbackRequestResultDto(String requestId, String errorCode, String errorMessage, String comment,
-            String callbackParameter) {
+    public CallbackRequestOutputsDto(String errorCode, String errorMessage, String comment, String callbackParameter) {
         super();
-        this.requestId = requestId;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.comment = comment;
@@ -66,5 +50,11 @@ public class CallbackRequestResultDto {
 
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
+    }
+
+    @Override
+    public String toString() {
+        return "CallbackRequestOutputsDto [errorCode=" + errorCode + ", errorMessage=" + errorMessage + ", comment="
+                + comment + ", callbackParameter=" + callbackParameter + "]";
     }
 }
