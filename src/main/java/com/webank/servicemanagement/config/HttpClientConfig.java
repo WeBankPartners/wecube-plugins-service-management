@@ -46,7 +46,7 @@ import com.webank.servicemanagement.support.core.CoreRestTemplate;
 @Configuration
 @EnableScheduling
 public class HttpClientConfig {
-    private static final Logger log = LoggerFactory.getLogger(CoreRestTemplate.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpClientConfig.class);
 
     @Autowired
     private HttpClientProperties httpClientProperties;
