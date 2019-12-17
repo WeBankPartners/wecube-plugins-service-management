@@ -25,7 +25,8 @@ import com.webank.servicemanagement.jpa.TaskRepository;
 import com.webank.servicemanagement.support.core.CoreRemoteCallException;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
-import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDto;
+import com.webank.servicemanagement.support.core.dto.CallbackRequestOutputsDto;
+import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDataDto;
 
 @Service
 public class TaskService {
@@ -91,13 +92,17 @@ public class TaskService {
         Task task = taskResult.get();
 
         String errorCode = processTaskRequest.getResult().equals(STATUS_SUCCESSFUL)
-                ? CallbackRequestResultDto.ERROR_CODE_SUCCESSFUL
-                : CallbackRequestResultDto.ERROR_CODE_FAILED;
+                ? CallbackRequestOutputsDto.ERROR_CODE_SUCCESSFUL
+                : CallbackRequestOutputsDto.ERROR_CODE_FAILED;
 
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
-        callbackRequest.setResults(Lists.newArrayList(
-                new CallbackRequestResultDto(task.getRequestId(), errorCode, processTaskRequest.getResultMessage(),
+        CallbackRequestResultDataDto callbackRequestResultDataDto = new CallbackRequestResultDataDto();
+        callbackRequestResultDataDto.setRequestId(task.getRequestId());
+        callbackRequestResultDataDto.setOutputs(
+                Lists.newArrayList(new CallbackRequestOutputsDto(errorCode, processTaskRequest.getResultMessage(),
                         processTaskRequest.getResultMessage(), task.getCallbackParameter())));
+
+        callbackRequest.setResults(callbackRequestResultDataDto);
         callbackRequest.setResultMessage(processTaskRequest.getResultMessage());
         if (ProcessTaskRequest.RESULT_SUCCESSFUL.equals(processTaskRequest.getResult())) {
             callbackRequest.setResultCode("0");
