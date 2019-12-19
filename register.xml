@@ -100,7 +100,6 @@
                     <parameter datatype="string" mappingType='constant' required='Y'>roleName</parameter>
                 </inputParameters>
                 <outputParameters>
-                     <parameter datatype="string" mappingType='context'>requestId</parameter>
                      <parameter datatype="string" mappingType='context'>errorCode</parameter>
                      <parameter datatype="string" mappingType='context'>errorMessage</parameter>
                      <parameter datatype="string" mappingType='context'>comment</parameter>
