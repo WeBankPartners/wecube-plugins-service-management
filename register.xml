@@ -41,7 +41,7 @@
                        refPackage="service-mgmt" refEntity="service_request_template" ref="id"/>
             <attribute name="reporter" datatype="str" description="上报人"/>
             <attribute name="reporter_role_id" datatype="str" description="上报角色ID"/>
-            <attribute name="report_time" datatype="timestamp" description="上报时间"/>
+            <attribute name="report_time" datatype="str" description="上报时间"/>
             <attribute name="emergency" datatype="str" description="紧急程度"/>
             <attribute name="result" datatype="str" description="结果"/>
             <attribute name="process_instance_id" datatype="str" description="流程模板ID"/>
@@ -52,17 +52,17 @@
             <attribute name="service_request_id" datatype='ref' description="所属服务请求"
                        refPackage="service-mgmt" refEntity="service_request" ref="id"/>
             <attribute name="process_instance_id" datatype="str" description="流程实例ID"/>
-            <attribute name="callback_url" datatype="int" description="回调url"/>
-            <attribute name="name" datatype="int" description="任务名称"/>
+            <attribute name="callback_url" datatype="str" description="回调url"/>
+            <attribute name="name" datatype="str" description="任务名称"/>
             <attribute name="process_definition_key" datatype="int" description="流程模板ID"/>
             <attribute name="reporter" datatype="str" description="上报人"/>
-            <attribute name="report_time" datatype="timestamp" description="上报时间"/>
+            <attribute name="report_time" datatype="str" description="上报时间"/>
             <attribute name="operator_role_id" datatype="str" description="操作角色ID"/>
             <attribute name="operator" datatype="str" description="操作人"/>
-            <attribute name="operator_time" datatype="timestamp" description="操作时间"/>
-            <attribute name="input_parameters" datatype="int" description="输入参数"/>
-            <attribute name="result" datatype="int" description="结果"/>
-            <attribute name="result_message" datatype="int" description="处理结果"/>
+            <attribute name="operator_time" datatype="str" description="操作时间"/>
+            <attribute name="input_parameters" datatype="str" description="输入参数"/>
+            <attribute name="result" datatype="str" description="结果"/>
+            <attribute name="result_message" datatype="str" description="处理结果"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
     </dataModel>
