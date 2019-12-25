@@ -1,16 +1,27 @@
 package com.webank.servicemanagement.dto;
 
+import java.util.List;
+
 public class WorkflowJsonResponse {
     public final static String STATUS_OK = "0";
     public final static String STATUS_ERROR = "1";
 
     private String resultCode;
     private String resultMessage;
+    private WorkflowResultDataJsonResponse results;
 
     public static WorkflowJsonResponse okay() {
         WorkflowJsonResponse result = new WorkflowJsonResponse();
         result.setResultCode(STATUS_OK);
         result.setResultMessage("Success");
+        return result;
+    }
+
+    public static WorkflowJsonResponse okayWithData(List<Object> outputs) {
+        WorkflowJsonResponse result = new WorkflowJsonResponse();
+        result.setResultCode(STATUS_OK);
+        result.setResultMessage("Success");
+        result.setResults(new WorkflowResultDataJsonResponse(outputs));
         return result;
     }
 
@@ -35,5 +46,13 @@ public class WorkflowJsonResponse {
 
     public void setResultMessage(String resultMessage) {
         this.resultMessage = resultMessage;
+    }
+
+    public WorkflowResultDataJsonResponse getResults() {
+        return results;
+    }
+
+    public void setResults(WorkflowResultDataJsonResponse results) {
+        this.results = results;
     }
 }

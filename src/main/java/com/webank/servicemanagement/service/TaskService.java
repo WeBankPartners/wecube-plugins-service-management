@@ -1,6 +1,7 @@
 package com.webank.servicemanagement.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -46,15 +47,18 @@ public class TaskService {
     private final static String STATUS_SUCCESSFUL = "Successful";
     private final static String STATUS_FAILED = "Failed";
 
-    public void createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
+    public List<Task> createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
+        List<Task> savedTasks=new ArrayList<Task>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         for (CreateTaskRequestInputDto input : inputs) {
             Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
                     createTaskRequest.getOperator(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
                     input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId(),
                     input.getCallbackParameter());
-            taskRepository.save(task);
+            Task savedTask= taskRepository.save(task);
+            savedTasks.add(savedTask);
         }
+        return savedTasks;
     }
 
     public List<Task> getAllTask() {
