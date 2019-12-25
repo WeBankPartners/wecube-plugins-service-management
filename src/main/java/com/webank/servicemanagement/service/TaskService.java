@@ -47,8 +47,8 @@ public class TaskService {
     private final static String STATUS_SUCCESSFUL = "Successful";
     private final static String STATUS_FAILED = "Failed";
 
-    public List<Task> createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
-        List<Task> savedTasks=new ArrayList<Task>();
+    public List<Object> createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
+        List<Object> savedTasks=new ArrayList<Object>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         for (CreateTaskRequestInputDto input : inputs) {
             Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
@@ -58,6 +58,7 @@ public class TaskService {
             Task savedTask= taskRepository.save(task);
             savedTasks.add(savedTask);
         }
+        
         return savedTasks;
     }
 
