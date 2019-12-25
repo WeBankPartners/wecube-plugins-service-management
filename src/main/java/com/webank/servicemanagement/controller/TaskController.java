@@ -4,6 +4,9 @@ import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,49 +28,50 @@ import com.webank.servicemanagement.service.TaskService;
 @RequestMapping("/v1/tasks")
 public class TaskController {
 
-	@Autowired
-	TaskService taskService;
+    @Autowired
+    TaskService taskService;
 
-	@PostMapping
-	public WorkflowJsonResponse createTask(@RequestBody CreateTaskRequestDto createTaskRequest) {
-		try {
-			taskService.createTask(createTaskRequest);
-		} catch (Exception e) {
-			return WorkflowJsonResponse.error(e.getMessage());
-		}
-		return WorkflowJsonResponse.okay();
-	}
+    @PostMapping
+    public WorkflowJsonResponse createTask(@RequestBody CreateTaskRequestDto createTaskRequest) {
+        List<Object> tasks = new ArrayList<Object>();
+        try {
+            tasks = taskService.createTask(createTaskRequest);
+        } catch (Exception e) {
+            return WorkflowJsonResponse.error(e.getMessage());
+        }
+        return WorkflowJsonResponse.okayWithData(tasks);
+    }
 
-	@Deprecated
-	@GetMapping
-	public JsonResponse getAllTask() {
-		return okayWithData(taskService.getAllTask());
-	}
+    @Deprecated
+    @GetMapping
+    public JsonResponse getAllTask() {
+        return okayWithData(taskService.getAllTask());
+    }
 
-	@PutMapping("/{task-id}/takeover")
-	public JsonResponse takeoverTask(@PathVariable(value = "task-id") int taskId,
-			@RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
-		try {
-			taskService.takeoverTask(taskId, takeOverTaskrequest);
-		} catch (Exception e) {
-			return error(e.getMessage());
-		}
-		return okay();
-	}
+    @PutMapping("/{task-id}/takeover")
+    public JsonResponse takeoverTask(@PathVariable(value = "task-id") int taskId,
+            @RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
+        try {
+            taskService.takeoverTask(taskId, takeOverTaskrequest);
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+        return okay();
+    }
 
-	@PutMapping("/{task-id}/process")
-	public JsonResponse processTask(@PathVariable(value = "task-id") int taskId,
-			@RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
-		try {
-			taskService.processTask(taskId, processTaskRequest);
-		} catch (Exception e) {
-			return error(e.getMessage());
-		}
-		return okay();
-	}
+    @PutMapping("/{task-id}/process")
+    public JsonResponse processTask(@PathVariable(value = "task-id") int taskId,
+            @RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
+        try {
+            taskService.processTask(taskId, processTaskRequest);
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+        return okay();
+    }
 
-	@PostMapping("/query")
-	public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
-		return okayWithData(taskService.queryTask(queryRequest));
-	}
+    @PostMapping("/query")
+    public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
+        return okayWithData(taskService.queryTask(queryRequest));
+    }
 }
