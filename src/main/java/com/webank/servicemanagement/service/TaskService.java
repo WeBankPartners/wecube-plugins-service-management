@@ -20,6 +20,8 @@ import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
+import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse;
+import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
@@ -28,6 +30,7 @@ import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestOutputsDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDataDto;
+import static com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse.okay;
 
 @Service
 public class TaskService {
@@ -47,18 +50,21 @@ public class TaskService {
     private final static String STATUS_SUCCESSFUL = "Successful";
     private final static String STATUS_FAILED = "Failed";
 
-    public List<Object> createTask(CreateTaskRequestDto createTaskRequest) throws Exception {
-        List<Object> savedTasks=new ArrayList<Object>();
+    public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
+            throws Exception {
+        List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         for (CreateTaskRequestInputDto input : inputs) {
             Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
                     createTaskRequest.getOperator(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
                     input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId(),
                     input.getCallbackParameter());
-            Task savedTask= taskRepository.save(task);
-            savedTasks.add(savedTask);
+            Task savedTask = taskRepository.save(task);
+            WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
+                    .okay(input.getCallbackParameter(), savedTask);
+            savedTasks.add(taskResult);
         }
-        
+
         return savedTasks;
     }
 
