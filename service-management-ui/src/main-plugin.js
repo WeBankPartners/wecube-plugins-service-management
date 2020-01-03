@@ -13,4 +13,4 @@ Vue.component("PluginSelect", PluginSelect);
 window.component && window.component("PluginSelect", PluginSelect)
 window.addRoutes && window.addRoutes(router, "itsm");
 window.locale("zh-CN", ZH);
-window.locale("en_US", EN);
+window.locale("en-US", EN);
