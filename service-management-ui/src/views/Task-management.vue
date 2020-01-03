@@ -1,7 +1,7 @@
 <template>
   <div>
     <Tabs type="card" :value="currentTab" closable @on-click="handleTabClick">
-      <TabPane :closable="false" name="requset" label="本组发起">
+      <TabPane :closable="false" name="requset" :label="$t('initiated_by_the_same_group')">
         <PluginTable
           :tableColumns="requestColumns"
           :tableData="requestTableData"
@@ -13,7 +13,7 @@
           @pageSizeChange="requestPageSizeChange"
         />
       </TabPane>
-      <TabPane :closable="false" name="handler" label="本组处理">
+      <TabPane :closable="false" name="handler" :label="$t('same_group_processing')">
         <PluginTable
           :tableColumns="handlerColumns"
           :tableData="handlerTableData"
@@ -28,68 +28,68 @@
     </Tabs>
     <Modal
       v-model="requestModalVisible"
-      title="请求上报"
+      :title="$t('request_to_report')"
       footer-hide
       width="50"
       @on-cancel="requestModalHide"
     >
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="requestForm" :label-width="100">
-          <FormItem label="模板">
+          <FormItem :label="$t('template')">
             <Select v-model="requestForm.templateId">
-              <Option v-for="tem in allTemplates" :value="tem.id">{{tem.name}}</Option>
+              <Option v-for="tem in allTemplates" :key="tem.id" :value="tem.id">{{tem.name}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="服务请求名称">
-            <Input v-model="requestForm.name" placeholder="服务请求名称"></Input>
+          <FormItem :label="$t('service_request_name')">
+            <Input v-model="requestForm.name" :placeholder="$t('service_request_name')"></Input>
           </FormItem>
-          <FormItem label="服务请求角色">
+          <FormItem :label="$t('service_request_role')">
             <Select v-model="requestForm.roleId">
-              <Option v-for="role in currentUserRoles" :value="role.roleId">{{role.description}}</Option>
+              <Option v-for="role in currentUserRoles" :key="role.roleId" :value="role.roleId">{{role.description}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="紧急程度">
+          <FormItem :label="$t('emergency_level')">
             <Select v-model="requestForm.emergency">
-              <Option value="normal">一般</Option>
-              <Option value="urgent">紧急</Option>
+              <Option value="normal">{{$t('not_urgent')}}</Option>
+              <Option value="urgent">{{$t('emergency')}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="描述">
-            <Input type="textarea" v-model="requestForm.description" placeholder="描述"></Input>
+          <FormItem :label="$t('describe')">
+            <Input type="textarea" v-model="requestForm.description" :placeholder="$t('describe')"></Input>
           </FormItem>
-          <FormItem label="请求附件">
+          <FormItem :label="$t('reqest_attachment')">
             <Upload :on-success="uploadSuccess" ref="upload" action="/service-mgmt/v1/service-requests/attach-file">
-                <Button icon="ios-cloud-upload-outline">上传附件</Button>
+                <Button icon="ios-cloud-upload-outline">{{$t('upload_attachment')}}</Button>
             </Upload>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="requestSubmit">提交</Button>
-            <Button style="margin-left: 8px" @click="requestCancel">取消</Button>
+            <Button type="primary" @click="requestSubmit">{{$t('submit')}}</Button>
+            <Button style="margin-left: 8px" @click="requestCancel">{{$t('cancle')}}</Button>
           </FormItem>
         </Form>
       </div>
     </Modal>
     <Modal
       v-model="handlerModalVisible"
-      title="任务处理"
+      :title="$t('task_processing')"
       footer-hide
       width="50"
       @on-cancel="handlerModalHide"
     >
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="handlerForm" :label-width="100">
-          <FormItem label="处理结果">
+          <FormItem :label="$t('process_result')">
             <Select v-model="handlerForm.result">
-              <Option value="Failed">处理失败/拒绝</Option>
-              <Option value="Successful">处理完成/通过</Option>
+              <Option value="Failed">{{$t('fail_or_reject')}}</Option>
+              <Option value="Successful">{{$t('success_or_approve')}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="描述">
-            <Input v-model="handlerForm.resultMessage" placeholder="描述"></Input>
+          <FormItem :label="$t('describe')">
+            <Input v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="handlerSubmit">提交</Button>
-            <Button style="margin-left: 8px" @click="handlerCancel">取消</Button>
+            <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
+            <Button style="margin-left: 8px" @click="handlerCancel">{{$t('cancle')}}</Button>
           </FormItem>
         </Form>
       </div>
@@ -138,14 +138,14 @@ export default {
       currentTab: "requset",
       requestColumns: [
         {
-          title: "服务请求名称",
+          title: this.$t('service_request_name'),
           key: "name",
           inputKey: "name",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "状态",
+          title: this.$t('status'),
           key: "status",
           inputKey: "status",
           component: "PluginSelect",
@@ -153,27 +153,27 @@ export default {
           options: [
             {
               value: "Summitted",
-              label: "已提交"
+              label: this.$t('summitted'),
             },
             {
               value: "Processing",
-              label: "处理中"
+              label: this.$t('processing')
             },
             {
               value: "Done",
-              label: "完成"
+              label: this.$t('done')
             }
           ],
         },
         {
-          title: "上报人",
+          title: this.$t('reporter'),
           key: "reporter",
           inputKey: "reporter",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "上报时间",
+          title: this.$t('reporting_time'),
           key: "reportTime",
           inputKey: "reportTime",
           component: "DatePicker",
@@ -181,31 +181,31 @@ export default {
           inputType: "date"
         },
         {
-          title: "紧急程度",
+          title: this.$t('emergency_level'),
           key: "emergency",
           inputKey: "emergency",
           component: "PluginSelect",
           options: [
             {
               value: "normal",
-              label: "一般"
+              label: this.$t('not_urgent')
             },
             {
               value: "urgent",
-              label: "紧急"
+              label: this.$t('emergency')
             }
           ],
           inputType: "select"
         },
         {
-          title: "描述",
+          title: this.$t('describe'),
           key: "description",
           inputKey: "description",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "操作",
+          title: this.$t('action'),
           key: "action",
           width: 150,
           align: "center",
@@ -218,7 +218,7 @@ export default {
                   size="small"
                   onClick={() => this.downloadFile(params.row.id)}
                 >
-                  附件下载
+                  {this.$t('download_attachment')}
                 </Button>}
               </div>
             );
@@ -228,21 +228,21 @@ export default {
       requestTableData: [],
       handlerColumns: [
         {
-          title: "服务请求ID",
+          title: this.$t('service_request_ID'),
           key: "serviceRequestId",
           inputKey: "serviceRequestId",
           component: "Input",
           isNotFilterable: true
         },
         {
-          title: "任务名称",
+          title: this.$t('task_name'),
           key: "name",
           inputKey: "name",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "状态",
+          title: this.$t('status'),
           key: "status",
           inputKey: "status",
           component: "PluginSelect",
@@ -250,31 +250,31 @@ export default {
           options: [
             {
               value: "Pending",
-              label: "待领取"
+              label: this.$t('pending')
             },
             {
               value: "Processing",
-              label: "处理中"
+              label: this.$t('processing')
             },
             {
               value: "Successful",
-              label: "处理成功"
+              label: this.$t('successful')
             },
             {
               value: "Failed",
-              label: "处理失败"
+              label: this.$t('failed')
             }
           ],
         },
         {
-          title: "上报人",
+          title: this.$t('reporter'),
           key: "reporter",
           inputKey: "reporter",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "上报时间",
+          title: this.$t('reporting_time'),
           key: "reportTime",
           inputKey: "reportTime",
           component: "DatePicker",
@@ -282,14 +282,14 @@ export default {
           inputType: "date"
         },
         {
-          title: "处理人",
+          title: this.$t('operator'),
           key: "operator",
           inputKey: "operator",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "处理时间",
+          title: this.$t('operate_time'),
           key: "operateTime",
           inputKey: "operateTime",
           component: "DatePicker",
@@ -297,14 +297,14 @@ export default {
           inputType: "date"
         },
         {
-          title: "描述",
+          title: this.$t('describe'),
           key: "description",
           inputKey: "description",
           component: "Input",
           inputType: "text"
         },
         {
-          title: "操作",
+          title: this.$t('action'),
           key: "action",
           width: 150,
           align: "center",
@@ -319,7 +319,7 @@ export default {
                       size="small"
                       onClick={() => this.taskTakeOver(params.row.id)}
                     >
-                      领取
+                      {this.$t('receive')}
                     </Button>
                   </div>
                 );
@@ -332,7 +332,7 @@ export default {
                       size="small"
                       onClick={() => {this.handlerForm.taskId = params.row.id; this.handlerModalVisible = true}}
                     >
-                      处理
+                      {this.$t('deal_with')}
                     </Button>
                   </div>
                 );
@@ -355,7 +355,7 @@ export default {
       handlerTableData: [],
       tableOuterActions: [
         {
-          label: "新增",
+          label: this.$t('add'),
           props: {
             type: "success",
             icon: "md-add",
