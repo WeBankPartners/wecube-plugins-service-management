@@ -1,18 +1,18 @@
 <template>
   <div>
     <Tabs type="card" :value="currentTab" closable @on-click="handleTabClick">
-      <TabPane :closable="false" name="templateDefinition" label="模板定义">
+      <TabPane :closable="false" name="templateDefinition" :label="$t('template_definition')">
         <Card style="width:600px;margin:0 auto;">
           <Row slot="title">
             <Col span="18">
-              <p>模板属性</p>
+              <p>{{$t('template_attribute')}}</p>
             </Col>
           </Row>
           <Collapse accordion>
             <Panel v-for="(item, index) in templateAttrs" :key="item.id" :name="index.toString()">
               <span>{{ item.name }}</span>
               <span class="serviceCatalog-margin-right">
-                <Tooltip content="删除属性" placement="top-start">
+                <Tooltip :content="$t('delete_attribute')" placement="top-start">
                   <Button
                     size="small"
                     type="error"
@@ -29,10 +29,10 @@
                   label-position="left"
                   :label-width="100"
                 >
-                  <FormItem label="属性名称" prop="attrName">
+                  <FormItem :label="$t('attribute_name')" prop="attrName">
                     <Input v-model="item.name" disabled></Input>
                   </FormItem>
-                  <FormItem label="类型" prop="type">
+                  <FormItem :label="$t('type')" prop="type">
                     <Input v-model="item.type" disabled></Input>
                   </FormItem>
                 </Form>
@@ -56,10 +56,10 @@
           label-position="left"
           :label-width="100"
         >
-          <FormItem label="模板名称" prop="attrName">
+          <FormItem :label="$t('template_name')" prop="attrName">
             <Input v-model="form.name"></Input>
           </FormItem>
-          <FormItem label="服务目录" prop="attrName">
+          <FormItem :label="$t('service_directory')" prop="attrName">
             <Select v-model="form.serviceCatalogId" @on-change="serviceCatalogChangeHandler" >
               <Option
                 v-for="item in serviceCatalogues"
@@ -68,7 +68,7 @@
               >{{item.name}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="服务通道" prop="attrName">
+          <FormItem :label="$t('service_channel')" prop="attrName">
             <Select v-model="form.servicePipelineId">
               <Option
                 v-for="pipeline in servicePipeline"
@@ -77,7 +77,7 @@
               >{{pipeline.name}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="流程" prop="attrName">
+          <FormItem :label="$t('process')" prop="attrName">
             <Select v-model="form.processDefinitionKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
@@ -86,22 +86,22 @@
               >{{process.processDefinitionKey}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="描述" prop="attrName">
+          <FormItem :label="$t('describe')" prop="attrName">
             <Input type="textarea" v-model="form.description"></Input>
           </FormItem>
         </Form>
         <div style="margin:30px auto;text-align:center">
-          <Button type="primary" @click="createServiceRequestTemplate">提交</Button>
+          <Button type="primary" @click="createServiceRequestTemplate">{{$t('submit')}}</Button>
         </div>
       </TabPane>
-      <TabPane :closable="false" name="serviceCatalog" label="服务目录管理">
+      <TabPane :closable="false" name="serviceCatalog" :label="$t('service_directory_mgmt')">
         <Card style="width:900px;margin:0 auto;">
           <Row slot="title">
             <Col span="18">
-              <p>服务目录</p>
+              <p>{{$t('service_directory')}}</p>
             </Col>
             <span class="serviceCatalog-margin-right">
-              <Tooltip content="新增服务目录" placement="top-start">
+              <Tooltip :content="$t('add_service_directory')" placement="top-start">
                 <Button
                   size="small"
                   type="primary"
@@ -115,7 +115,7 @@
             <Panel v-for="(item, index) in serviceCatalogues" :key="item.id" :name="item.id.toString()">
               <span><strong>{{ item.name }}</strong> - - {{ item.description }}</span>
               <span class="serviceCatalog-margin-right">
-                <Tooltip content="删除服务目录" placement="top-start">
+                <Tooltip :content="$t('delete_service_directory')" placement="top-start">
                   <Button
                     size="small"
                     type="error"
@@ -126,7 +126,7 @@
                 </Tooltip>
               </span>
               <span class="serviceCatalog-margin-right">
-                <Tooltip content="新增服务通道" placement="top-start">
+                <Tooltip :content="$t('add_service_channel')" placement="top-start">
                   <Button
                     size="small"
                     type="primary"
@@ -145,39 +145,39 @@
     </Tabs>
     <Modal
       v-model="catalogModalVisible"
-      title="服务目录新增"
+      :title="$t('add_service_channel')"
       footer-hide
       width="50"
       @on-cancel="catalogModalHide"
     >
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="catalogForm" :label-width="100">
-          <FormItem label="服务目录名称">
-            <Input v-model="catalogForm.name" placeholder="服务目录名称"></Input>
+          <FormItem :label="$t('service_directory_name')">
+            <Input v-model="catalogForm.name" :placeholder="$t('service_directory_name')"></Input>
           </FormItem>
-          <FormItem label="描述">
-            <Input v-model="catalogForm.description" placeholder="描述"></Input>
+          <FormItem :label="$t('describe')">
+            <Input v-model="catalogForm.description" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="handlerSubmit">提交</Button>
-            <Button style="margin-left: 8px" @click="handlerCancel">取消</Button>
+            <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
+            <Button style="margin-left: 8px" @click="handlerCancel">{{$t('cancle')}}</Button>
           </FormItem>
         </Form>
       </div>
     </Modal>
     <Modal
       v-model="pipelineModalVisible"
-      title="服务通道新增"
+      :title="$t('add_service_channel')"
       footer-hide
       width="50"
       @on-cancel="pipelineModalHide"
     >
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="pipelineForm" :label-width="100">
-          <FormItem label="服务通道名称">
-            <Input v-model="pipelineForm.name" placeholder="服务通道名称"></Input>
+          <FormItem :label="$t('service_channel_name')">
+            <Input v-model="pipelineForm.name" :placeholder="$t('service_channel_name')"></Input>
           </FormItem>
-          <FormItem label="处理角色">
+          <FormItem :label="$t('processing_roles')">
             <Select v-model="pipelineForm.ownerRoleId">
               <Option
                 v-for="role in allRoles"
@@ -186,12 +186,12 @@
               >{{role.description}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="描述">
-            <Input v-model="pipelineForm.description" placeholder="描述"></Input>
+          <FormItem :label="$t('describe')">
+            <Input v-model="pipelineForm.description" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem> 
-            <Button type="primary" @click="handlerPipelineSubmit">提交</Button>
-            <Button style="margin-left: 8px" @click="handlerPipelineCancel">取消</Button>
+            <Button type="primary" @click="handlerPipelineSubmit">{{$t('submit')}}</Button>
+            <Button style="margin-left: 8px" @click="handlerPipelineCancel">{{$t('cancle')}}</Button>
           </FormItem>
         </Form>
       </div>
@@ -218,51 +218,51 @@ export default {
       templateAttrs: [
         {
           id: 1,
-          name: "任务名称",
+          name: this.$t('task_name'),
           type: "text"
         },
         {
           id: 2,
-          name: "上报人",
+          name: this.$t('reporter'),
           type: "text"
         },
         {
           id: 3,
-          name: "上报时间",
+          name: this.$t('reporting_time'),
           type: "date"
         },
         {
           id: 4,
-          name: "紧急程度",
+          name: this.$t('emergency_level'),
           type: "select"
         },
         {
           id: 5,
-          name: "任务描述",
+          name: this.$t('mission_details'),
           type: "text"
         },
         {
           id: 6,
-          name: "任务附件",
+          name: this.$t('attachment'),
           type: "file"
         },
         {
           id: 7,
-          name: "处理结果",
+          name: this.$t('process_result'),
           type: "text"
         }
       ],
       pipelineColumns: [
         {
-          title: '通道名称',
+          title: this.$t('service_channel_name'),
           key: 'name'
         },
         {
-          title: '状态',
+          title: this.$t('status'),
           key: 'status'
         },
         {
-          title: '描述',
+          title: this.$t('describe'),
           key: 'description'
         },
       ],
