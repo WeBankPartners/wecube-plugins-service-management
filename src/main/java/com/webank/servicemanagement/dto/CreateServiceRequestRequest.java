@@ -1,27 +1,27 @@
 package com.webank.servicemanagement.dto;
 
 public class CreateServiceRequestRequest {
-	private int templateId;
-	private int roleId;
+	private String templateId;
+	private String roleId;
 	private int attachFileId;
 	private String name;
 	private String reporter;
 	private String emergency;
 	private String description;
 
-	public int getTemplateId() {
+	public String getTemplateId() {
 		return templateId;
 	}
 
-	public void setTemplateId(int templateId) {
+	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
 	}
 
-	public int getRoleId() {
+	public String getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(int roleId) {
+	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
 

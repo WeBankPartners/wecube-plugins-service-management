@@ -6,10 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.webank.servicemanagement.domain.ServicePipeline;
 
-public interface ServicePipelineRepository extends CrudRepository<ServicePipeline, Integer> {
+public interface ServicePipelineRepository extends CrudRepository<ServicePipeline, String> {
 	List<ServicePipeline> findAllByStatus(String status);
 
-	List<ServicePipeline> findAllByServiceCatalogueIdAndStatus(int serviceCatalogueId,String status);
+	List<ServicePipeline> findAllByServiceCatalogueIdAndStatus(String serviceCatalogueId,String status);
 
-	List<ServicePipeline> findAllByServiceCatalogueIdAndName(int serviceCatalogueId, String name);
+	List<ServicePipeline> findAllByServiceCatalogueIdAndName(String serviceCatalogueId, String name);
 }

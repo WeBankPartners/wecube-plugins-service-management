@@ -1,7 +1,7 @@
 package com.webank.servicemanagement.dto;
 
 public class DoneServiceRequestRequest {
-    private int serviceRequestId;
+    private String serviceRequestId;
 	private String result;
 
 	public String getResult() {
@@ -12,11 +12,11 @@ public class DoneServiceRequestRequest {
 		this.result = result;
 	}
 
-    public int getServiceRequestId() {
+    public String getServiceRequestId() {
         return serviceRequestId;
     }
 
-    public void setServiceRequestId(int serviceRequestId) {
+    public void setServiceRequestId(String serviceRequestId) {
         this.serviceRequestId = serviceRequestId;
     }
 }

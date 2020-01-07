@@ -2,29 +2,29 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 drop table if exists `service_catalogue`;
 CREATE TABLE `service_catalogue` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(32) NOT NULL ,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NULL,
-    `status` VARCHAR(32) NOT NULL,
+    `status` VARCHAR(32) NULL default null,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 
 drop table if exists `service_pipeline`;
 CREATE TABLE `service_pipeline` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(32) NOT NULL ,
     `service_catalogue_id` INT(11) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NULL,
     `owner_role_id` INT(11) NOT NULL DEFAULT '0',
-    `status` VARCHAR(32) NOT NULL,
+    `status` VARCHAR(32) NULL DEFAULT null,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_service_catalogue_service_pipeline` FOREIGN KEY (`service_catalogue_id`) REFERENCES `service_catalogue` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists `service_request_template`;
 CREATE TABLE `service_request_template` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(32) NOT NULL ,
     `service_pipeline_id` INT(11) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NULL,
@@ -34,17 +34,9 @@ CREATE TABLE `service_request_template` (
     UNIQUE INDEX `service_pipeline_and_name` (`service_pipeline_id`, `name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
-drop table if exists `attach_file`;
-CREATE TABLE `attach_file` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `attach_file_name` VARCHAR(255) NULL,
-    `attach_file` MEDIUMBLOB NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
-
 drop table if exists `service_request`;
 CREATE TABLE `service_request` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(32) NOT NULL ,
     `template_id` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL,
     `reporter` VARCHAR(64) NULL DEFAULT NULL,
@@ -56,6 +48,7 @@ CREATE TABLE `service_request` (
     `result` VARCHAR(32) NULL,
     `process_instance_id` VARCHAR(255) NULL DEFAULT NULL,
     `status` VARCHAR(32) NULL DEFAULT NULL,
+    `env_type` VARCHAR(32) NULL DEFAULT 'TEST',
     PRIMARY KEY (`id`),
     INDEX `idx_template_id` (`template_id`),
     CONSTRAINT `fk_service_request_template_service_request` FOREIGN KEY (`template_id`) REFERENCES `service_request_template` (`id`),
@@ -64,7 +57,7 @@ CREATE TABLE `service_request` (
 
 drop table if exists `task`;
 CREATE TABLE `task` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(32) NOT NULL ,
     `service_request_id` INT(11) NULL ,
     `callback_url` VARCHAR(255) NULL DEFAULT NULL,
     `name` VARCHAR(64) NOT NULL,

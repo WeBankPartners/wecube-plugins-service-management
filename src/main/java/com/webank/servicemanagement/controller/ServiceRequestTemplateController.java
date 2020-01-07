@@ -42,7 +42,7 @@ public class ServiceRequestTemplateController {
 
 	@GetMapping("/service-pipelines/{service-pipeline-id}")
 	public JsonResponse getServiceRequestTemplateByPipelineId(
-			@PathVariable(value = "service-pipeline-id") int servicePipelinId) {
+			@PathVariable(value = "service-pipeline-id") String servicePipelinId) {
 		return okayWithData(serviceRequestTemplateService.getServiceRequestTemplateByPipelineId(servicePipelinId));
 	}
 

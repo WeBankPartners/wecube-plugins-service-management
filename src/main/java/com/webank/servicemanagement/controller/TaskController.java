@@ -51,7 +51,7 @@ public class TaskController {
     }
 
     @PutMapping("/{task-id}/takeover")
-    public JsonResponse takeoverTask(@PathVariable(value = "task-id") int taskId,
+    public JsonResponse takeoverTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
         try {
             taskService.takeoverTask(taskId, takeOverTaskrequest);
@@ -62,7 +62,7 @@ public class TaskController {
     }
 
     @PutMapping("/{task-id}/process")
-    public JsonResponse processTask(@PathVariable(value = "task-id") int taskId,
+    public JsonResponse processTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
         try {
             taskService.processTask(taskId, processTaskRequest);
