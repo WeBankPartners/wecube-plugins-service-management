@@ -3,7 +3,7 @@ package com.webank.servicemanagement.dto;
 public class CreateServicePipelineRequest {
 	private String name;
 	private String description;
-	private int serviceCatalogueId;
+	private String serviceCatalogueId;
 	private int ownerRoleId;
 
 	public String getName() {
@@ -22,11 +22,11 @@ public class CreateServicePipelineRequest {
 		this.description = description;
 	}
 
-	public int getServiceCatalogueId() {
+	public String getServiceCatalogueId() {
 		return serviceCatalogueId;
 	}
 
-	public void setServiceCatalogueId(int serviceCatalogueId) {
+	public void setServiceCatalogueId(String serviceCatalogueId) {
 		this.serviceCatalogueId = serviceCatalogueId;
 	}
 

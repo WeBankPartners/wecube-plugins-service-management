@@ -1,10 +1,14 @@
 package com.webank.servicemanagement.support.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 public class RolesDataResponse {
 
+    @JsonAlias("id")
 	private int roleId;
+    @JsonAlias("name")
 	private String roleName;
-	private String roleType;
+    @JsonAlias("displayName")
 	private String description;
 
 	public int getRoleId() {
@@ -21,14 +25,6 @@ public class RolesDataResponse {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
-	}
-
-	public String getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(String roleType) {
-		this.roleType = roleType;
 	}
 
 	public String getDescription() {

@@ -36,7 +36,7 @@ public class ServicePipelineController {
 
 	@GetMapping("/service-catalogues/{service-catalogue-id}")
 	public JsonResponse getServicePipelineByCatalogueId(
-			@PathVariable(value = "service-catalogue-id") int serviceCatalogueId) {
+			@PathVariable(value = "service-catalogue-id") String serviceCatalogueId) {
 		return okayWithData(servicePipelineService.getServicePipelineByCatalogueId(serviceCatalogueId));
 	}
 

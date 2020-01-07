@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
@@ -20,7 +22,6 @@ import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
-import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
@@ -30,7 +31,7 @@ import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestOutputsDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDataDto;
-import static com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse.okay;
+import com.webank.servicemanagement.utils.JsonUtils;
 
 @Service
 public class TaskService {
@@ -50,6 +51,7 @@ public class TaskService {
     private final static String STATUS_SUCCESSFUL = "Successful";
     private final static String STATUS_FAILED = "Failed";
 
+    @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
             throws Exception {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
@@ -72,7 +74,7 @@ public class TaskService {
         return Lists.newArrayList(taskRepository.findAll());
     }
 
-    public void takeoverTask(int taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
+    public void takeoverTask(String taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
         Task task;
         Optional<Task> taskResult = taskRepository.findById(taskId);
         if (!taskResult.isPresent()) {
@@ -84,7 +86,7 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void processTask(int taskId, ProcessTaskRequest processTaskRequest) throws Exception {
+    public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {
         if (!checkResultIsAvailable(processTaskRequest.getResult()))
             throw new Exception(String.format("Result[%s] is invalid, Only support 'Successful' and 'Failed'",
                     processTaskRequest.getResult()));
@@ -95,7 +97,7 @@ public class TaskService {
         return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result);
     }
 
-    private void updateTaskByProcessTaskRequest(int taskId, ProcessTaskRequest processTaskRequest)
+    private void updateTaskByProcessTaskRequest(String taskId, ProcessTaskRequest processTaskRequest)
             throws Exception, CoreRemoteCallException {
         Optional<Task> taskResult = taskRepository.findById(taskId);
         if (!taskResult.isPresent())
@@ -148,6 +150,38 @@ public class TaskService {
         } catch (Exception e) {
             return new QueryResponse<>();
         }
+    }
+
+    public List<Task> create(List<Map<String, Object>> mapList) {
+        List<Task> tasks = convertToDomainList(mapList);
+        Iterable<Task> savedTask = taskRepository.saveAll(tasks);
+        return Lists.newArrayList(savedTask);
+    }
+
+    public List<Task> update(List<Map<String, Object>> mapList) {
+        List<Task> tasks = convertToDomainList(mapList);
+        Iterable<Task> savedTask = taskRepository.saveAll(tasks);
+        return Lists.newArrayList(savedTask);
+    }
+
+    public void delete(List<Map<String, Object>> mapList) {
+        List<Task> tasks = convertToDomainList(mapList);
+        tasks.forEach(task -> {
+            taskRepository.deleteById(task.getId());
+        });
+    }
+
+    private List<Task> convertToDomainList(List<Map<String, Object>> mapList) {
+        List<Task> tasks = new ArrayList<Task>();
+        mapList.forEach(map -> {
+            tasks.add(JsonUtils.toObject(map, Task.class));
+        });
+        return tasks;
+    }
+
+    public List<Task> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+        QueryResponse<Task> response = queryTask(QueryRequest.buildQueryRequest(filter, sorting, select));
+        return response.getContents();
     }
 
 }

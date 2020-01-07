@@ -4,11 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.StringUtils;
 
 public class QueryRequest {
     protected boolean paging = false;
     protected Pageable pageable = new Pageable();
-    
+
     private Sorting sorting = new Sorting();
     protected List<Filter> filters = new LinkedList<>();
 
@@ -27,7 +28,7 @@ public class QueryRequest {
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
     }
-    
+
     public Sorting getSorting() {
         return sorting;
     }
@@ -74,7 +75,7 @@ public class QueryRequest {
         return this;
     }
 
-    public QueryRequest addInFilter(String name, List values) {
+    public QueryRequest addInFilter(String name, List<?> values) {
         filters.add(new Filter(name, "in", values));
         return this;
     }
@@ -100,5 +101,26 @@ public class QueryRequest {
 
     public static QueryRequest defaultQueryObject(String name, Object value) {
         return defaultQueryObject().addEqualsFilter(name, value);
+    }
+
+    public static QueryRequest buildQueryRequest(String filter, String sorting, String select) throws Exception {
+        QueryRequest queryRequest = new QueryRequest();
+
+        if (filter != null && !filter.isEmpty()) {
+            String[] filterStrings = StringUtils.split(filter, ",");
+            if (filterStrings.length != 2) {
+                throw new Exception("Invalid query parameter [filter], please double check");
+            }
+            if ("id".equals(filterStrings[0])) {
+                int id = Integer.valueOf(filterStrings[1]);
+                queryRequest.addEqualsFilter(filterStrings[0], id);
+            } else {
+                queryRequest.addEqualsFilter(filterStrings[0], filterStrings[1]);
+            }
+        }
+
+        // TODO - implement 'sorting' and 'select' function
+
+        return queryRequest;
     }
 }

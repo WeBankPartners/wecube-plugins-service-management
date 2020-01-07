@@ -42,10 +42,9 @@ public class ServiceRequestController {
     AppProperties appProperties;
 
     @PostMapping
-    public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request,
-            HttpServletRequest httpRequest) throws Exception {
+    public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request) throws Exception {
         try {
-            serviceRequestService.createNewServiceRequest(httpRequest.getHeader("Current_User"), request);
+            serviceRequestService.createNewServiceRequest(request);
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -95,9 +94,9 @@ public class ServiceRequestController {
     }
 
     @GetMapping("/{service-request-id}/attach-file")
-    public void downloadServiceRequestAttachFile(@PathVariable(value = "service-request-id") int serviceRequestId,
+    public void downloadServiceRequestAttachFile(@PathVariable(value = "service-request-id") String serviceRequestId,
             HttpServletResponse response) throws Exception {
-        if (serviceRequestId <= 0)
+        if (serviceRequestId == null || serviceRequestId.isEmpty())
             throw new Exception("Invalid service-request-id: " + serviceRequestId);
         try {
             ServletOutputStream out = response.getOutputStream();

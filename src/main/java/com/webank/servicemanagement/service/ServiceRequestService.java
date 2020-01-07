@@ -2,17 +2,18 @@ package com.webank.servicemanagement.service;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
@@ -26,10 +27,9 @@ import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
-import com.webank.servicemanagement.support.core.MockCoreServiceStub;
-import com.webank.servicemanagement.support.core.dto.StartProcessInstanceDto;
-import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
+import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.utils.FileUtils;
+import com.webank.servicemanagement.utils.JsonUtils;
 
 @Service
 public class ServiceRequestService {
@@ -43,16 +43,15 @@ public class ServiceRequestService {
     @Autowired
     EntityRepository entityRepository;
 
-    // TODO - modify "MockCoreServiceStub" to "CoreServiceStub" when Core API is
-    // ready
     @Autowired
-    MockCoreServiceStub coreServiceStub;
+    CoreServiceStub coreServiceStub;
 
     private final static String STATUS_SUBMITTED = "Submitted";
     private final static String STATUS_PROCESSING = "Processing";
     private final static String STATUS_DONE = "Done";
 
-    public void createNewServiceRequest(String currentUserName, CreateServiceRequestRequest request) throws Exception {
+    public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
+        String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
@@ -67,16 +66,17 @@ public class ServiceRequestService {
             attachFile = attachFileOptional.get();
         }
         ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
-                request.getRoleId(), request.getReporter(), currentTime, request.getEmergency(),
+                request.getRoleId(), currentUserName, currentTime, request.getEmergency(),
                 request.getDescription(), STATUS_SUBMITTED, attachFile);
         serviceRequestRepository.save(serviceRequest);
 
-        StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
-                serviceRequestTemplate.get().getProcessDefinitionKey());
-        StartProcessInstanceDto startProcessInstanceRequest= new StartProcessInstanceDto();
-        
-        serviceRequest.setProcessInstanceId(
-                coreServiceStub.startWorkflowInstanceByProcessDefinitionId(startWorkflowInstanceRequest));
+        // TODO - report the request ticket to core
+//        StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
+//                serviceRequestTemplate.get().getProcessDefinitionKey());
+//       
+//        StartProcessInstanceDto startProcessInstanceRequest = new StartProcessInstanceDto();
+//        serviceRequest.setProcessInstanceId(
+//                coreServiceStub.startWorkflowInstanceByProcessDefinitionId(startWorkflowInstanceRequest));
 
         serviceRequest.setStatus(STATUS_PROCESSING);
         serviceRequestRepository.save(serviceRequest);
@@ -105,7 +105,7 @@ public class ServiceRequestService {
         return attachFileObject.getId();
     }
 
-    public DownloadAttachFileResponse downloadServiceRequestAttachFile(int serviceRequestId) throws Exception {
+    public DownloadAttachFileResponse downloadServiceRequestAttachFile(String serviceRequestId) throws Exception {
         Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
         if (!serviceRequestResult.isPresent())
             throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
@@ -133,6 +133,39 @@ public class ServiceRequestService {
         } catch (Exception e) {
             return new QueryResponse<>();
         }
+    }
+
+    public List<ServiceRequest> create(List<Map<String, Object>> mapList) {
+        List<ServiceRequest> serviceRequests = convertToDomainList(mapList);
+        Iterable<ServiceRequest> savedServiceRequests = serviceRequestRepository.saveAll(serviceRequests);
+        return Lists.newArrayList(savedServiceRequests);
+    }
+
+    public List<ServiceRequest> update(List<Map<String, Object>> mapList) {
+        List<ServiceRequest> serviceRequests = convertToDomainList(mapList);
+        Iterable<ServiceRequest> savedServiceRequests = serviceRequestRepository.saveAll(serviceRequests);
+        return Lists.newArrayList(savedServiceRequests);
+    }
+
+    public void delete(List<Map<String, Object>> mapList) {
+        List<ServiceRequest> serviceRequests = convertToDomainList(mapList);
+        serviceRequests.forEach(serviceRequest -> {
+            serviceRequestRepository.deleteById(serviceRequest.getId());
+        });
+    }
+
+    private List<ServiceRequest> convertToDomainList(List<Map<String, Object>> mapList) {
+        List<ServiceRequest> serviceRequests = new ArrayList<ServiceRequest>();
+        mapList.forEach(map -> {
+            serviceRequests.add(JsonUtils.toObject(map, ServiceRequest.class));
+        });
+        return serviceRequests;
+    }
+
+    public List<ServiceRequest> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+        QueryResponse<ServiceRequest> response = queryServiceRequest(
+                QueryRequest.buildQueryRequest(filter, sorting, select));
+        return response.getContents();
     }
 
 }
