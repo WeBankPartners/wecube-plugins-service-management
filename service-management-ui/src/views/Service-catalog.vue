@@ -370,7 +370,7 @@ export default {
     },
     async getPipelineByCatalogueId(id) {
       if(id.length === 0) return
-      const { data, status } = await getServicePipelineByCatalogueId(id[0]*1);
+      const { data, status } = await getServicePipelineByCatalogueId(id[0]);
       if (status === "OK") {
         const found = this.serviceCatalogues.find(i=>i.id === id[0]*1)
         found.pipelines = data
