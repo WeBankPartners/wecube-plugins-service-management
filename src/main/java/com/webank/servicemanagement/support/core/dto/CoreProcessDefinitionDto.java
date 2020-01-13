@@ -74,4 +74,11 @@ public abstract class CoreProcessDefinitionDto {
         this.createdTime = createdTime;
     }
 
+    @Override
+    public String toString() {
+        return "CoreProcessDefinitionDto [procDefId=" + procDefId + ", procDefKey=" + procDefKey + ", procDefName="
+                + procDefName + ", procDefVersion=" + procDefVersion + ", status=" + status + ", procDefData="
+                + procDefData + ", rootEntity=" + rootEntity + ", createdTime=" + createdTime + "]";
+    }
+
 }
