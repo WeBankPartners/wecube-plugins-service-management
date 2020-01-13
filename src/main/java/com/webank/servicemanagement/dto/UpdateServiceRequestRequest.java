@@ -48,10 +48,6 @@ public class UpdateServiceRequestRequest {
             serviceRequest.setResult(updateServiceRequestRequest.getResult());
         }
 
-        if (updateServiceRequestRequest.getProcessInstanceId() != null) {
-            serviceRequest.setProcessInstanceId(updateServiceRequestRequest.getProcessInstanceId());
-        }
-
         if (updateServiceRequestRequest.getStatus() != null) {
             serviceRequest.setStatus(updateServiceRequestRequest.getStatus());
         }

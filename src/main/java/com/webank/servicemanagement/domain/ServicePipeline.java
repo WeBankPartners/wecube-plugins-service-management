@@ -26,20 +26,20 @@ public class ServicePipeline {
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "owner_role_id")
-    private int ownerRoleId;
+    @Column(name = "owner_role")
+    private String ownerRole;
     @Column(name = "status")
     private String status = "active";
 
     public ServicePipeline() {
     }
 
-    public ServicePipeline(ServiceCatalogue serviceCatalogue, String name, String description, int ownerRoleId,
+    public ServicePipeline(ServiceCatalogue serviceCatalogue, String name, String description, String ownerRole,
             String status) {
         this.serviceCatalogue = serviceCatalogue;
         this.name = name;
         this.description = description;
-        this.ownerRoleId = ownerRoleId;
+        this.ownerRole = ownerRole;
         this.status = status;
     }
 
@@ -75,12 +75,12 @@ public class ServicePipeline {
         this.description = description;
     }
 
-    public int getOwnerRoleId() {
-        return ownerRoleId;
+    public String getOwnerRole() {
+        return ownerRole;
     }
 
-    public void setOwnerRoleId(int ownerRoleId) {
-        this.ownerRoleId = ownerRoleId;
+    public void setOwnerRole(String ownerRole) {
+        this.ownerRole = ownerRole;
     }
 
     public String getStatus() {

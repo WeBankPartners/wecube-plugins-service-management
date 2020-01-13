@@ -1,6 +1,6 @@
 package com.webank.servicemanagement.service;
 
-import java.io.InputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
@@ -28,11 +33,14 @@ import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
-import com.webank.servicemanagement.utils.FileUtils;
+import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
+import com.webank.servicemanagement.support.s3.S3Client;
 import com.webank.servicemanagement.utils.JsonUtils;
+import com.webank.servicemanagement.utils.SystemUtils;
 
 @Service
 public class ServiceRequestService {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
@@ -45,6 +53,8 @@ public class ServiceRequestService {
 
     @Autowired
     CoreServiceStub coreServiceStub;
+    @Autowired
+    ServiceManagementProperties serviceManagementProperties;
 
     private final static String STATUS_SUBMITTED = "Submitted";
     private final static String STATUS_PROCESSING = "Processing";
@@ -53,9 +63,9 @@ public class ServiceRequestService {
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        Optional<ServiceRequestTemplate> serviceRequestTemplate = serviceRequestTemplateRepository
+        Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
-        if (!serviceRequestTemplate.isPresent())
+        if (!serviceRequestTemplateOptional.isPresent())
             throw new Exception("Invalid service request template ID !");
 
         AttachFile attachFile = null;
@@ -65,18 +75,25 @@ public class ServiceRequestService {
                 throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
             attachFile = attachFileOptional.get();
         }
-        ServiceRequest serviceRequest = new ServiceRequest(serviceRequestTemplate.get(), request.getName(),
-                request.getRoleId(), currentUserName, currentTime, request.getEmergency(),
-                request.getDescription(), STATUS_SUBMITTED, attachFile);
-        serviceRequestRepository.save(serviceRequest);
+        ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
+        ServiceRequest serviceRequest = serviceRequestRepository.save(
+                new ServiceRequest(serviceRequestTemplate, request.getName(), request.getRoleId(), currentUserName,
+                        currentTime, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED, attachFile));
 
-        // TODO - report the request ticket to core
-//        StartWorkflowInstanceRequest startWorkflowInstanceRequest = new StartWorkflowInstanceRequest(
-//                serviceRequestTemplate.get().getProcessDefinitionKey());
-//       
-//        StartProcessInstanceDto startProcessInstanceRequest = new StartProcessInstanceDto();
-//        serviceRequest.setProcessInstanceId(
-//                coreServiceStub.startWorkflowInstanceByProcessDefinitionId(startWorkflowInstanceRequest));
+        ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
+                serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
+                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), "YES",
+                "/v1/service-requests/done", serviceRequest.getReporter(), serviceRequest.getReportTime(),
+                serviceRequest.getEnvType());
+
+        try {
+            coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+        } catch (Exception e) {
+            serviceRequest.setStatus(STATUS_DONE);
+            serviceRequest.setResult("Report to Core Error: " + e.getMessage());
+            serviceRequestRepository.save(serviceRequest);
+            throw new Exception("Report to Core Error: " + e.getMessage());
+        }
 
         serviceRequest.setStatus(STATUS_PROCESSING);
         serviceRequestRepository.save(serviceRequest);
@@ -98,10 +115,28 @@ public class ServiceRequestService {
         serviceRequestRepository.save(serviceRequest);
     }
 
-    public int uploadServiceRequestAttachFile(InputStream attachFileStream, String attachFileName) throws Exception {
-        AttachFile attachFileObject = new AttachFile(attachFileName, FileUtils.streamToByteArray(attachFileStream));
+    public String uploadServiceRequestAttachFile(MultipartFile attachFile) throws Exception {
+        if (attachFile.isEmpty()) {
+            throw new Exception("Empty file!");
+        }
+
+        String fileExtension = FilenameUtils.getExtension(attachFile.getOriginalFilename());
+        if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
+            throw new IllegalArgumentException("Only support Excel file");
+        }
+
+        String tmpFileName = String.valueOf(System.currentTimeMillis());
+        File tempUploadFile = new File(SystemUtils.getTempFolderPath() + tmpFileName);
+        attachFile.transferTo(tempUploadFile);
+
+        String uploadFileName = FilenameUtils.getBaseName(attachFile.getOriginalFilename()) + "-" + tmpFileName + "."
+                + fileExtension;
+
+        String s3Url = new S3Client(serviceManagementProperties).uploadFile(uploadFileName, tempUploadFile);
+        AttachFile attachFileObject = new AttachFile(uploadFileName, s3Url);
         attachFileRepository.save(attachFileObject);
 
+        FileUtils.forceDelete(tempUploadFile);
         return attachFileObject.getId();
     }
 
@@ -111,13 +146,18 @@ public class ServiceRequestService {
             throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
         ServiceRequest serviceRequest = serviceRequestResult.get();
 
-        ResponseEntity<byte[]> responseEntity = FileUtils.byteArrayToFileResponseEntity(
-                serviceRequest.getAttachFile().getAttachFileName(), serviceRequest.getAttachFile().getAttachFile());
-        if (responseEntity == null) {
-            throw new Exception("File object not found for service-request-id: " + serviceRequestId);
-        }
-        return new DownloadAttachFileResponse(responseEntity, serviceRequest.getAttachFile().getAttachFileName());
+        String fileName = serviceRequest.getAttachFile().getAttachFileName();
 
+        String tempDownloadFilePath = SystemUtils.getTempFolderPath() + fileName;
+        File downloadFile = new File(tempDownloadFilePath);
+
+        new S3Client(serviceManagementProperties).downFile(serviceRequest.getAttachFile().getAttachFileName(),
+                tempDownloadFilePath);
+        DownloadAttachFileResponse response = new DownloadAttachFileResponse(
+                FileUtils.readFileToByteArray(downloadFile), serviceRequest.getAttachFile().getAttachFileName());
+
+        FileUtils.forceDelete(downloadFile);
+        return response;
     }
 
     public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {

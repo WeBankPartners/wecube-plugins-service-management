@@ -6,10 +6,8 @@ public abstract class CoreProcessDefinitionDto {
     private String procDefName;
     private String procDefVersion;
     private String status;
-
     private String procDefData;
     private String rootEntity;
-
     private String createdTime;
 
     public String getProcDefId() {

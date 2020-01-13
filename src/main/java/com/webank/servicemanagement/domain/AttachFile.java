@@ -3,53 +3,56 @@ package com.webank.servicemanagement.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "attach_file")
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class AttachFile {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(name = "id", length = 32)
+    private String id;
 
-	@Column(name = "attach_file_name")
-	private String attachFileName;
-	@Column(name = "attach_file")
-	private byte[] attachFile;
+    @Column(name = "attach_file_name")
+    private String attachFileName;
+    @Column(name = "s3_url")
+    private String s3Url;
 
-	public AttachFile() {
-	}
+    public AttachFile() {
+    }
 
-	public AttachFile(String attachFileName, byte[] attachFile) {
-		this.attachFileName = attachFileName;
-		this.attachFile = attachFile;
-	}
+    public AttachFile(String attachFileName, String s3Url) {
+        this.attachFileName = attachFileName;
+        this.s3Url = s3Url;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getAttachFileName() {
-		return attachFileName;
-	}
+    public String getAttachFileName() {
+        return attachFileName;
+    }
 
-	public void setAttachFileName(String attachFileName) {
-		this.attachFileName = attachFileName;
-	}
+    public void setAttachFileName(String attachFileName) {
+        this.attachFileName = attachFileName;
+    }
 
-	public byte[] getAttachFile() {
-		return attachFile;
-	}
+    public String getS3Url() {
+        return s3Url;
+    }
 
-	public void setAttachFile(byte[] attachFile) {
-		this.attachFile = attachFile;
-	}
+    public void setS3Url(String s3Url) {
+        this.s3Url = s3Url;
+    }
 
 }

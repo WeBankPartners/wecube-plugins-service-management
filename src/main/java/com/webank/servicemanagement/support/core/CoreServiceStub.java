@@ -12,8 +12,10 @@ import com.webank.servicemanagement.support.core.dto.CoreProcessDefinitionDto;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.DefaultCoreResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllProcessKeysResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllRolesResponse;
-
+import com.webank.servicemanagement.support.core.dto.CoreResponse.StringCoreResponse;
+import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
+import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
 
 @Service
 public class CoreServiceStub {
@@ -21,7 +23,7 @@ public class CoreServiceStub {
 
     private static final String GET_ALL_ROLES = "/auth/v1/roles";
     private static final String GET_ROLES_BY_USER_NAME = "/auth/v1/users/%s/roles";
-//    private static final String START_WORKFLOW_INSTANCE = "/platform/process-definition-keys/%s/start";
+    private static final String REPORT_OPERATION_EVENTS = "/platform/v1//operation-events";
     private static final String GET_ALL_PEOCESS_KEYS = "/platform/v1/process/definitions?includeDraft=%d";
 
     @Autowired
@@ -38,11 +40,9 @@ public class CoreServiceStub {
         return template.get(asCoreUrl(GET_ROLES_BY_USER_NAME, userName), GetAllRolesResponse.class);
     }
 
-//    public String startWorkflowInstanceByProcessDefinitionId(
-//            StartWorkflowInstanceRequest startWorkflowInstanceRequest) {
-//        return template.get(asCoreUrl(START_WORKFLOW_INSTANCE, startWorkflowInstanceRequest.getProcessDefinitionId()),
-//                StringCoreResponse.class);
-//    }
+    public void reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
+        template.postForResponse(REPORT_OPERATION_EVENTS, reportServiceRequest, DefaultCoreResponse.class);
+    }
 
     public Object callback(String callbackUrl, CallbackRequestDto callbackRequest) {
         return template.postForResponse(asCoreUrl(callbackUrl), callbackRequest, DefaultCoreResponse.class);
