@@ -26,6 +26,12 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
     }
 
     public static class GetAllProcessKeysResponse extends CoreResponse<List<CoreProcessDefinitionDto>> {
+        @Override
+        public String toString() {
+            return "GetAllProcessKeysResponse [getStatus()=" + getStatus() + ", getMessage()=" + getMessage()
+                    + ", getData()=" + getData() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+                    + ", toString()=" + super.toString() + "]";
+        }
     }
 
     public String getStatus() {
@@ -51,6 +57,6 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
 
     @SuppressWarnings("unchecked")
     public void setData(Object data) {
-        this.data =(DATATYPE) data;
+        this.data = (DATATYPE) data;
     }
 }
