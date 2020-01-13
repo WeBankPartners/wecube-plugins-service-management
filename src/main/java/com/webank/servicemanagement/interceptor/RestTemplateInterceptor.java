@@ -22,8 +22,12 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         HttpHeaders headers = request.getHeaders();
-//        headers.add("Authorization", AuthenticationContextHolder.getCurrentUser().getToken());
-        headers.add("Authorization", smProperties.getWecubePlatformToken());
+        if (AuthenticationContextHolder.getCurrentUser() != null
+                && !AuthenticationContextHolder.getCurrentUser().getToken().isEmpty()) {
+            headers.add("Authorization", AuthenticationContextHolder.getCurrentUser().getToken());
+        } else {
+            headers.add("Authorization", smProperties.getWecubePlatformToken());
+        }
         return execution.execute(request, body);
     }
 }
