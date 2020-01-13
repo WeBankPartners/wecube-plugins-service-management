@@ -54,7 +54,7 @@ public class ServicePipelineService {
 
         ServicePipeline servicePipeline = new ServicePipeline(serviceCatalogue.get(),
                 createServicePipelineRequest.getName(), createServicePipelineRequest.getDescription(),
-                createServicePipelineRequest.getOwnerRoleId(), AVAILABLE_STATU_STRING);
+                createServicePipelineRequest.getOwnerRole(), AVAILABLE_STATU_STRING);
         servicePipelineRepository.save(servicePipeline);
     }
 

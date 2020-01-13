@@ -61,8 +61,6 @@ public class ServiceRequest {
 
     @Column(name = "result")
     private String result;
-    @Column(name = "process_instance_id")
-    private String ProcessInstanceId;
     @Column(name = "status")
     private String status = "active";
     @Column(name = "env_type")
@@ -146,14 +144,6 @@ public class ServiceRequest {
 
     public void setResult(String result) {
         this.result = result;
-    }
-
-    public String getProcessInstanceId() {
-        return ProcessInstanceId;
-    }
-
-    public void setProcessInstanceId(String processInstanceId) {
-        ProcessInstanceId = processInstanceId;
     }
 
     public String getStatus() {

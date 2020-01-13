@@ -1,17 +1,15 @@
 package com.webank.servicemanagement.dto;
 
-import org.springframework.http.ResponseEntity;
-
 public class DownloadAttachFileResponse {
-	private ResponseEntity<byte[]> fileResponseEntity;
+	private byte[] fileByteArray;
 	private String attachFileName;
 
-	public ResponseEntity<byte[]> getFileResponseEntity() {
-		return fileResponseEntity;
+	public byte[] getFileByteArray() {
+		return fileByteArray;
 	}
 
-	public void setFileResponseEntity(ResponseEntity<byte[]> fileResponseEntity) {
-		this.fileResponseEntity = fileResponseEntity;
+	public void setFileByteArray(byte[] fileByteArray) {
+		this.fileByteArray = fileByteArray;
 	}
 
 	public String getAttachFileName() {
@@ -22,9 +20,9 @@ public class DownloadAttachFileResponse {
 		this.attachFileName = attachFileName;
 	}
 
-	public DownloadAttachFileResponse(ResponseEntity<byte[]> fileResponseEntity, String attachFileName) {
+	public DownloadAttachFileResponse(byte[] fileByteArray, String attachFileName) {
 		super();
-		this.fileResponseEntity = fileResponseEntity;
+		this.fileByteArray = fileByteArray;
 		this.attachFileName = attachFileName;
 	}
 

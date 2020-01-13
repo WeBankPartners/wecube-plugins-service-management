@@ -32,9 +32,6 @@ import com.webank.servicemanagement.service.ServiceRequestService;
 @RestController
 @RequestMapping("/v1/service-requests")
 public class ServiceRequestController {
-
-    private final static long ATTACH_FILE_MAX_SIZE = 16 * 1024 * 1024;
-
     @Autowired
     ServiceRequestService serviceRequestService;
 
@@ -51,19 +48,13 @@ public class ServiceRequestController {
         return okay();
     }
 
-    @Deprecated
-    @GetMapping
-    public JsonResponse getAllServiceRequest(HttpServletRequest httpRequest) {
-        return okayWithData(serviceRequestService.getAllServiceRequest());
-    }
-
     @PostMapping("/query")
     public JsonResponse queryServiceRequest(@RequestBody QueryRequest queryRequest, HttpServletRequest httpRequest)
             throws Exception {
         return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
     }
 
-    @PutMapping("/done")
+    @PostMapping("/done")
     public JsonResponse updateServiceRequest(@RequestBody DoneServiceRequestRequest request,
             HttpServletRequest httpRequest) throws Exception {
         try {
@@ -77,15 +68,9 @@ public class ServiceRequestController {
     @PostMapping("/attach-file")
     public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
             throws Exception {
-        if (attachFile == null || attachFile.isEmpty())
-            throw new IllegalArgumentException("File is required.");
-        if (attachFile.getSize() > ATTACH_FILE_MAX_SIZE)
-            throw new IllegalArgumentException("File greater than 16Mb are not supported");
-
-        int attachFileId;
+        String attachFileId;
         try {
-            attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile.getInputStream(),
-                    attachFile.getOriginalFilename());
+            attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile);
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -102,12 +87,13 @@ public class ServiceRequestController {
             ServletOutputStream out = response.getOutputStream();
             DownloadAttachFileResponse attachFileInfo = serviceRequestService
                     .downloadServiceRequestAttachFile(serviceRequestId);
+
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment;fileName=" + attachFileInfo.getAttachFileName());
             response.setHeader("Accept", MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            out.write(attachFileInfo.getFileResponseEntity().getBody());
+            out.write(attachFileInfo.getFileByteArray());
             out.flush();
             out.close();
         } catch (Exception e) {

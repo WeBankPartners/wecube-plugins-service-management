@@ -76,6 +76,11 @@ public class AppProperties {
     public class ServiceManagementProperties {
         private String wecubeCoreAddress;
         private String wecubePlatformToken = "";
+        private String s3AccessKey = "";
+        private String s3SecretKey = "";
+        private String s3Endpoint = "";
+        private String s3DefaultBucket = "";
+        private String systemCode = "";
 
         public String getWecubeCoreAddress() {
             return wecubeCoreAddress;
@@ -91,6 +96,46 @@ public class AppProperties {
 
         public void setWecubePlatformToken(String wecubePlatformToken) {
             this.wecubePlatformToken = wecubePlatformToken;
+        }
+
+        public String getS3AccessKey() {
+            return s3AccessKey;
+        }
+
+        public void setS3AccessKey(String s3AccessKey) {
+            this.s3AccessKey = s3AccessKey;
+        }
+
+        public String getS3SecretKey() {
+            return s3SecretKey;
+        }
+
+        public void setS3SecretKey(String s3SecretKey) {
+            this.s3SecretKey = s3SecretKey;
+        }
+
+        public String getS3Endpoint() {
+            return s3Endpoint;
+        }
+
+        public void setS3Endpoint(String s3Endpoint) {
+            this.s3Endpoint = s3Endpoint;
+        }
+
+        public String getS3DefaultBucket() {
+            return s3DefaultBucket;
+        }
+
+        public void setS3DefaultBucket(String s3DefaultBucket) {
+            this.s3DefaultBucket = s3DefaultBucket;
+        }
+
+        public String getSystemCode() {
+            return systemCode;
+        }
+
+        public void setSystemCode(String systemCode) {
+            this.systemCode = systemCode;
         }
     }
 

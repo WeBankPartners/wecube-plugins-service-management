@@ -181,8 +181,8 @@
             <Select v-model="pipelineForm.ownerRoleId">
               <Option
                 v-for="role in allRoles"
-                :key="role.roleId"
-                :value="role.roleId"
+                :key="role.name"
+                :value="role.displayName"
               >{{role.description}}</Option>
             </Select>
           </FormItem>

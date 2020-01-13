@@ -85,6 +85,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.106</version>
+        </dependency>
         
         <dependency>
             <groupId>com.webank.wecube.platform</groupId>
