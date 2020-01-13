@@ -178,12 +178,12 @@
             <Input v-model="pipelineForm.name" placeholder="服务通道名称"></Input>
           </FormItem>
           <FormItem label="处理角色">
-            <Select v-model="pipelineForm.ownerRoleId">
+            <Select v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
                 :key="role.name"
-                :value="role.displayName"
-              >{{role.description}}</Option>
+                :value="role.name"
+              >{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem label="描述">
@@ -281,7 +281,7 @@ export default {
       pipelineForm:{
         name:"",
         description:"",
-        ownerRoleId:''
+        ownerRole:''
       },
       form: {
         name: "",
@@ -324,7 +324,7 @@ export default {
       this.pipelineModalVisible = false;
       this.pipelineForm.name = ''
       this.pipelineForm.description = ''
-      this.pipelineForm.ownerRoleId = ''
+      this.pipelineForm.ownerRole = ''
     },
     async handlerPipelineSubmit() {
       const payload = {
