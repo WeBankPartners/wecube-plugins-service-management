@@ -81,9 +81,9 @@
             <Select v-model="form.processDefinitionKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.processDefinitionKey"
-                :value="process.processDefinitionKey"
-              >{{process.processDefinitionKey}}</Option>
+                :key="process.procDefKey"
+                :value="process.procDefKey"
+              >{{process.procDefName}}</Option>
             </Select>
           </FormItem>
           <FormItem label="描述" prop="attrName">
