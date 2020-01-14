@@ -134,7 +134,8 @@ public class ServiceRequestService {
                 + fileExtension;
 
         String s3Url = new S3Client(serviceManagementProperties).uploadFile(uploadFileName, tempUploadFile);
-        AttachFile attachFileObject = new AttachFile(uploadFileName, s3Url);
+        AttachFile attachFileObject = new AttachFile(uploadFileName, s3Url,
+                serviceManagementProperties.getS3DefaultBucket(), uploadFileName);
         attachFileRepository.save(attachFileObject);
 
         FileUtils.forceDelete(tempUploadFile);

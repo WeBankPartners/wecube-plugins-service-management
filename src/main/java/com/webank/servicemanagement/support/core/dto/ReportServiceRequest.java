@@ -1,11 +1,6 @@
 package com.webank.servicemanagement.support.core.dto;
 
 public class ReportServiceRequest {
-
-    public ReportServiceRequest() {
-        super();
-    }
-
     private String eventSeqNo;
     private String eventType;
     private String sourceSubSystem;
@@ -16,6 +11,10 @@ public class ReportServiceRequest {
     private String operationUser;
     private String reportTime;
     private String envType;
+
+    public ReportServiceRequest() {
+        super();
+    }
 
     public ReportServiceRequest(String eventSeqNo, String eventType, String sourceSubSystem, String operationKey,
             String operationData, String notifyRequired, String notifyEndpoint, String operationUser, String reportTime,
