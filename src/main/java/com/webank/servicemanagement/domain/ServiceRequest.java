@@ -26,7 +26,7 @@ public class ServiceRequest {
 
     public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporterRoleId,
             String reporter, String reportTime, String emergency, String description, String status,
-            AttachFile attachFile) {
+            AttachFile attachFile, String envType) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
         this.reporterRoleId = reporterRoleId;
@@ -36,6 +36,7 @@ public class ServiceRequest {
         this.description = description;
         this.status = status;
         this.attachFile = attachFile;
+        this.envType = envType;
     }
 
     @ManyToOne
