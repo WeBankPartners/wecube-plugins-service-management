@@ -70,21 +70,21 @@ public class ServiceRequestService {
             throw new Exception("Invalid service request template ID !");
 
         AttachFile attachFile = null;
-        if (!request.getAttachFileId().isEmpty()) {
+        if (request.getAttachFileId() != null && !request.getAttachFileId().isEmpty()) {
             Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
             if (!attachFileOptional.isPresent())
                 throw new Exception(String.format("Attach file ID [%s] not found", request.getAttachFileId()));
             attachFile = attachFileOptional.get();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
-        ServiceRequest serviceRequest = serviceRequestRepository.save(
-                new ServiceRequest(serviceRequestTemplate, request.getName(), request.getRoleId(), currentUserName,
-                        currentTime, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED, attachFile));
+        ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
+                request.getName(), request.getRoleId(), currentUserName, currentTime, request.getEmergency(),
+                request.getDescription(), STATUS_SUBMITTED, attachFile, request.getEnvType()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
-                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), "YES",
-                ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
+                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), "Y",
+                ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
                 serviceRequest.getReportTime(), serviceRequest.getEnvType());
 
         try {
