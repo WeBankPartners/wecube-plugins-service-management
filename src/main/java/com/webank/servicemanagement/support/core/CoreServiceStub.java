@@ -1,8 +1,6 @@
 package com.webank.servicemanagement.support.core;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +10,8 @@ import com.webank.servicemanagement.support.core.dto.CoreProcessDefinitionDto;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.DefaultCoreResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllProcessKeysResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllRolesResponse;
-import com.webank.servicemanagement.support.core.dto.CoreResponse.StringCoreResponse;
 import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
-import com.webank.servicemanagement.support.core.dto.StartWorkflowInstanceRequest;
 
 @Service
 public class CoreServiceStub {
@@ -41,7 +37,7 @@ public class CoreServiceStub {
     }
 
     public void reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
-        template.postForResponse(REPORT_OPERATION_EVENTS, reportServiceRequest, DefaultCoreResponse.class);
+        template.postForResponse(asCoreUrl(REPORT_OPERATION_EVENTS), reportServiceRequest, DefaultCoreResponse.class);
     }
 
     public Object callback(String callbackUrl, CallbackRequestDto callbackRequest) {

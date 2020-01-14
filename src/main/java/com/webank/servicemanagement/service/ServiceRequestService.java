@@ -78,8 +78,8 @@ public class ServiceRequestService {
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
         ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
-                request.getName(), request.getRoleId(), currentUserName, currentTime, request.getEmergency(),
-                request.getDescription(), STATUS_SUBMITTED, attachFile, request.getEnvType()));
+                request.getName(), currentUserName, currentTime, request.getEmergency(), request.getDescription(),
+                STATUS_SUBMITTED, attachFile, request.getEnvType()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),

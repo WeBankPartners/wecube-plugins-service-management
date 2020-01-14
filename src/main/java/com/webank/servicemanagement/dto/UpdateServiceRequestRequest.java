@@ -24,10 +24,6 @@ public class UpdateServiceRequestRequest {
             serviceRequest.setName(updateServiceRequestRequest.getName());
         }
 
-        if (!updateServiceRequestRequest.getReporterRoleId().isEmpty()) {
-            serviceRequest.setReporterRoleId(updateServiceRequestRequest.getReporterRoleId());
-        }
-
         if (updateServiceRequestRequest.getReporter() != null) {
             serviceRequest.setReporter(updateServiceRequestRequest.getReporter());
         }

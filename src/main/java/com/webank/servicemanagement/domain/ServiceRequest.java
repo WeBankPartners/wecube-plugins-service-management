@@ -24,12 +24,11 @@ public class ServiceRequest {
     public ServiceRequest() {
     }
 
-    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporterRoleId,
+    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, 
             String reporter, String reportTime, String emergency, String description, String status,
             AttachFile attachFile, String envType) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
-        this.reporterRoleId = reporterRoleId;
         this.reporter = reporter;
         this.reportTime = reportTime;
         this.emergency = emergency;
@@ -45,8 +44,6 @@ public class ServiceRequest {
 
     @Column(name = "name")
     private String name;
-    @Column(name = "reporter_role_id")
-    private String reporterRoleId;
     @Column(name = "reporter")
     private String reporter;
     @Column(name = "report_time")
@@ -89,14 +86,6 @@ public class ServiceRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getReporterRoleId() {
-        return reporterRoleId;
-    }
-
-    public void setReporterRoleId(String reporterRoleId) {
-        this.reporterRoleId = reporterRoleId;
     }
 
     public String getReporter() {
