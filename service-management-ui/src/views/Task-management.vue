@@ -48,6 +48,13 @@
               <Option v-for="role in currentUserRoles" :key="role.name" :value="role.name">{{role.displayName}}</Option>
             </Select>
           </FormItem>
+          <FormItem label="环境类型">
+            <Select v-model="requestForm.envType">
+              <Option value="test">测试</Option>
+              <Option value="preProduction">准生产</Option>
+              <Option value="production">生产</Option>
+            </Select>
+          </FormItem>
           <FormItem label="紧急程度">
             <Select v-model="requestForm.emergency">
               <Option value="normal">一般</Option>
@@ -179,6 +186,27 @@ export default {
           component: "DatePicker",
           type: "datetimerange",
           inputType: "date"
+        },
+        {
+          title: "环境类型",
+          key: "envType",
+          inputKey: "envType",
+          component: "PluginSelect",
+          options: [
+            {
+              value: "test",
+              label: "测试"
+            },
+            {
+              value: "preProduction",
+              label: "准生产"
+            },
+            {
+              value: "production",
+              label: "生产"
+            }
+          ],
+          inputType: "select"
         },
         {
           title: "紧急程度",
