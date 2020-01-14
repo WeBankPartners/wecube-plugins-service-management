@@ -51,7 +51,7 @@ CREATE TABLE `service_request` (
     `emergency` VARCHAR(32) NULL,
     `description` VARCHAR(255) NOT NULL,
     `attach_file_id` VARCHAR(32) NULL DEFAULT NULL,
-    `result` VARCHAR(32) NULL,
+    `result` VARCHAR(1024) NULL,
     `status` VARCHAR(32) NULL DEFAULT NULL,
     `env_type` VARCHAR(32) NULL DEFAULT 'TEST',
     PRIMARY KEY (`id`),
