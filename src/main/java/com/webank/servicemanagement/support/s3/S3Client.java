@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.net.URL;
 
 public class S3Client {
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -73,6 +74,8 @@ public class S3Client {
         }
 
         log.info("uploaded File  [{}] to S3 bucket[{}]", s3KeyName, bucketName);
+        s3Client.putObject(
+                new PutObjectRequest(bucketName, s3KeyName, file).withCannedAcl(CannedAccessControlList.Private));
         GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, s3KeyName);
         String url = s3Client.generatePresignedUrl(urlRequest).toString();
         return url;
