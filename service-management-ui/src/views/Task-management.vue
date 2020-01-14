@@ -37,7 +37,7 @@
         <Form ref="request" :model="requestForm" :label-width="100">
           <FormItem label="模板">
             <Select v-model="requestForm.templateId">
-              <Option v-for="tem in allTemplates" :value="tem.id">{{tem.name}}</Option>
+              <Option v-for="tem in allTemplates" :key="tem.id" :value="tem.id">{{tem.name}}</Option>
             </Select>
           </FormItem>
           <FormItem label="服务请求名称">
@@ -45,7 +45,7 @@
           </FormItem>
           <FormItem label="服务请求角色">
             <Select v-model="requestForm.roleId">
-              <Option v-for="role in currentUserRoles" :value="role.roleId">{{role.description}}</Option>
+              <Option v-for="role in currentUserRoles" :key="role.name" :value="role.name">{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem label="紧急程度">

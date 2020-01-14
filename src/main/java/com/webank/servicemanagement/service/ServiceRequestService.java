@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
+import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
@@ -69,10 +70,10 @@ public class ServiceRequestService {
             throw new Exception("Invalid service request template ID !");
 
         AttachFile attachFile = null;
-        if (request.getAttachFileId() != 0) {
+        if (!request.getAttachFileId().isEmpty()) {
             Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
             if (!attachFileOptional.isPresent())
-                throw new Exception(String.format("Attach file ID [%d] not found", request.getAttachFileId()));
+                throw new Exception(String.format("Attach file ID [%s] not found", request.getAttachFileId()));
             attachFile = attachFileOptional.get();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
@@ -83,8 +84,8 @@ public class ServiceRequestService {
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
                 serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), "YES",
-                "/v1/service-requests/done", serviceRequest.getReporter(), serviceRequest.getReportTime(),
-                serviceRequest.getEnvType());
+                ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
+                serviceRequest.getReportTime(), serviceRequest.getEnvType());
 
         try {
             coreServiceStub.reportOperationEventsToCore(reportServiceRequest);

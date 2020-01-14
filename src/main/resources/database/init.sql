@@ -32,7 +32,7 @@ CREATE TABLE `service_pipeline` (
 drop table if exists `service_request_template`;
 CREATE TABLE `service_request_template` (
     `id` VARCHAR(32) NOT NULL ,
-    `service_pipeline_id` INT(11) NOT NULL,
+    `service_pipeline_id` VARCHAR(32) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NULL,
     `process_definition_key`  VARCHAR(255) NOT NULL,

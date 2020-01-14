@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
+import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
@@ -30,7 +30,7 @@ import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
-@RequestMapping("/v1/service-requests")
+@RequestMapping(ApiInfo.API_VERSION_V1 + ApiInfo.API_RESOURCE_SERVICE_REQUEST)
 public class ServiceRequestController {
     @Autowired
     ServiceRequestService serviceRequestService;
@@ -54,7 +54,7 @@ public class ServiceRequestController {
         return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
     }
 
-    @PostMapping("/done")
+    @PostMapping(ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST)
     public JsonResponse updateServiceRequest(@RequestBody DoneServiceRequestRequest request,
             HttpServletRequest httpRequest) throws Exception {
         try {
