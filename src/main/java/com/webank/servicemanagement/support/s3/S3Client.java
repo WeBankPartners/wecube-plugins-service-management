@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 
 public class S3Client {
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -76,7 +78,14 @@ public class S3Client {
         log.info("uploaded File  [{}] to S3 bucket[{}]", s3KeyName, bucketName);
         s3Client.putObject(
                 new PutObjectRequest(bucketName, s3KeyName, file).withCannedAcl(CannedAccessControlList.Private));
-        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, s3KeyName);
+
+        Date expiration = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(expiration);
+        calendar.add(Calendar.HOUR, 24);
+
+        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, s3KeyName)
+                .withExpiration(calendar.getTime());
         String url = s3Client.generatePresignedUrl(urlRequest).toString();
         return url;
     }

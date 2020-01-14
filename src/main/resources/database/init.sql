@@ -14,6 +14,8 @@ CREATE TABLE `attach_file` (
     `id` VARCHAR(32) NOT NULL,
     `attach_file_name` VARCHAR(255) NULL,
     `s3_url` VARCHAR(2048) NULL,
+    `s3_bucket_name` VARCHAR(64) NULL,
+    `s3_key_name` VARCHAR(256) NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
