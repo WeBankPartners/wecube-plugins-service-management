@@ -18,8 +18,8 @@ public class ReportServiceRequest {
     private String envType;
 
     public ReportServiceRequest(String eventSeqNo, String eventType, String sourceSubSystem, String operationKey,
-            String operationData, String notifyRequired, String notifyEndpoint, String operationUser,
-            String reportTime,String envType) {
+            String operationData, String notifyRequired, String notifyEndpoint, String operationUser, String reportTime,
+            String envType) {
         super();
         this.eventSeqNo = eventSeqNo;
         this.eventType = eventType;
@@ -111,6 +111,14 @@ public class ReportServiceRequest {
 
     public void setEnvType(String envType) {
         this.envType = envType;
+    }
+
+    @Override
+    public String toString() {
+        return "ReportServiceRequest [eventSeqNo=" + eventSeqNo + ", eventType=" + eventType + ", sourceSubSystem="
+                + sourceSubSystem + ", operationKey=" + operationKey + ", operationData=" + operationData
+                + ", notifyRequired=" + notifyRequired + ", notifyEndpoint=" + notifyEndpoint + ", operationUser="
+                + operationUser + ", reportTime=" + reportTime + ", envType=" + envType + "]";
     }
 
 }

@@ -23,7 +23,7 @@ public class CoreServiceStub {
 
     private static final String GET_ALL_ROLES = "/auth/v1/roles";
     private static final String GET_ROLES_BY_USER_NAME = "/auth/v1/users/%s/roles";
-    private static final String REPORT_OPERATION_EVENTS = "/platform/v1//operation-events";
+    private static final String REPORT_OPERATION_EVENTS = "/platform/v1/operation-events";
     private static final String GET_ALL_PEOCESS_KEYS = "/platform/v1/process/definitions?includeDraft=%d";
 
     @Autowired
