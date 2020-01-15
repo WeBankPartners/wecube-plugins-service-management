@@ -24,9 +24,9 @@ public class ServiceRequest {
     public ServiceRequest() {
     }
 
-    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, 
-            String reporter, String reportTime, String emergency, String description, String status,
-            AttachFile attachFile, String envType) {
+    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter,
+            String reportTime, String emergency, String description, String status, AttachFile attachFile,
+            String envType) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
         this.reporter = reporter;
@@ -56,6 +56,9 @@ public class ServiceRequest {
     @OneToOne
     @JoinColumn(name = "attach_file_id")
     private AttachFile attachFile;
+
+    @Column(name = "attach_file_id")
+    private String attachFileId;
 
     @Column(name = "result")
     private String result;
