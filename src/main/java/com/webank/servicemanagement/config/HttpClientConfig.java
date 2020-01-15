@@ -41,7 +41,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.webank.servicemanagement.commons.AppProperties.HttpClientProperties;
 import com.webank.servicemanagement.interceptor.RestTemplateInterceptor;
-import com.webank.servicemanagement.support.core.CoreRestTemplate;
 
 @Configuration
 @EnableScheduling

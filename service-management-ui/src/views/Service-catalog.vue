@@ -81,9 +81,9 @@
             <Select v-model="form.processDefinitionKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.processDefinitionKey"
-                :value="process.processDefinitionKey"
-              >{{process.processDefinitionKey}}</Option>
+                :key="process.procDefKey"
+                :value="process.procDefKey"
+              >{{process.procDefName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')" prop="attrName">
@@ -178,12 +178,12 @@
             <Input v-model="pipelineForm.name" :placeholder="$t('service_channel_name')"></Input>
           </FormItem>
           <FormItem :label="$t('processing_roles')">
-            <Select v-model="pipelineForm.ownerRoleId">
+            <Select v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
-                :key="role.roleId"
-                :value="role.roleId"
-              >{{role.description}}</Option>
+                :key="role.name"
+                :value="role.name"
+              >{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
@@ -281,7 +281,7 @@ export default {
       pipelineForm:{
         name:"",
         description:"",
-        ownerRoleId:''
+        ownerRole:''
       },
       form: {
         name: "",
@@ -324,7 +324,7 @@ export default {
       this.pipelineModalVisible = false;
       this.pipelineForm.name = ''
       this.pipelineForm.description = ''
-      this.pipelineForm.ownerRoleId = ''
+      this.pipelineForm.ownerRole = ''
     },
     async handlerPipelineSubmit() {
       const payload = {
@@ -370,9 +370,9 @@ export default {
     },
     async getPipelineByCatalogueId(id) {
       if(id.length === 0) return
-      const { data, status } = await getServicePipelineByCatalogueId(id[0]*1);
+      const { data, status } = await getServicePipelineByCatalogueId(id[0]);
       if (status === "OK") {
-        const found = this.serviceCatalogues.find(i=>i.id === id[0]*1)
+        const found = this.serviceCatalogues.find(i=>i.id === id[0])
         found.pipelines = data
         // this.$set(found,'pipelines',data)
       }

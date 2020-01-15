@@ -1,67 +1,67 @@
 package com.webank.servicemanagement.dto;
 
 public class CreateServiceRequestRequest {
-	private int templateId;
-	private int roleId;
-	private int attachFileId;
-	private String name;
-	private String reporter;
-	private String emergency;
-	private String description;
+    private String templateId;
+    private String roleId;
+    private String attachFileId;
+    private String name;
+    private String emergency;
+    private String description;
+    private String envType;
 
-	public int getTemplateId() {
-		return templateId;
-	}
+    public String getTemplateId() {
+        return templateId;
+    }
 
-	public void setTemplateId(int templateId) {
-		this.templateId = templateId;
-	}
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
+    }
 
-	public int getRoleId() {
-		return roleId;
-	}
+    public String getRoleId() {
+        return roleId;
+    }
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
 
-	public int getAttachFileId() {
-		return attachFileId;
-	}
+    public String getAttachFileId() {
+        return attachFileId;
+    }
 
-	public void setAttachFileId(int attachFileId) {
-		this.attachFileId = attachFileId;
-	}
+    public void setAttachFileId(String attachFileId) {
+        this.attachFileId = attachFileId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getReporter() {
-		return reporter;
-	}
+    public String getEmergency() {
+        return emergency;
+    }
 
-	public void setReporter(String reporter) {
-		this.reporter = reporter;
-	}
+    public void setEmergency(String emergency) {
+        this.emergency = emergency;
+    }
 
-	public String getEmergency() {
-		return emergency;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setEmergency(String emergency) {
-		this.emergency = emergency;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getEnvType() {
+        return envType;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setEnvType(String envType) {
+        this.envType = envType;
+    }
 }

@@ -8,83 +8,87 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "service_pipeline")
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class ServicePipeline {
-	@Id
-	@GeneratedValue
-	private Integer id;
+    @Id
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(name = "id", length = 32)
+    private String id;
 
-	@ManyToOne
-	@JoinColumn(name = "service_catalogue_id")
-	private ServiceCatalogue serviceCatalogue;
-	@Column(name = "name")
-	private String name;
-	@Column(name = "description")
-	private String description;
-	@Column(name = "owner_role_id")
-	private int ownerRoleId;
-	@Column(name = "status")
-	private String status;
+    @ManyToOne
+    @JoinColumn(name = "service_catalogue_id")
+    private ServiceCatalogue serviceCatalogue;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "owner_role")
+    private String ownerRole;
+    @Column(name = "status")
+    private String status = "active";
 
-	public ServicePipeline() {
-	}
+    public ServicePipeline() {
+    }
 
-	public ServicePipeline(ServiceCatalogue serviceCatalogue, String name, String description, int ownerRoleId,
-			String status) {
-		this.serviceCatalogue = serviceCatalogue;
-		this.name = name;
-		this.description = description;
-		this.ownerRoleId = ownerRoleId;
-		this.status = status;
-	}
+    public ServicePipeline(ServiceCatalogue serviceCatalogue, String name, String description, String ownerRole,
+            String status) {
+        this.serviceCatalogue = serviceCatalogue;
+        this.name = name;
+        this.description = description;
+        this.ownerRole = ownerRole;
+        this.status = status;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public ServiceCatalogue getServiceCatalogue() {
-		return serviceCatalogue;
-	}
+    public ServiceCatalogue getServiceCatalogue() {
+        return serviceCatalogue;
+    }
 
-	public void setServiceCatalogue(ServiceCatalogue serviceCatalogue) {
-		this.serviceCatalogue = serviceCatalogue;
-	}
+    public void setServiceCatalogue(ServiceCatalogue serviceCatalogue) {
+        this.serviceCatalogue = serviceCatalogue;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getOwnerRoleId() {
-		return ownerRoleId;
-	}
+    public String getOwnerRole() {
+        return ownerRole;
+    }
 
-	public void setOwnerRoleId(int ownerRoleId) {
-		this.ownerRoleId = ownerRoleId;
-	}
+    public void setOwnerRole(String ownerRole) {
+        this.ownerRole = ownerRole;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

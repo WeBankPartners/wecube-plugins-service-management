@@ -9,152 +9,146 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "service_request")
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class ServiceRequest {
 
-	@Id
-	@GeneratedValue
-	private int id;
+    @Id
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(name = "id", length = 32)
+    private String id;
 
-	public ServiceRequest() {
-	}
+    public ServiceRequest() {
+    }
 
-	public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, int reporterRoleId,
-			String reporter, String reportTime, String emergency, String description, String status,
-			AttachFile attachFile) {
-		this.serviceRequestTemplate = serviceRequestTemplate;
-		this.name = name;
-		this.reporterRoleId = reporterRoleId;
-		this.reporter = reporter;
-		this.reportTime = reportTime;
-		this.emergency = emergency;
-		this.description = description;
-		this.status = status;
-		this.attachFile = attachFile;
-	}
+    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, 
+            String reporter, String reportTime, String emergency, String description, String status,
+            AttachFile attachFile, String envType) {
+        this.serviceRequestTemplate = serviceRequestTemplate;
+        this.name = name;
+        this.reporter = reporter;
+        this.reportTime = reportTime;
+        this.emergency = emergency;
+        this.description = description;
+        this.status = status;
+        this.attachFile = attachFile;
+        this.envType = envType;
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "template_id")
-	private ServiceRequestTemplate serviceRequestTemplate;
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private ServiceRequestTemplate serviceRequestTemplate;
 
-	@Column(name = "name")
-	private String name;
-	@Column(name = "reporter_role_id")
-	private int reporterRoleId;
-	@Column(name = "reporter")
-	private String reporter;
-	@Column(name = "report_time")
-	private String reportTime;
-	@Column(name = "emergency")
-	private String emergency;
-	@Column(name = "description")
-	private String description;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "reporter")
+    private String reporter;
+    @Column(name = "report_time")
+    private String reportTime;
+    @Column(name = "emergency")
+    private String emergency;
+    @Column(name = "description")
+    private String description;
 
-	@OneToOne
-	@JoinColumn(name = "attach_file_id")
-	private AttachFile attachFile;
+    @OneToOne
+    @JoinColumn(name = "attach_file_id")
+    private AttachFile attachFile;
 
-	@Column(name = "result")
-	private String result;
-	@Column(name = "process_instance_id")
-	private String ProcessInstanceId;
-	@Column(name = "status")
-	private String status;
+    @Column(name = "result")
+    private String result;
+    @Column(name = "status")
+    private String status = "active";
+    @Column(name = "env_type")
+    private String envType;
 
-	public int getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public ServiceRequestTemplate getServiceRequestTemplate() {
-		return serviceRequestTemplate;
-	}
+    public ServiceRequestTemplate getServiceRequestTemplate() {
+        return serviceRequestTemplate;
+    }
 
-	public void setServiceRequestTemplate(ServiceRequestTemplate serviceRequestTemplate) {
-		this.serviceRequestTemplate = serviceRequestTemplate;
-	}
+    public void setServiceRequestTemplate(ServiceRequestTemplate serviceRequestTemplate) {
+        this.serviceRequestTemplate = serviceRequestTemplate;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getReporterRoleId() {
-		return reporterRoleId;
-	}
+    public String getReporter() {
+        return reporter;
+    }
 
-	public void setReporterRoleId(int reporterRoleId) {
-		this.reporterRoleId = reporterRoleId;
-	}
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
 
-	public String getReporter() {
-		return reporter;
-	}
+    public String getReportTime() {
+        return reportTime;
+    }
 
-	public void setReporter(String reporter) {
-		this.reporter = reporter;
-	}
+    public void setReportTime(String reportTime) {
+        this.reportTime = reportTime;
+    }
 
-	public String getReportTime() {
-		return reportTime;
-	}
+    public String getEmergency() {
+        return emergency;
+    }
 
-	public void setReportTime(String reportTime) {
-		this.reportTime = reportTime;
-	}
+    public void setEmergency(String emergency) {
+        this.emergency = emergency;
+    }
 
-	public String getEmergency() {
-		return emergency;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setEmergency(String emergency) {
-		this.emergency = emergency;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public AttachFile getAttachFile() {
+        return attachFile;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setAttachFile(AttachFile attachFile) {
+        this.attachFile = attachFile;
+    }
 
-	public AttachFile getAttachFile() {
-		return attachFile;
-	}
+    public String getResult() {
+        return result;
+    }
 
-	public void setAttachFile(AttachFile attachFile) {
-		this.attachFile = attachFile;
-	}
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getProcessInstanceId() {
-		return ProcessInstanceId;
-	}
+    public String getEnvType() {
+        return envType;
+    }
 
-	public void setProcessInstanceId(String processInstanceId) {
-		ProcessInstanceId = processInstanceId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setEnvType(String envType) {
+        this.envType = envType;
+    }
 }
