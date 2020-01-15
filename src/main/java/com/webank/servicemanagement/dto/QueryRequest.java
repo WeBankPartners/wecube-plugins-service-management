@@ -112,7 +112,7 @@ public class QueryRequest {
                 throw new Exception("Invalid query parameter [filter], please double check");
             }
             if ("id".equals(filterStrings[0])) {
-                int id = Integer.valueOf(filterStrings[1]);
+                String id = filterStrings[1];
                 queryRequest.addEqualsFilter(filterStrings[0], id);
             } else {
                 queryRequest.addEqualsFilter(filterStrings[0], filterStrings[1]);
