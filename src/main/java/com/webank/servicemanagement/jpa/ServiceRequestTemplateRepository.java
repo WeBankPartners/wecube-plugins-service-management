@@ -6,8 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 
-public interface ServiceRequestTemplateRepository extends CrudRepository<ServiceRequestTemplate, Integer> {
+public interface ServiceRequestTemplateRepository extends CrudRepository<ServiceRequestTemplate, String> {
 	List<ServiceRequestTemplate> findAllByStatus(String status);
 
-	List<ServiceRequestTemplate> findAllByServicePipelineId(int servicePipelineId);
+	List<ServiceRequestTemplate> findAllByServicePipelineId(String servicePipelineId);
 }

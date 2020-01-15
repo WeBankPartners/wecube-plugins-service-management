@@ -11,6 +11,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
+import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 
 @Component
 public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
@@ -21,7 +22,10 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         HttpHeaders headers = request.getHeaders();
-        headers.add("Authorization", smProperties.getWecubePlatformToken());
+        if (AuthenticationContextHolder.getCurrentUser() != null
+                && !AuthenticationContextHolder.getCurrentUser().getToken().isEmpty()) {
+            headers.add("Authorization", AuthenticationContextHolder.getCurrentUser().getToken());
+        }
         return execution.execute(request, body);
     }
 }

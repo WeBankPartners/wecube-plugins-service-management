@@ -1,136 +1,126 @@
 package com.webank.servicemanagement.dto;
 
-import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
-import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 
 public class UpdateServiceRequestRequest {
-	private String name;
-	private int reporterRoleId;
-	private String reporter;
-	private String reportTime;
-	private String emergency;
-	private String description;
-	private String result;
-	private String ProcessInstanceId;
-	private String status;
+    private String name;
+    private String reporterRoleId;
+    private String reporter;
+    private String reportTime;
+    private String emergency;
+    private String description;
+    private String result;
+    private String ProcessInstanceId;
+    private String status;
 
-	public static ServiceRequest toDomain(UpdateServiceRequestRequest updateServiceRequestRequest,
-			ServiceRequest existedServiceRequest) {
-		ServiceRequest serviceRequest = existedServiceRequest;
-		if (serviceRequest == null) {
-			serviceRequest = new ServiceRequest();
-		}
+    public static ServiceRequest toDomain(UpdateServiceRequestRequest updateServiceRequestRequest,
+            ServiceRequest existedServiceRequest) {
+        ServiceRequest serviceRequest = existedServiceRequest;
+        if (serviceRequest == null) {
+            serviceRequest = new ServiceRequest();
+        }
 
-		if (updateServiceRequestRequest.getName() != null) {
-			serviceRequest.setName(updateServiceRequestRequest.getName());
-		}
+        if (updateServiceRequestRequest.getName() != null) {
+            serviceRequest.setName(updateServiceRequestRequest.getName());
+        }
 
-		if (updateServiceRequestRequest.getReporterRoleId() != 0) {
-			serviceRequest.setReporterRoleId(updateServiceRequestRequest.getReporterRoleId());
-		}
+        if (updateServiceRequestRequest.getReporter() != null) {
+            serviceRequest.setReporter(updateServiceRequestRequest.getReporter());
+        }
 
-		if (updateServiceRequestRequest.getReporter() != null) {
-			serviceRequest.setReporter(updateServiceRequestRequest.getReporter());
-		}
+        if (updateServiceRequestRequest.getReportTime() != null) {
+            serviceRequest.setReportTime(updateServiceRequestRequest.getReportTime());
+        }
 
-		if (updateServiceRequestRequest.getReportTime() != null) {
-			serviceRequest.setReportTime(updateServiceRequestRequest.getReportTime());
-		}
+        if (updateServiceRequestRequest.getEmergency() != null) {
+            serviceRequest.setEmergency(updateServiceRequestRequest.getEmergency());
+        }
 
-		if (updateServiceRequestRequest.getEmergency() != null) {
-			serviceRequest.setEmergency(updateServiceRequestRequest.getEmergency());
-		}
+        if (updateServiceRequestRequest.getDescription() != null) {
+            serviceRequest.setDescription(updateServiceRequestRequest.getDescription());
+        }
 
-		if (updateServiceRequestRequest.getDescription() != null) {
-			serviceRequest.setDescription(updateServiceRequestRequest.getDescription());
-		}
+        if (updateServiceRequestRequest.getResult() != null) {
+            serviceRequest.setResult(updateServiceRequestRequest.getResult());
+        }
 
-		if (updateServiceRequestRequest.getResult() != null) {
-			serviceRequest.setResult(updateServiceRequestRequest.getResult());
-		}
+        if (updateServiceRequestRequest.getStatus() != null) {
+            serviceRequest.setStatus(updateServiceRequestRequest.getStatus());
+        }
 
-		if (updateServiceRequestRequest.getProcessInstanceId() != null) {
-			serviceRequest.setProcessInstanceId(updateServiceRequestRequest.getProcessInstanceId());
-		}
+        return serviceRequest;
+    }
 
-		if (updateServiceRequestRequest.getStatus() != null) {
-			serviceRequest.setStatus(updateServiceRequestRequest.getStatus());
-		}
+    public String getName() {
+        return name;
+    }
 
-		return serviceRequest;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getReporterRoleId() {
+        return reporterRoleId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setReporterRoleId(String reporterRoleId) {
+        this.reporterRoleId = reporterRoleId;
+    }
 
-	public int getReporterRoleId() {
-		return reporterRoleId;
-	}
+    public String getReporter() {
+        return reporter;
+    }
 
-	public void setReporterRoleId(int reporterRoleId) {
-		this.reporterRoleId = reporterRoleId;
-	}
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
 
-	public String getReporter() {
-		return reporter;
-	}
+    public String getReportTime() {
+        return reportTime;
+    }
 
-	public void setReporter(String reporter) {
-		this.reporter = reporter;
-	}
+    public void setReportTime(String reportTime) {
+        this.reportTime = reportTime;
+    }
 
-	public String getReportTime() {
-		return reportTime;
-	}
+    public String getEmergency() {
+        return emergency;
+    }
 
-	public void setReportTime(String reportTime) {
-		this.reportTime = reportTime;
-	}
+    public void setEmergency(String emergency) {
+        this.emergency = emergency;
+    }
 
-	public String getEmergency() {
-		return emergency;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setEmergency(String emergency) {
-		this.emergency = emergency;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getResult() {
+        return result;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public String getProcessInstanceId() {
+        return ProcessInstanceId;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public void setProcessInstanceId(String processInstanceId) {
+        ProcessInstanceId = processInstanceId;
+    }
 
-	public String getProcessInstanceId() {
-		return ProcessInstanceId;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setProcessInstanceId(String processInstanceId) {
-		ProcessInstanceId = processInstanceId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
+import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
@@ -30,11 +30,8 @@ import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.service.ServiceRequestService;
 
 @RestController
-@RequestMapping("/v1/service-requests")
+@RequestMapping(ApiInfo.API_VERSION_V1 + ApiInfo.API_RESOURCE_SERVICE_REQUEST)
 public class ServiceRequestController {
-
-    private final static long ATTACH_FILE_MAX_SIZE = 16 * 1024 * 1024;
-
     @Autowired
     ServiceRequestService serviceRequestService;
 
@@ -42,20 +39,13 @@ public class ServiceRequestController {
     AppProperties appProperties;
 
     @PostMapping
-    public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request,
-            HttpServletRequest httpRequest) throws Exception {
+    public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request) throws Exception {
         try {
-            serviceRequestService.createNewServiceRequest(httpRequest.getHeader("Current_User"), request);
+            serviceRequestService.createNewServiceRequest(request);
         } catch (Exception e) {
             return error(e.getMessage());
         }
         return okay();
-    }
-
-    @Deprecated
-    @GetMapping
-    public JsonResponse getAllServiceRequest(HttpServletRequest httpRequest) {
-        return okayWithData(serviceRequestService.getAllServiceRequest());
     }
 
     @PostMapping("/query")
@@ -64,7 +54,7 @@ public class ServiceRequestController {
         return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
     }
 
-    @PutMapping("/done")
+    @PostMapping(ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST)
     public JsonResponse updateServiceRequest(@RequestBody DoneServiceRequestRequest request,
             HttpServletRequest httpRequest) throws Exception {
         try {
@@ -78,15 +68,9 @@ public class ServiceRequestController {
     @PostMapping("/attach-file")
     public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
             throws Exception {
-        if (attachFile == null || attachFile.isEmpty())
-            throw new IllegalArgumentException("File is required.");
-        if (attachFile.getSize() > ATTACH_FILE_MAX_SIZE)
-            throw new IllegalArgumentException("File greater than 16Mb are not supported");
-
-        int attachFileId;
+        String attachFileId;
         try {
-            attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile.getInputStream(),
-                    attachFile.getOriginalFilename());
+            attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile);
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -95,20 +79,21 @@ public class ServiceRequestController {
     }
 
     @GetMapping("/{service-request-id}/attach-file")
-    public void downloadServiceRequestAttachFile(@PathVariable(value = "service-request-id") int serviceRequestId,
+    public void downloadServiceRequestAttachFile(@PathVariable(value = "service-request-id") String serviceRequestId,
             HttpServletResponse response) throws Exception {
-        if (serviceRequestId <= 0)
+        if (serviceRequestId == null || serviceRequestId.isEmpty())
             throw new Exception("Invalid service-request-id: " + serviceRequestId);
         try {
             ServletOutputStream out = response.getOutputStream();
             DownloadAttachFileResponse attachFileInfo = serviceRequestService
                     .downloadServiceRequestAttachFile(serviceRequestId);
+
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment;fileName=" + attachFileInfo.getAttachFileName());
             response.setHeader("Accept", MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            out.write(attachFileInfo.getFileResponseEntity().getBody());
+            out.write(attachFileInfo.getFileByteArray());
             out.flush();
             out.close();
         } catch (Exception e) {

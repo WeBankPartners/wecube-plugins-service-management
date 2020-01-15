@@ -8,13 +8,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "task")
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class Task {
 
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(name = "id", length = 32)
+    private String id;
 
     public Task() {
     }
@@ -70,7 +74,7 @@ public class Task {
     private String resultMessage;
 
     @Column(name = "status")
-    private String status;
+    private String status = "active";
 
     @Column(name = "request_id")
     private String requestId;
@@ -78,11 +82,11 @@ public class Task {
     @Column(name = "callback_parameter")
     private String callbackParameter;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

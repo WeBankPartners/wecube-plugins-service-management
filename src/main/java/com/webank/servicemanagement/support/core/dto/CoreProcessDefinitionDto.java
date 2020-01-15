@@ -6,10 +6,8 @@ public abstract class CoreProcessDefinitionDto {
     private String procDefName;
     private String procDefVersion;
     private String status;
-
     private String procDefData;
     private String rootEntity;
-
     private String createdTime;
 
     public String getProcDefId() {
@@ -74,6 +72,13 @@ public abstract class CoreProcessDefinitionDto {
 
     public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
+    }
+
+    @Override
+    public String toString() {
+        return "CoreProcessDefinitionDto [procDefId=" + procDefId + ", procDefKey=" + procDefKey + ", procDefName="
+                + procDefName + ", procDefVersion=" + procDefVersion + ", status=" + status + ", procDefData="
+                + procDefData + ", rootEntity=" + rootEntity + ", createdTime=" + createdTime + "]";
     }
 
 }

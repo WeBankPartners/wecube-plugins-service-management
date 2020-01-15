@@ -1,40 +1,40 @@
 package com.webank.servicemanagement.dto;
 
 public class CreateServicePipelineRequest {
-	private String name;
-	private String description;
-	private int serviceCatalogueId;
-	private int ownerRoleId;
+    private String name;
+    private String description;
+    private String serviceCatalogueId;
+    private String ownerRole;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getServiceCatalogueId() {
-		return serviceCatalogueId;
-	}
+    public String getServiceCatalogueId() {
+        return serviceCatalogueId;
+    }
 
-	public void setServiceCatalogueId(int serviceCatalogueId) {
-		this.serviceCatalogueId = serviceCatalogueId;
-	}
+    public void setServiceCatalogueId(String serviceCatalogueId) {
+        this.serviceCatalogueId = serviceCatalogueId;
+    }
 
-	public int getOwnerRoleId() {
-		return ownerRoleId;
-	}
+    public String getOwnerRole() {
+        return ownerRole;
+    }
 
-	public void setOwnerRoleId(int ownerRoleId) {
-		this.ownerRoleId = ownerRoleId;
-	}
+    public void setOwnerRole(String ownerRole) {
+        this.ownerRole = ownerRole;
+    }
 }
