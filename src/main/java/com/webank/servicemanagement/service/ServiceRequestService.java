@@ -39,6 +39,8 @@ import com.webank.servicemanagement.support.s3.S3Client;
 import com.webank.servicemanagement.utils.JsonUtils;
 import com.webank.servicemanagement.utils.SystemUtils;
 
+import net.bytebuddy.asm.Advice.This;
+
 @Service
 public class ServiceRequestService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -60,6 +62,7 @@ public class ServiceRequestService {
     private final static String STATUS_SUBMITTED = "Submitted";
     private final static String STATUS_PROCESSING = "Processing";
     private final static String STATUS_DONE = "Done";
+    private final static String IS_NOTIFY_REQUIRED = "Y";
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
@@ -69,21 +72,21 @@ public class ServiceRequestService {
         if (!serviceRequestTemplateOptional.isPresent())
             throw new Exception("Invalid service request template ID !");
 
-        AttachFile attachFile = null;
+        String attachFileId = null;
         if (request.getAttachFileId() != null && !request.getAttachFileId().isEmpty()) {
             Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
             if (!attachFileOptional.isPresent())
                 throw new Exception(String.format("Attach file ID [%s] not found", request.getAttachFileId()));
-            attachFile = attachFileOptional.get();
+            attachFileId = attachFileOptional.get().getId();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
         ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
                 request.getName(), currentUserName, currentTime, request.getEmergency(), request.getDescription(),
-                STATUS_SUBMITTED, attachFile, request.getEnvType()));
+                STATUS_SUBMITTED, attachFileId, request.getEnvType()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
-                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), "Y",
+                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), IS_NOTIFY_REQUIRED,
                 ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
                 serviceRequest.getReportTime(), serviceRequest.getEnvType());
 
@@ -148,15 +151,18 @@ public class ServiceRequestService {
             throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
         ServiceRequest serviceRequest = serviceRequestResult.get();
 
-        String fileName = serviceRequest.getAttachFile().getAttachFileName();
+        Optional<AttachFile> attachFileOptional = attachFileRepository.findById(serviceRequest.getAttachFileId());
+        if (!attachFileOptional.isPresent())
+            throw new Exception("This service request has no attach file");
+        AttachFile attachFile = attachFileOptional.get();
+        String fileName = attachFile.getAttachFileName();
 
         String tempDownloadFilePath = SystemUtils.getTempFolderPath() + fileName;
         File downloadFile = new File(tempDownloadFilePath);
 
-        new S3Client(serviceManagementProperties).downFile(serviceRequest.getAttachFile().getAttachFileName(),
-                tempDownloadFilePath);
+        new S3Client(serviceManagementProperties).downFile(fileName, tempDownloadFilePath);
         DownloadAttachFileResponse response = new DownloadAttachFileResponse(
-                FileUtils.readFileToByteArray(downloadFile), serviceRequest.getAttachFile().getAttachFileName());
+                FileUtils.readFileToByteArray(downloadFile), fileName);
 
         FileUtils.forceDelete(downloadFile);
         return response;
