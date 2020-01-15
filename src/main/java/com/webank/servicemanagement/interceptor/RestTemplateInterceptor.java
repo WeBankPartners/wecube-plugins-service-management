@@ -25,8 +25,6 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
         if (AuthenticationContextHolder.getCurrentUser() != null
                 && !AuthenticationContextHolder.getCurrentUser().getToken().isEmpty()) {
             headers.add("Authorization", AuthenticationContextHolder.getCurrentUser().getToken());
-        } else {
-            headers.add("Authorization", smProperties.getWecubePlatformToken());
         }
         return execution.execute(request, body);
     }
