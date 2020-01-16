@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
