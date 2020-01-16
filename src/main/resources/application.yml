@@ -30,7 +30,7 @@ service:
       max-total-connections: 200
     wecube-core-address: localhost:8080
     wecube-platform-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJIVFRQLU1PQ0siLCJpYXQiOjE1NzYwNTMxOTcsInR5cGUiOiJhY2Nlc3NUb2tlbiIsImNsaWVudFR5cGUiOiJTVUJfU1lTVEVNIiwiZXhwIjoxNjAxOTczMTk3LCJhdXRob3JpdHkiOiJbU1VCX1NZU1RFTV0ifQ.Wd5rhFX3G-dtqlqYzgnkzd9i8T0xJkkPQSAckzO3V3NWXMCw3B9JWe7JlMjbNtE7va8qce1qcrz6qaa4pB0t5A
-    s3-endpoint: http://129.204.99.160:9000
+    s3-endpoint: http://127.0.0.1:9000
     s3-access-key: access_key
     s3-secret-key: secret_key
     s3-default-bucket: service-mgmt 
