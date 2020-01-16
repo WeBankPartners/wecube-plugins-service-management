@@ -25,6 +25,7 @@
     "task_name": "任务名称",
     "reporter": "上报人",
     "reporting_time": "上报时间",
+    "environment_type": "环境类型",
     "emergency_level": "紧急程度",
     "mission_details": "任务描述",
     "attachment": "任务附件",
