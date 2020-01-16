@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webank.servicemanagement.dto.JsonResponse;
+import com.webank.servicemanagement.service.AttachFileService;
 import com.webank.servicemanagement.service.ServiceCatalogueService;
 import com.webank.servicemanagement.service.ServicePipelineService;
 import com.webank.servicemanagement.service.ServiceRequestService;
@@ -36,8 +37,17 @@ public class DataModelController {
     ServiceRequestService serviceRequestService;
     @Autowired
     TaskService taskService;
+    @Autowired
+    AttachFileService attachFileService;
 
-    @GetMapping("/service_catalogue")
+    public static final String SERVICE_CATALOGUE = "serviceCatalogue";
+    public static final String SERVICE_PIPELINE = "servicePipeline";
+    public static final String SERVICE_REQUEST_TEMPLATE = "serviceRequestTemplate";
+    public static final String SERVICE_REQUEST = "serviceRequest";
+    public static final String TASK = "task";
+    public static final String ATTACH_FILE = "attachFile";
+
+    @GetMapping("/" + SERVICE_CATALOGUE)
     @ResponseBody
     public JsonResponse retrieveServiceCatalogues(@RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "sorting", required = false) String sorting,
@@ -45,23 +55,23 @@ public class DataModelController {
         return okayWithData(serviceCatalogueService.getDataWithConditions(filter, sorting, select));
     }
 
-    @PostMapping("/service_catalogue/create")
+    @PostMapping("/" + SERVICE_CATALOGUE + "/create")
     public JsonResponse createServiceCatalogues(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceCatalogueService.create(request));
     }
 
-    @PostMapping("/service_catalogue/update")
+    @PostMapping("/" + SERVICE_CATALOGUE + "/update")
     public JsonResponse updateServiceCatalogues(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceCatalogueService.update(request));
     }
 
-    @PostMapping("/service_catalogue/delete")
+    @PostMapping("/" + SERVICE_CATALOGUE + "/delete")
     public JsonResponse deleteServiceCatalogues(@RequestBody List<Map<String, Object>> request) {
         serviceCatalogueService.delete(request);
         return okay();
     }
 
-    @GetMapping("/service_pipeline")
+    @GetMapping("/" + SERVICE_PIPELINE)
     @ResponseBody
     public JsonResponse retrieveServicePipelines(@RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "sorting", required = false) String sorting,
@@ -69,23 +79,23 @@ public class DataModelController {
         return okayWithData(servicePipelineService.getDataWithConditions(filter, sorting, select));
     }
 
-    @PostMapping("/service_pipeline/create")
+    @PostMapping("/" + SERVICE_PIPELINE + "/create")
     public JsonResponse createServicePipelines(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(servicePipelineService.create(request));
     }
 
-    @PostMapping("/service_pipeline/update")
+    @PostMapping("/" + SERVICE_PIPELINE + "/update")
     public JsonResponse updateServicePipelines(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(servicePipelineService.update(request));
     }
 
-    @PostMapping("/service_pipeline/delete")
+    @PostMapping("/" + SERVICE_PIPELINE + "/delete")
     public JsonResponse deleteServicePipelines(@RequestBody List<Map<String, Object>> request) {
         servicePipelineService.delete(request);
         return okay();
     }
 
-    @GetMapping("/service_request_template")
+    @GetMapping("/" + SERVICE_REQUEST_TEMPLATE)
     @ResponseBody
     public JsonResponse retrieveServiceRequestTemplates(@RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "sorting", required = false) String sorting,
@@ -93,23 +103,23 @@ public class DataModelController {
         return okayWithData(serviceRequestTemplateService.getDataWithConditions(filter, sorting, select));
     }
 
-    @PostMapping("/service_request_template/create")
+    @PostMapping("/" + SERVICE_REQUEST_TEMPLATE + "/create")
     public JsonResponse createServiceRequestTemplates(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceRequestTemplateService.create(request));
     }
 
-    @PostMapping("/service_request_template/update")
+    @PostMapping("/" + SERVICE_REQUEST_TEMPLATE + "/update")
     public JsonResponse updateServiceRequestTemplates(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceRequestTemplateService.update(request));
     }
 
-    @PostMapping("/service_request_template/delete")
+    @PostMapping("/" + SERVICE_REQUEST_TEMPLATE + "/delete")
     public JsonResponse deleteServiceRequestTemplates(@RequestBody List<Map<String, Object>> request) {
         serviceRequestTemplateService.delete(request);
         return okay();
     }
 
-    @GetMapping("/service_request")
+    @GetMapping("/" + SERVICE_REQUEST)
     @ResponseBody
     public JsonResponse retrieveServiceRequests(@RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "sorting", required = false) String sorting,
@@ -117,23 +127,23 @@ public class DataModelController {
         return okayWithData(serviceRequestService.getDataWithConditions(filter, sorting, select));
     }
 
-    @PostMapping("/service_request/create")
+    @PostMapping("/" + SERVICE_REQUEST + "/create")
     public JsonResponse createServiceRequests(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceRequestService.create(request));
     }
 
-    @PostMapping("/service_request/update")
+    @PostMapping("/" + SERVICE_REQUEST + "/update")
     public JsonResponse updateServiceRequests(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(serviceRequestService.update(request));
     }
 
-    @PostMapping("/service_request/delete")
+    @PostMapping("/" + SERVICE_REQUEST + "/delete")
     public JsonResponse deleteServiceRequests(@RequestBody List<Map<String, Object>> request) {
         serviceRequestService.delete(request);
         return okay();
     }
 
-    @GetMapping("/task")
+    @GetMapping("/" + TASK)
     @ResponseBody
     public JsonResponse retrieveTasks(@RequestParam(value = "filter", required = false) String filter,
             @RequestParam(value = "sorting", required = false) String sorting,
@@ -141,19 +151,43 @@ public class DataModelController {
         return okayWithData(taskService.getDataWithConditions(filter, sorting, select));
     }
 
-    @PostMapping("/task/create")
+    @PostMapping("/" + TASK + "/create")
     public JsonResponse createTasks(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(taskService.create(request));
     }
 
-    @PostMapping("/task/update")
+    @PostMapping("/" + TASK + "/update")
     public JsonResponse updateTasks(@RequestBody List<Map<String, Object>> request) {
         return okayWithData(taskService.update(request));
     }
 
-    @PostMapping("/task/delete")
+    @PostMapping("/" + TASK + "/delete")
     public JsonResponse deleteTasks(@RequestBody List<Map<String, Object>> request) {
         taskService.delete(request);
+        return okay();
+    }
+
+    @GetMapping("/" + ATTACH_FILE)
+    @ResponseBody
+    public JsonResponse retrieveAttachFiles(@RequestParam(value = "filter", required = false) String filter,
+            @RequestParam(value = "sorting", required = false) String sorting,
+            @RequestParam(value = "select", required = false) String select) throws Exception {
+        return okayWithData(attachFileService.getDataWithConditions(filter, sorting, select));
+    }
+
+    @PostMapping("/" + ATTACH_FILE + "/create")
+    public JsonResponse createAttachFiles(@RequestBody List<Map<String, Object>> request) {
+        return okayWithData(attachFileService.create(request));
+    }
+
+    @PostMapping("/" + ATTACH_FILE + "/update")
+    public JsonResponse updateAttachFiles(@RequestBody List<Map<String, Object>> request) {
+        return okayWithData(attachFileService.update(request));
+    }
+
+    @PostMapping("/" + ATTACH_FILE + "/delete")
+    public JsonResponse deleteAttachFiles(@RequestBody List<Map<String, Object>> request) {
+        attachFileService.delete(request);
         return okay();
     }
 

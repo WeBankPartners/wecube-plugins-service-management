@@ -14,12 +14,12 @@
 
     <!-- 3.数据模型 - 描述本插件包的数据模型,并且描述和Framework数据模型的关系 -->
     <dataModel>
-        <entity name="service_catalogue" displayName="服务目录" description="服务目录模型">
+        <entity name="serviceCatalogue" displayName="服务目录" description="服务目录模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="name" datatype="str" description="目录名称"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_pipeline" displayName="服务通道" description="服务通道模型">
+        <entity name="servicePipeline" displayName="服务通道" description="服务通道模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="serviceCatalogueId" datatype='ref' description="所属服务目录"
                        refPackage="" refVersion="" refEntity="service_catalogue" ref="id"/>
@@ -28,7 +28,7 @@
             <attribute name="ownerRole" datatype="str" description="所属角色"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_request_template" displayName="服务请求模板" description="服务请求模板模型">
+        <entity name="serviceRequestTemplate" displayName="服务请求模板" description="服务请求模板模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="servicePipelineId" datatype='ref' description="所属服务通道"
                        refPackage="" refVersion="" refEntity="service_pipeline" ref="id"/>
@@ -37,7 +37,7 @@
             <attribute name="processDefinedKey" datatype="str" description="编排唯一Key"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_request" displayName="服务请求" description="服务请求模型">
+        <entity name="serviceRequest" displayName="服务请求" description="服务请求模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="templateId" datatype='ref' description="所属服务模板"
                        refPackage="" refVersion="" refEntity="service_request_template" ref="id"/>
@@ -53,7 +53,7 @@
             <attribute name="status" datatype="str" description="状态"/>
             <attribute name="env_type" datatype="str" description="所属环境"/>
         </entity>
-        <entity name="attach_file" displayName="附件信息" description="附件信息模型">
+        <entity name="attachFile" displayName="附件信息" description="附件信息模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="attachFileName" datatype="str" description="附件名称"/>
             <attribute name="s3Url" datatype="str" description="文件临时地址"/>
