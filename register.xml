@@ -119,7 +119,7 @@
                 </outputParameters>
             </interface>
         </plugin>
-        <plugin name="service_request">
+        <plugin name="serviceRequest">
             <interface action="update" path="/service-mgmt/v1/service-requests/done"
                        httpMethod='PUT'>
                 <inputParameters>
