@@ -47,8 +47,8 @@ public class TaskService {
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
-    private final static String STATUS_SUCCESSFUL = "Successful";
-    private final static String STATUS_FAILED = "Failed";
+    private final static String STATUS_SUCCESSFUL = "Successful/Approved";
+    private final static String STATUS_FAILED = "Failed/Rejected";
 
     @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
@@ -87,7 +87,7 @@ public class TaskService {
 
     public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {
         if (!checkResultIsAvailable(processTaskRequest.getResult()))
-            throw new Exception(String.format("Result[%s] is invalid, Only support 'Successful' and 'Failed'",
+            throw new Exception(String.format("Result[%s] is invalid, Only support 'Successfule/Approved' and 'Failed/Rejected'",
                     processTaskRequest.getResult()));
         updateTaskByProcessTaskRequest(taskId, processTaskRequest);
     }

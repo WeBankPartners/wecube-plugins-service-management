@@ -51,8 +51,6 @@
     "download_attachment": "下载附件",
     "service_request_ID": "服务请求ID",
     "pending": "待领取",
-    "successful": "处理成功",
-    "failed": "处理失败",
     "operator": "处理人",
     "operate_time": "处理时间",
     "receive": "领取",
