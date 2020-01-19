@@ -14,69 +14,69 @@
 
     <!-- 3.数据模型 - 描述本插件包的数据模型,并且描述和Framework数据模型的关系 -->
     <dataModel>
-        <entity name="service_catalogue" displayName="服务目录" description="服务目录模型">
+        <entity name="serviceCatalogue" displayName="服务目录" description="服务目录模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
             <attribute name="name" datatype="str" description="目录名称"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_pipeline" displayName="服务通道" description="服务通道模型">
+        <entity name="servicePipeline" displayName="服务通道" description="服务通道模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
-            <attribute name="service_catalogue_id" datatype='ref' description="所属服务目录"
-                       refPackage="" refVersion="" refEntity="service_catalogue" ref="id"/>
+            <attribute name="serviceCatalogueId" datatype='ref' description="所属服务目录"
+                       refPackage="" refVersion="" refEntity="serviceCatalogue" ref="id"/>
             <attribute name="name" datatype="str" description="通道名称"/>
             <attribute name="description" datatype="str" description="描述"/>
-            <attribute name="owner_role" datatype="str" description="所属角色"/>
+            <attribute name="ownerRole" datatype="str" description="所属角色"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_request_template" displayName="服务请求模板" description="服务请求模板模型">
+        <entity name="serviceRequestTemplate" displayName="服务请求模板" description="服务请求模板模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
-            <attribute name="service_pipeline_id" datatype='ref' description="所属服务通道"
-                       refPackage="" refVersion="" refEntity="service_pipeline" ref="id"/>
+            <attribute name="servicePipelineId" datatype='ref' description="所属服务通道"
+                       refPackage="" refVersion="" refEntity="servicePipeline" ref="id"/>
             <attribute name="name" datatype="str" description="模板名称"/>
             <attribute name="description" datatype="str" description="描述"/>
-            <attribute name="process_defined_key" datatype="str" description="编排唯一Key"/>
+            <attribute name="processDefinedKey" datatype="str" description="编排唯一Key"/>
             <attribute name="status" datatype="str" description="状态"/>
         </entity>
-        <entity name="service_request" displayName="服务请求" description="服务请求模型">
+        <entity name="serviceRequest" displayName="服务请求" description="服务请求模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
-            <attribute name="template_id" datatype='ref' description="所属服务模板"
-                       refPackage="" refVersion="" refEntity="service_request_template" ref="id"/>
+            <attribute name="templateId" datatype='ref' description="所属服务模板"
+                       refPackage="" refVersion="" refEntity="serviceRequestTemplate" ref="id"/>
             <attribute name="name" datatype="str" description="请求名称"/>
             <attribute name="reporter" datatype="str" description="上报人"/>
-            <attribute name="reporter_role_id" datatype="str" description="上报角色ID"/>
-            <attribute name="report_time" datatype="timestamp" description="上报时间"/>
+            <attribute name="reporterRoleId" datatype="str" description="上报角色ID"/>
+            <attribute name="reportTime" datatype="timestamp" description="上报时间"/>
             <attribute name="emergency" datatype="str" description="紧急程度"/>
             <attribute name="description" datatype="str" description="描述"/>
-            <attribute name="attach_file_id" datatype='ref' description="附件ID"
-                       refPackage="" refVersion="" refEntity="attach_file" ref="id"/>
+            <attribute name="attachFileId" datatype='ref' description="附件ID"
+                       refPackage="" refVersion="" refEntity="attachFile" ref="id"/>
             <attribute name="result" datatype="str" description="结果"/>
             <attribute name="status" datatype="str" description="状态"/>
             <attribute name="env_type" datatype="str" description="所属环境"/>
         </entity>
-        <entity name="attach_file" displayName="附件信息" description="附件信息模型">
+        <entity name="attachFile" displayName="附件信息" description="附件信息模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
-            <attribute name="attach_file_name" datatype="str" description="附件名称"/>
-            <attribute name="s3_url" datatype="str" description="文件临时地址"/>
-            <attribute name="s3_bucket_name" datatype="str" description="文件所在桶"/>
-            <attribute name="s3_key_name" datatype="str" description="文件名称"/>
+            <attribute name="attachFileName" datatype="str" description="附件名称"/>
+            <attribute name="s3Url" datatype="str" description="文件临时地址"/>
+            <attribute name="s3BucketName" datatype="str" description="文件所在桶"/>
+            <attribute name="s3KeyName" datatype="str" description="文件名称"/>
         </entity>
         <entity name="task" displayName="任务" description="任务模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
-            <attribute name="service_request_id" datatype='ref' description="所属服务请求"
-                       refPackage="" refVersion="" refEntity="service_request" ref="id"/>
-            <attribute name="callback_url" datatype="str" description="回调url"/>
+            <attribute name="serviceRequestId" datatype='ref' description="所属服务请求"
+                       refPackage="" refVersion="" refEntity="serviceRequest" ref="id"/>
+            <attribute name="callbackUrl" datatype="str" description="回调url"/>
             <attribute name="name" datatype="int" description="任务名称"/>
             <attribute name="reporter" datatype="str" description="上报人"/>
-            <attribute name="report_time" datatype="timestamp" description="上报时间"/>
-            <attribute name="operator_role" datatype="str" description="操作角色ID"/>
+            <attribute name="reportTime" datatype="timestamp" description="上报时间"/>
+            <attribute name="operatorRole" datatype="str" description="操作角色ID"/>
             <attribute name="operator" datatype="str" description="操作人"/>
-            <attribute name="operator_time" datatype="timestamp" description="操作时间"/>
-            <attribute name="input_parameters" datatype="int" description="输入参数"/>
+            <attribute name="operatorTime" datatype="timestamp" description="操作时间"/>
+            <attribute name="inputParameters" datatype="int" description="输入参数"/>
             <attribute name="description" datatype="str" description="描述"/>
             <attribute name="result" datatype="int" description="结果"/>
-            <attribute name="result_message" datatype="int" description="处理结果"/>
+            <attribute name="resultMessage" datatype="int" description="处理结果"/>
             <attribute name="status" datatype="str" description="状态"/>
-            <attribute name="callback_parameter" datatype="str" description="唯一回调参数"/>
+            <attribute name="callbackParameter" datatype="str" description="唯一回调参数"/>
         </entity>
     </dataModel>
     
@@ -119,7 +119,7 @@
                 </outputParameters>
             </interface>
         </plugin>
-        <plugin name="service_request">
+        <plugin name="serviceRequest">
             <interface action="update" path="/service-mgmt/v1/service-requests/done"
                        httpMethod='PUT'>
                 <inputParameters>

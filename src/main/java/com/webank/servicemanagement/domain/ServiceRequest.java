@@ -24,9 +24,9 @@ public class ServiceRequest {
     public ServiceRequest() {
     }
 
-    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, 
-            String reporter, String reportTime, String emergency, String description, String status,
-            AttachFile attachFile, String envType) {
+    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter,
+            String reportTime, String emergency, String description, String status, String attachFileId,
+            String envType) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
         this.reporter = reporter;
@@ -34,7 +34,7 @@ public class ServiceRequest {
         this.emergency = emergency;
         this.description = description;
         this.status = status;
-        this.attachFile = attachFile;
+        this.attachFileId = attachFileId;
         this.envType = envType;
     }
 
@@ -53,9 +53,8 @@ public class ServiceRequest {
     @Column(name = "description")
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "attach_file_id")
-    private AttachFile attachFile;
+    @Column(name = "attach_file_id")
+    private String attachFileId;
 
     @Column(name = "result")
     private String result;
@@ -120,14 +119,6 @@ public class ServiceRequest {
         this.description = description;
     }
 
-    public AttachFile getAttachFile() {
-        return attachFile;
-    }
-
-    public void setAttachFile(AttachFile attachFile) {
-        this.attachFile = attachFile;
-    }
-
     public String getResult() {
         return result;
     }
@@ -150,5 +141,13 @@ public class ServiceRequest {
 
     public void setEnvType(String envType) {
         this.envType = envType;
+    }
+
+    public String getAttachFileId() {
+        return attachFileId;
+    }
+
+    public void setAttachFileId(String attachFileId) {
+        this.attachFileId = attachFileId;
     }
 }
