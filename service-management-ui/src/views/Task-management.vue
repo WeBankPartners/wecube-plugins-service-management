@@ -87,8 +87,8 @@
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem :label="$t('process_result')">
             <Select v-model="handlerForm.result">
-              <Option value="Failed">{{$t('fail_or_reject')}}</Option>
-              <Option value="Successful">{{$t('success_or_approve')}}</Option>
+              <Option value="Failed/Rejected">{{$t('fail_or_reject')}}</Option>
+              <Option value="Successful/Approved">{{$t('success_or_approve')}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
@@ -285,12 +285,12 @@ export default {
               label: this.$t('processing')
             },
             {
-              value: "Successful",
-              label: this.$t('successful')
+              value: "Successful/Approved",
+              label: this.$t('success_or_approve')
             },
             {
-              value: "Failed",
-              label: this.$t('failed')
+              value: "Failed/Rejected",
+              label: this.$t('fail_or_reject')
             }
           ],
         },
@@ -365,12 +365,12 @@ export default {
                   </div>
                 );
                 break;
-              case "Successful":
+              case "Successful/Approved":
                 return (
                   <div></div>
                 );
                 break;
-              case "Failed":
+              case "Failed/Rejected":
                 return (
                   <div></div>
                 );

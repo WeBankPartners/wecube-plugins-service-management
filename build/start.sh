@@ -5,7 +5,7 @@ db_port=$2
 db_schema=$3
 
 mkdir -p /log
-java -jar /service-management/service-management.jar  --server.address=0.0.0.0 --server.port=21000 \
+java -Djava.security.egd=file:/dev/urandom -jar /service-management/service-management.jar  --server.address=0.0.0.0 --server.port=21000 \
 --spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver \
 --spring.datasource.url="jdbc:mysql://${db_host}:${db_port}/${db_schema}?characterEncoding=utf8&serverTimezone=Asia/Shanghai" \
 --spring.datasource.username=$4 \
