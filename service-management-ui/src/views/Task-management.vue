@@ -48,7 +48,7 @@
               <Option v-for="role in currentUserRoles" :key="role.roleName" :value="role.roleName">{{role.description}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="$t('environment_type')">
+          <FormItem :label="$t('environment_type')">
             <Select v-model="requestForm.envType">
               <Option value="test">测试</Option>
               <Option value="preProduction">准生产</Option>
