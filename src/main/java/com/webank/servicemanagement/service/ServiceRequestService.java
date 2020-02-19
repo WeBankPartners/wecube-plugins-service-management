@@ -66,7 +66,6 @@ public class ServiceRequestService {
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
-        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
         if (!serviceRequestTemplateOptional.isPresent())
@@ -80,9 +79,9 @@ public class ServiceRequestService {
             attachFileId = attachFileOptional.get().getId();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
-        ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
-                request.getName(), currentUserName, currentTime, request.getEmergency(), request.getDescription(),
-                STATUS_SUBMITTED, attachFileId, request.getEnvType()));
+        ServiceRequest serviceRequest = serviceRequestRepository.save(
+                new ServiceRequest(serviceRequestTemplate, request.getName(), currentUserName, request.getEmergency(),
+                        request.getDescription(), STATUS_SUBMITTED, attachFileId, request.getEnvType()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
