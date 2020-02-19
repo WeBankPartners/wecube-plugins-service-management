@@ -51,7 +51,8 @@
                        refPackage="" refVersion="" refEntity="attachFile" ref="id"/>
             <attribute name="result" datatype="str" description="结果"/>
             <attribute name="status" datatype="str" description="状态"/>
-            <attribute name="env_type" datatype="str" description="所属环境"/>
+            <attribute name="envType" datatype="str" description="所属环境"/>
+            <attribute name="requestNo" datatype="int" description="请求单号"/>
         </entity>
         <entity name="attachFile" displayName="附件信息" description="附件信息模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
@@ -94,7 +95,7 @@
 
     <!-- 6.运行资源 - 描述部署运行本插件包需要的基础资源(如主机、虚拟机、容器、数据库等) -->
     <resourceDependencies>
-        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{ALLOCATE_PORT}}:21000" volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log" envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}}"/>
+        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{ALLOCATE_PORT}}:21000" volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log" envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}},S3_ENDPOINT={{S3_SERVER_URL}},S3_ACCESS_KEY={{S3_ACCESS_KEY}},S3_SECRET_KEY={{S3_SECRET_KEY}}"/>
         <mysql schema="service_mgmt" initFileName="init.sql" upgradeFileName="upgrade.sql"/>
     </resourceDependencies>
 
