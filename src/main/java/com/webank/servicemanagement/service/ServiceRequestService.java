@@ -83,10 +83,9 @@ public class ServiceRequestService {
                 new ServiceRequest(serviceRequestTemplate, request.getName(), currentUserName, request.getEmergency(),
                         request.getDescription(), STATUS_SUBMITTED, attachFileId, request.getEnvType()));
 
-        ReportServiceRequest reportServiceRequest = new ReportServiceRequest(
-                String.valueOf(serviceRequest.getRequestNo()), serviceRequestTemplate.getName(),
-                serviceManagementProperties.getSystemCode(), serviceRequestTemplate.getProcessDefinitionKey(),
-                serviceRequest.getId(), IS_NOTIFY_REQUIRED,
+        ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
+                serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
+                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), IS_NOTIFY_REQUIRED,
                 ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
                 serviceRequest.getReportTime(), serviceRequest.getEnvType());
 

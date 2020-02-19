@@ -51,7 +51,8 @@
                        refPackage="" refVersion="" refEntity="attachFile" ref="id"/>
             <attribute name="result" datatype="str" description="结果"/>
             <attribute name="status" datatype="str" description="状态"/>
-            <attribute name="env_type" datatype="str" description="所属环境"/>
+            <attribute name="envType" datatype="str" description="所属环境"/>
+            <attribute name="requestNo" datatype="int" description="请求单号"/>
         </entity>
         <entity name="attachFile" displayName="附件信息" description="附件信息模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
