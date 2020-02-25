@@ -81,9 +81,9 @@
             <Select v-model="form.processDefinitionKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.procDefKey"
-                :value="process.procDefKey"
-              >{{process.procDefName}}</Option>
+                :key="process.processDefinitionKey"
+                :value="process.processDefinitionKey"
+              >{{process.processDefinitionKey}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')" prop="attrName">
@@ -145,7 +145,7 @@
     </Tabs>
     <Modal
       v-model="catalogModalVisible"
-      :title="$t('add_service_channel')"
+      :title="$t('add_service_directory')"
       footer-hide
       width="50"
       @on-cancel="catalogModalHide"
@@ -181,9 +181,9 @@
             <Select v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
-                :key="role.name"
-                :value="role.name"
-              >{{role.displayName}}</Option>
+                :key="role.roleName"
+                :value="role.roleName"
+              >{{role.description}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
