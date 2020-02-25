@@ -51,7 +51,8 @@
                        refPackage="" refVersion="" refEntity="attachFile" ref="id"/>
             <attribute name="result" datatype="str" description="结果"/>
             <attribute name="status" datatype="str" description="状态"/>
-            <attribute name="env_type" datatype="str" description="所属环境"/>
+            <attribute name="envType" datatype="str" description="所属环境"/>
+            <attribute name="requestNo" datatype="int" description="请求单号"/>
         </entity>
         <entity name="attachFile" displayName="附件信息" description="附件信息模型">
             <attribute name="id" datatype="str" description="唯一ID"/>
@@ -86,36 +87,33 @@
 
     <!-- 5.权限设定 -->
     <authorities>
-        <authority systemRoleName="admin">
+        <authority systemRoleName="SUPER_ADMIN">
             <menu code="JOBS_SERVICE_CATALOG_MANAGEMENT"/>
-            <menu code="JOBS_TASK_MANAGEMENT"/>
-        </authority>
-        <authority systemRoleName="wecube_operator">
             <menu code="JOBS_TASK_MANAGEMENT"/>
         </authority>
     </authorities>
 
     <!-- 6.运行资源 - 描述部署运行本插件包需要的基础资源(如主机、虚拟机、容器、数据库等) -->
     <resourceDependencies>
-        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{ALLOCATE_PORT}}:21000" volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log" envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}}"/>
+        <docker imageName="service-mgmt:{{VERSION}}" containerName="service-mgmt-{{VERSION}}" portBindings="{{ALLOCATE_PORT}}:21000" volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log" envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}},S3_ENDPOINT={{S3_SERVER_URL}},S3_ACCESS_KEY={{S3_ACCESS_KEY}},S3_SECRET_KEY={{S3_SECRET_KEY}}"/>
         <mysql schema="service_mgmt" initFileName="init.sql" upgradeFileName="upgrade.sql"/>
     </resourceDependencies>
 
     <!-- 7.插件列表 - 描述插件包中单个插件的输入和输出 -->
     <plugins>
         <plugin name="task">
-            <interface action="create" path="/service-mgmt/v1/tasks" httpMethod='POST' isAsyncProcessing="Y" type="APPROVAL">
+            <interface action="create" path="/service-mgmt/v1/tasks" httpMethod="POST" isAsyncProcessing="Y" type="APPROVAL">
                 <inputParameters>
-                    <parameter datatype="string" mappingType='system_variable' mappingSystemVariableName='CALLBACK_URL' required='Y'>
+                    <parameter datatype="string" mappingType="system_variable" mappingSystemVariableName="CALLBACK_URL" required="Y">
                         callbackUrl
                     </parameter>
-                    <parameter datatype="string" mappingType='constant' required='Y'>taskName</parameter>
-                    <parameter datatype="string" mappingType='constant' required='Y'>roleName</parameter>
+                    <parameter datatype="string" mappingType="constant" required="Y">taskName</parameter>
+                    <parameter datatype="string" mappingType="constant" required="Y">roleName</parameter>
                 </inputParameters>
                 <outputParameters>
-                     <parameter datatype="string" mappingType='context'>errorCode</parameter>
-                     <parameter datatype="string" mappingType='context'>errorMessage</parameter>
-                     <parameter datatype="string" mappingType='context'>comment</parameter>
+                     <parameter datatype="string" mappingType="context">errorCode</parameter>
+                     <parameter datatype="string" mappingType="context">errorMessage</parameter>
+                     <parameter datatype="string" mappingType="context">comment</parameter>
                 </outputParameters>
             </interface>
         </plugin>
@@ -123,10 +121,10 @@
             <interface action="update" path="/service-mgmt/v1/service-requests/done"
                        httpMethod='PUT'>
                 <inputParameters>
-                    <parameter datatype="string" mappingType='context' required='Y'>
+                    <parameter datatype="string" mappingType="context" required="Y">
                         service-request-id
                     </parameter>
-                    <parameter datatype="string" mappingType='context' required='Y'>result</parameter>
+                    <parameter datatype="string" mappingType="context" required="Y">result</parameter>
                 </inputParameters>
                 <outputParameters>
                     <parameter datatype="string">status</parameter>

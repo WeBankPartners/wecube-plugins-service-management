@@ -56,6 +56,7 @@ CREATE TABLE `service_request` (
     `result` VARCHAR(1024) NULL,
     `status` VARCHAR(32) NULL DEFAULT NULL,
     `env_type` VARCHAR(32) NULL DEFAULT 'TEST',
+    `request_no` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `idx_template_id` (`template_id`),
     CONSTRAINT `fk_service_request_template_service_request` FOREIGN KEY (`template_id`) REFERENCES `service_request_template` (`id`),
