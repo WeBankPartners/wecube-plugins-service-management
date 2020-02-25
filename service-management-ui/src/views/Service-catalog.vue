@@ -145,7 +145,7 @@
     </Tabs>
     <Modal
       v-model="catalogModalVisible"
-      :title="$t('add_service_channel')"
+      :title="$t('add_service_directory')"
       footer-hide
       width="50"
       @on-cancel="catalogModalHide"
