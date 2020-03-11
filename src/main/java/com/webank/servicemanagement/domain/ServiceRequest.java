@@ -80,8 +80,8 @@ public class ServiceRequest {
         return serviceForm;
     }
 
-    public void setServiceRequestTemplate(ServiceForm serviceRequestTemplate) {
-        this.serviceForm = serviceRequestTemplate;
+    public void setServiceForm(ServiceForm serviceForm) {
+        this.serviceForm = serviceForm;
     }
 
     public String getName() {
