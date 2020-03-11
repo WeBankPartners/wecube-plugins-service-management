@@ -31,8 +31,8 @@ CREATE TABLE `service_pipeline` (
     CONSTRAINT `fk_service_catalogue_service_pipeline` FOREIGN KEY (`service_catalogue_id`) REFERENCES `service_catalogue` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
-drop table if exists `service_request_template`;
-CREATE TABLE `service_request_template` (
+drop table if exists `service_form`;
+CREATE TABLE `service_form` (
     `id` VARCHAR(32) NOT NULL ,
     `service_pipeline_id` VARCHAR(32) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `service_request_template` (
 drop table if exists `service_request`;
 CREATE TABLE `service_request` (
     `id` VARCHAR(32) NOT NULL ,
-    `template_id` VARCHAR(32) NOT NULL ,
+    `service_form_id` VARCHAR(32) NOT NULL ,
     `name` VARCHAR(255) NOT NULL,
     `reporter` VARCHAR(64) NULL DEFAULT NULL,
     `report_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -58,8 +58,8 @@ CREATE TABLE `service_request` (
     `env_type` VARCHAR(32) NULL DEFAULT 'TEST',
     `request_no` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `idx_template_id` (`template_id`),
-    CONSTRAINT `fk_service_request_template_service_request` FOREIGN KEY (`template_id`) REFERENCES `service_request_template` (`id`),
+    INDEX `idx_service_form_id` (`service_form_id`),
+    CONSTRAINT `fk_service_form_service_request` FOREIGN KEY (`service_form_id`) REFERENCES `service_form` (`id`),
     CONSTRAINT `fk_attach_file_service_request` FOREIGN KEY (`attach_file_id`) REFERENCES `attach_file` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 

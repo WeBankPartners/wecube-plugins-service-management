@@ -1,7 +1,7 @@
 package com.webank.servicemanagement.dto;
 
 public class CreateServiceRequestRequest {
-    private String templateId;
+    private String serviceFormId;
     private String roleId;
     private String attachFileId;
     private String name;
@@ -9,12 +9,12 @@ public class CreateServiceRequestRequest {
     private String description;
     private String envType;
 
-    public String getTemplateId() {
-        return templateId;
+    public String getServiceFormId() {
+        return serviceFormId;
     }
 
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId;
+    public void setServiceFormId(String serviceFormId) {
+        this.serviceFormId = serviceFormId;
     }
 
     public String getRoleId() {

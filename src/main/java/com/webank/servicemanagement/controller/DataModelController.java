@@ -20,7 +20,7 @@ import com.webank.servicemanagement.service.AttachFileService;
 import com.webank.servicemanagement.service.ServiceCatalogueService;
 import com.webank.servicemanagement.service.ServicePipelineService;
 import com.webank.servicemanagement.service.ServiceRequestService;
-import com.webank.servicemanagement.service.ServiceRequestTemplateService;
+import com.webank.servicemanagement.service.ServiceFormService;
 import com.webank.servicemanagement.service.TaskService;
 
 @RestController
@@ -32,7 +32,7 @@ public class DataModelController {
     @Autowired
     ServicePipelineService servicePipelineService;
     @Autowired
-    ServiceRequestTemplateService serviceRequestTemplateService;
+    ServiceFormService serviceRequestTemplateService;
     @Autowired
     ServiceRequestService serviceRequestService;
     @Autowired

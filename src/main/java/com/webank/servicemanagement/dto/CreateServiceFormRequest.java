@@ -1,6 +1,6 @@
 package com.webank.servicemanagement.dto;
 
-public class CreateServiceRequestTemplateRequest {
+public class CreateServiceFormRequest {
 	private String name;
 	private String description;
 	private String servicePipelineId;

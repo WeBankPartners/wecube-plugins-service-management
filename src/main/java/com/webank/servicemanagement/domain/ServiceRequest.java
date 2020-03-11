@@ -28,9 +28,9 @@ public class ServiceRequest {
     public ServiceRequest() {
     }
 
-    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter, String emergency,
+    public ServiceRequest(ServiceForm serviceForm, String name, String reporter, String emergency,
             String description, String status, String attachFileId, String envType) {
-        this.serviceRequestTemplate = serviceRequestTemplate;
+        this.serviceForm = serviceForm;
         this.name = name;
         this.reporter = reporter;
         this.emergency = emergency;
@@ -44,8 +44,8 @@ public class ServiceRequest {
     }
 
     @ManyToOne
-    @JoinColumn(name = "template_id")
-    private ServiceRequestTemplate serviceRequestTemplate;
+    @JoinColumn(name = "service_form_id")
+    private ServiceForm serviceForm;
 
     @Column(name = "name")
     private String name;
@@ -76,12 +76,12 @@ public class ServiceRequest {
         this.id = id;
     }
 
-    public ServiceRequestTemplate getServiceRequestTemplate() {
-        return serviceRequestTemplate;
+    public ServiceForm getServiceForm() {
+        return serviceForm;
     }
 
-    public void setServiceRequestTemplate(ServiceRequestTemplate serviceRequestTemplate) {
-        this.serviceRequestTemplate = serviceRequestTemplate;
+    public void setServiceRequestTemplate(ServiceForm serviceRequestTemplate) {
+        this.serviceForm = serviceRequestTemplate;
     }
 
     public String getName() {

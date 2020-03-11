@@ -11,9 +11,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "service_request_template")
+@Table(name = "service_form")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
-public class ServiceRequestTemplate {
+public class ServiceForm {
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     @Column(name = "id", length = 32)
@@ -32,10 +32,10 @@ public class ServiceRequestTemplate {
     @Column(name = "status")
     private String status = "active";
 
-    public ServiceRequestTemplate() {
+    public ServiceForm() {
     }
 
-    public ServiceRequestTemplate(ServicePipeline servicePipeline, String name, String description,
+    public ServiceForm(ServicePipeline servicePipeline, String name, String description,
             String processDefinitionKey, String status) {
         this.servicePipeline = servicePipeline;
         this.name = name;

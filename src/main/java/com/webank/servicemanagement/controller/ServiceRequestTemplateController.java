@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webank.servicemanagement.dto.CreateServiceRequestTemplateRequest;
+import com.webank.servicemanagement.dto.CreateServiceFormRequest;
 import com.webank.servicemanagement.dto.JsonResponse;
-import com.webank.servicemanagement.service.ServiceRequestTemplateService;
+import com.webank.servicemanagement.service.ServiceFormService;
 
 @RestController
 @RequestMapping("/v1/service-request-templates")
 public class ServiceRequestTemplateController {
 
 	@Autowired
-	ServiceRequestTemplateService serviceRequestTemplateService;
+	ServiceFormService serviceRequestTemplateService;
 
 	@PostMapping
 	public JsonResponse createServiceRequestTemplate(
-			@RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest) throws Exception {
+			@RequestBody CreateServiceFormRequest createServiceRequestTemplateRequest) throws Exception {
 		try {
-			serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
+			serviceRequestTemplateService.createServiceForm(createServiceRequestTemplateRequest);
 		} catch (Exception e) {
 			return error(e.getMessage());
 		}
@@ -37,13 +37,13 @@ public class ServiceRequestTemplateController {
 	@Deprecated
 	@GetMapping("/available")
 	public JsonResponse getAllAvailableServiceTemplate() {
-		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceRequestTemplate());
+		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceForm());
 	}
 
 	@GetMapping("/service-pipelines/{service-pipeline-id}")
 	public JsonResponse getServiceRequestTemplateByPipelineId(
 			@PathVariable(value = "service-pipeline-id") String servicePipelinId) {
-		return okayWithData(serviceRequestTemplateService.getServiceRequestTemplateByPipelineId(servicePipelinId));
+		return okayWithData(serviceRequestTemplateService.getServiceFormByPipelineId(servicePipelinId));
 	}
 
 }

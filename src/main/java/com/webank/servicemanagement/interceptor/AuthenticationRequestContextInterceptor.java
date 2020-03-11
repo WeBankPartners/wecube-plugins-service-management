@@ -29,14 +29,14 @@ public class AuthenticationRequestContextInterceptor implements HandlerIntercept
             request.setAttribute(REQ_ATTR_KEY_CURRENT_USER, currentUser);
         }
         // TODO - for test
-        if (userPrincipal == null) {
-            AuthenticatedUser currentUser = new AuthenticatedUser("umadmin");
-            currentUser.setToken(
-                    "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJIVFRQLU1PQ0siLCJpYXQiOjE1NzYwNTMxOTcsInR5cGUiOiJhY2Nlc3NUb2tlbiIsImNsaWVudFR5cGUiOiJTVUJfU1lTVEVNIiwiZXhwIjoxNjAxOTczMTk3LCJhdXRob3JpdHkiOiJbU1VCX1NZU1RFTV0ifQ.Wd5rhFX3G-dtqlqYzgnkzd9i8T0xJkkPQSAckzO3V3NWXMCw3B9JWe7JlMjbNtE7va8qce1qcrz6qaa4pB0t5A");
-            AuthenticationContextHolder.setAuthenticatedUser(currentUser);
-
-            request.setAttribute(REQ_ATTR_KEY_CURRENT_USER, currentUser);
-        }
+//        if (userPrincipal == null) {
+//            AuthenticatedUser currentUser = new AuthenticatedUser("umadmin");
+//            currentUser.setToken(
+//                    "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJIVFRQLU1PQ0siLCJpYXQiOjE1NzYwNTMxOTcsInR5cGUiOiJhY2Nlc3NUb2tlbiIsImNsaWVudFR5cGUiOiJTVUJfU1lTVEVNIiwiZXhwIjoxNjAxOTczMTk3LCJhdXRob3JpdHkiOiJbU1VCX1NZU1RFTV0ifQ.Wd5rhFX3G-dtqlqYzgnkzd9i8T0xJkkPQSAckzO3V3NWXMCw3B9JWe7JlMjbNtE7va8qce1qcrz6qaa4pB0t5A");
+//            AuthenticationContextHolder.setAuthenticatedUser(currentUser);
+//
+//            request.setAttribute(REQ_ATTR_KEY_CURRENT_USER, currentUser);
+//        }
 
         return true;
     }

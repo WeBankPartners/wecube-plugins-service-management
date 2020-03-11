@@ -1,17 +1,13 @@
 package com.webank.servicemanagement.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +18,7 @@ import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
-import com.webank.servicemanagement.domain.ServiceRequestTemplate;
+import com.webank.servicemanagement.domain.ServiceForm;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
@@ -32,23 +28,20 @@ import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
-import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
+import com.webank.servicemanagement.jpa.ServiceFormRepository;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.s3.S3Client;
 import com.webank.servicemanagement.utils.JsonUtils;
 import com.webank.servicemanagement.utils.SystemUtils;
 
-import net.bytebuddy.asm.Advice.This;
-
 @Service
 public class ServiceRequestService {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
     @Autowired
-    ServiceRequestTemplateRepository serviceRequestTemplateRepository;
+    ServiceFormRepository serviceFormRepository;
     @Autowired
     AttachFileRepository attachFileRepository;
     @Autowired
@@ -66,10 +59,10 @@ public class ServiceRequestService {
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
-        Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
-                .findById(request.getTemplateId());
-        if (!serviceRequestTemplateOptional.isPresent())
-            throw new Exception("Invalid service request template ID !");
+        Optional<ServiceForm> serviceFormOptional = serviceFormRepository
+                .findById(request.getServiceFormId());
+        if (!serviceFormOptional.isPresent())
+            throw new Exception("Invalid service form ID !");
 
         String attachFileId = null;
         if (request.getAttachFileId() != null && !request.getAttachFileId().isEmpty()) {
@@ -78,7 +71,7 @@ public class ServiceRequestService {
                 throw new Exception(String.format("Attach file ID [%s] not found", request.getAttachFileId()));
             attachFileId = attachFileOptional.get().getId();
         }
-        ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
+        ServiceForm serviceRequestTemplate = serviceFormOptional.get();
         ServiceRequest serviceRequest = serviceRequestRepository.save(
                 new ServiceRequest(serviceRequestTemplate, request.getName(), currentUserName, request.getEmergency(),
                         request.getDescription(), STATUS_SUBMITTED, attachFileId, request.getEnvType()));
