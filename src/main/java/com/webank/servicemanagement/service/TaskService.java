@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
@@ -73,6 +74,13 @@ public class TaskService {
         return Lists.newArrayList(taskRepository.findAll());
     }
 
+    public List<Task> getTasksByCurrentUser() {
+        List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
+
+        log.info("currentRoles:{}", currentRoles);
+        return Lists.newArrayList(taskRepository.findByOperatorRoleIn(currentRoles));
+    }
+
     public void takeoverTask(String taskId, UpdateTaskRequest receiveTaskrequest) throws Exception {
         Task task;
         Optional<Task> taskResult = taskRepository.findById(taskId);
@@ -87,8 +95,9 @@ public class TaskService {
 
     public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {
         if (!checkResultIsAvailable(processTaskRequest.getResult()))
-            throw new Exception(String.format("Result[%s] is invalid, Only support 'Successfule/Approved' and 'Failed/Rejected'",
-                    processTaskRequest.getResult()));
+            throw new Exception(
+                    String.format("Result[%s] is invalid, Only support 'Successfule/Approved' and 'Failed/Rejected'",
+                            processTaskRequest.getResult()));
         updateTaskByProcessTaskRequest(taskId, processTaskRequest);
     }
 
