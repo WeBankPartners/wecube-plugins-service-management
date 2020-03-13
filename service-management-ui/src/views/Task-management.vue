@@ -113,7 +113,7 @@ import {
   updateServiceRequest,
   getAllAvailableServiceTemplate,
   taskProcess,
-  queryTask,
+  queryMyTask,
   taskTakeover,
   getCurrentUserRoles
 } from "../api/server";
@@ -511,7 +511,7 @@ export default {
       this.handlerPayload.pageable.startIndex =
         this.handlerPagination.pageSize *
         (this.handlerPagination.currentPage - 1);
-      const { status, message, data } = await queryTask(
+      const { status, message, data } = await queryMyTask(
         this.handlerPayload
       );
       if (status === "OK") {
