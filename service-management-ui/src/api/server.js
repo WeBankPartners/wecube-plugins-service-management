@@ -6,7 +6,7 @@ export const createServiceRequest = data => request.post(`/service-mgmt/v1/servi
 export const updateServiceRequest = data => request.put(`/service-mgmt/v1/service-requests/${data.id}/update`, data);
 export const getAllAvailableServiceTemplate = () => request.get(`/service-mgmt/v1/service-request-templates/available`);
 export const taskProcess = data => request.put(`/service-mgmt/v1/tasks/${data.taskId}/process`, data);
-export const queryTask = data => request.post(`/service-mgmt/v1/tasks/query`, data);
+export const queryMyTask = data => request.post(`/service-mgmt/v1/tasks/my-tasks/query`, data);
 export const taskTakeover = data => request.put(`/service-mgmt/v1/tasks/${data.taskId}/takeover`, data);
 export const getCurrentUserRoles = () => request.get(`/service-mgmt/v1/core-resources/users/current-user/roles`);
 

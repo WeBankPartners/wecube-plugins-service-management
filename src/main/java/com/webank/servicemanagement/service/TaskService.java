@@ -70,10 +70,6 @@ public class TaskService {
         return savedTasks;
     }
 
-    public List<Task> getAllTask() {
-        return Lists.newArrayList(taskRepository.findAll());
-    }
-
     public List<Task> getTasksByCurrentUser() {
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
@@ -147,6 +143,11 @@ public class TaskService {
 
     public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
+
+        List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
+
+        log.info("currentRoles:{}", currentRoles);
+        queryRequest.addInFilter("operatorRole", currentRoles);
 
         QueryResponse<Task> queryResult;
         try {

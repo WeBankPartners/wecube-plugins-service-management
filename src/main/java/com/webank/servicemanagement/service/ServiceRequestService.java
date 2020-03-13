@@ -37,8 +37,6 @@ import com.webank.servicemanagement.support.s3.S3Client;
 import com.webank.servicemanagement.utils.JsonUtils;
 import com.webank.servicemanagement.utils.SystemUtils;
 
-import net.bytebuddy.asm.Advice.This;
-
 @Service
 public class ServiceRequestService {
     private Logger log = LoggerFactory.getLogger(this.getClass());

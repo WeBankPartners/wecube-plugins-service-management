@@ -42,11 +42,6 @@ public class TaskController {
         }
         return WorkflowJsonResponse.okayWithData(tasks);
     }
-
-    @GetMapping
-    public JsonResponse getAllTasks() {
-        return okayWithData(taskService.getAllTask());
-    }
     
     @GetMapping("/my-tasks")
     public JsonResponse getMyTasks() {
@@ -75,7 +70,7 @@ public class TaskController {
         return okay();
     }
 
-    @PostMapping("/query")
+    @PostMapping("/my-tasks/query")
     public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
         return okayWithData(taskService.queryTask(queryRequest));
     }
