@@ -1,9 +1,7 @@
 package com.webank.servicemanagement.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -167,8 +165,13 @@ public class ServiceRequestService {
         return response;
     }
 
-    public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {
+    public QueryResponse<ServiceRequest> queryServiceRequestByCurrentUserOrderByReportTimeDesc(
+            QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
+
+        String currentUserName = AuthenticationContextHolder.getCurrentUsername();
+        log.info("currentUserName={}", currentUserName);
+        queryRequest.addEqualsFilter("reporter", currentUserName);
 
         QueryResponse<ServiceRequest> queryResult;
         try {
@@ -210,7 +213,7 @@ public class ServiceRequestService {
     }
 
     public List<ServiceRequest> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<ServiceRequest> response = queryServiceRequest(
+        QueryResponse<ServiceRequest> response = queryServiceRequestByCurrentUserOrderByReportTimeDesc(
                 QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
