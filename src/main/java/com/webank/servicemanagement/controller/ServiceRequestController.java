@@ -22,26 +22,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
 import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
-import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
+import com.webank.servicemanagement.dto.CreateServiceTicketRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.QueryRequest;
-import com.webank.servicemanagement.service.ServiceRequestService;
+import com.webank.servicemanagement.service.ServiceTicketService;
 
 @RestController
 @RequestMapping(ApiInfo.API_VERSION_V1 + ApiInfo.API_RESOURCE_SERVICE_REQUEST)
 public class ServiceRequestController {
     @Autowired
-    ServiceRequestService serviceRequestService;
+    ServiceTicketService serviceRequestService;
 
     @Autowired
     AppProperties appProperties;
 
     @PostMapping
-    public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request) throws Exception {
+    public JsonResponse createServiceRequest(@RequestBody CreateServiceTicketRequest request) throws Exception {
         try {
-            serviceRequestService.createNewServiceRequest(request);
+            serviceRequestService.createNewServiceTicket(request);
         } catch (Exception e) {
             return error(e.getMessage());
         }

@@ -1,6 +1,6 @@
 package com.webank.servicemanagement.dto;
 
-public class CreateServiceRequestRequest {
+public class CreateServiceTicketRequest {
     private String serviceFormId;
     private String roleId;
     private String attachFileId;

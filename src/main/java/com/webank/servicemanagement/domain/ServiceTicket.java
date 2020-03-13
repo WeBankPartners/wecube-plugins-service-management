@@ -14,9 +14,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "service_request")
+@Table(name = "service_ticket")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
-public class ServiceRequest {
+public class ServiceTicket {
 
     @Id
     @GeneratedValue(generator = "jpa-uuid")
@@ -25,34 +25,14 @@ public class ServiceRequest {
 
     private long requestNo;
 
-    public ServiceRequest() {
-    }
-
-    public ServiceRequest(ServiceForm serviceForm, String name, String reporter, String emergency,
-            String description, String status, String attachFileId, String envType) {
-        this.serviceForm = serviceForm;
-        this.name = name;
-        this.reporter = reporter;
-        this.emergency = emergency;
-        this.description = description;
-        this.status = status;
-        this.attachFileId = attachFileId;
-        this.envType = envType;
-        long currentTimeMillis = System.currentTimeMillis();
-        this.reportTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(currentTimeMillis));
-        this.requestNo = currentTimeMillis;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "service_form_id")
+    @JoinColumn(name = "service_form_id", insertable = false, updatable = false)
     private ServiceForm serviceForm;
+    @Column(name = "service_form_id")
+    private String serviceFormId;
 
-    @Column(name = "name")
-    private String name;
-    @Column(name = "reporter")
-    private String reporter;
-    @Column(name = "report_time")
-    private String reportTime;
+    @Column(name = "title")
+    private String title;
     @Column(name = "emergency")
     private String emergency;
     @Column(name = "description")
@@ -68,6 +48,29 @@ public class ServiceRequest {
     @Column(name = "env_type")
     private String envType;
 
+    @Column(name = "reporter")
+    private String reporter;
+    @Column(name = "report_time")
+    private String reportTime;
+
+    public ServiceTicket() {
+    }
+
+    public ServiceTicket(ServiceForm serviceForm, String title, String reporter, String emergency,
+            String description, String status, String attachFileId, String envType) {
+        this.serviceForm = serviceForm;
+        this.title = title;
+        this.reporter = reporter;
+        this.emergency = emergency;
+        this.description = description;
+        this.status = status;
+        this.attachFileId = attachFileId;
+        this.envType = envType;
+        long currentTimeMillis = System.currentTimeMillis();
+        this.reportTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(currentTimeMillis));
+        this.requestNo = currentTimeMillis;
+    }
+    
     public String getId() {
         return id;
     }
@@ -84,12 +87,12 @@ public class ServiceRequest {
         this.serviceForm = serviceForm;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getReporter() {

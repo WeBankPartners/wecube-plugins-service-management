@@ -34,7 +34,8 @@ public class CoreResourceController {
         return okayWithData(coreServiceStub.getAllRoles());
     }
 
-    @GetMapping("/workflow/process-definition-keys")
+//    @GetMapping("/workflow/process-definition-keys")
+    @GetMapping("/workflow/process-definitions")
     public JsonResponse getAllProcessDefinitionKeys() {
         return okayWithData(coreServiceStub.getAllProcessDefinitionKeys());
     }

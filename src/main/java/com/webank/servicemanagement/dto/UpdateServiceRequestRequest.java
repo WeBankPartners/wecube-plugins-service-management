@@ -1,6 +1,6 @@
 package com.webank.servicemanagement.dto;
 
-import com.webank.servicemanagement.domain.ServiceRequest;
+import com.webank.servicemanagement.domain.ServiceTicket;
 
 public class UpdateServiceRequestRequest {
     private String name;
@@ -13,15 +13,15 @@ public class UpdateServiceRequestRequest {
     private String ProcessInstanceId;
     private String status;
 
-    public static ServiceRequest toDomain(UpdateServiceRequestRequest updateServiceRequestRequest,
-            ServiceRequest existedServiceRequest) {
-        ServiceRequest serviceRequest = existedServiceRequest;
+    public static ServiceTicket toDomain(UpdateServiceRequestRequest updateServiceRequestRequest,
+            ServiceTicket existedServiceRequest) {
+        ServiceTicket serviceRequest = existedServiceRequest;
         if (serviceRequest == null) {
-            serviceRequest = new ServiceRequest();
+            serviceRequest = new ServiceTicket();
         }
 
         if (updateServiceRequestRequest.getName() != null) {
-            serviceRequest.setName(updateServiceRequestRequest.getName());
+            serviceRequest.setTitle(updateServiceRequestRequest.getName());
         }
 
         if (updateServiceRequestRequest.getReporter() != null) {

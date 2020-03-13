@@ -38,7 +38,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "service_request_id")
-    private ServiceRequest serviceRequest;
+    private ServiceTicket serviceRequest;
 
     @Column(name = "callback_url")
     private String callbackUrl;
@@ -90,11 +90,11 @@ public class Task {
         this.id = id;
     }
 
-    public ServiceRequest getServiceRequest() {
+    public ServiceTicket getServiceRequest() {
         return serviceRequest;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
+    public void setServiceRequest(ServiceTicket serviceRequest) {
         this.serviceRequest = serviceRequest;
     }
 

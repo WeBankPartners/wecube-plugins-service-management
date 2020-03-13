@@ -23,7 +23,7 @@ import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.jpa.EntityRepository;
-import com.webank.servicemanagement.jpa.ServiceRequestRepository;
+import com.webank.servicemanagement.jpa.ServiceTicketRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
 import com.webank.servicemanagement.support.core.CoreRemoteCallException;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
@@ -39,7 +39,7 @@ public class TaskService {
     @Autowired
     TaskRepository taskRepository;
     @Autowired
-    ServiceRequestRepository serviceRequestRepository;
+    ServiceTicketRepository serviceRequestRepository;
     @Autowired
     EntityRepository entityRepository;
     @Autowired

@@ -19,7 +19,7 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.AttachFileService;
 import com.webank.servicemanagement.service.ServiceCatalogueService;
 import com.webank.servicemanagement.service.ServicePipelineService;
-import com.webank.servicemanagement.service.ServiceRequestService;
+import com.webank.servicemanagement.service.ServiceTicketService;
 import com.webank.servicemanagement.service.ServiceFormService;
 import com.webank.servicemanagement.service.TaskService;
 
@@ -34,7 +34,7 @@ public class DataModelController {
     @Autowired
     ServiceFormService serviceRequestTemplateService;
     @Autowired
-    ServiceRequestService serviceRequestService;
+    ServiceTicketService serviceRequestService;
     @Autowired
     TaskService taskService;
     @Autowired

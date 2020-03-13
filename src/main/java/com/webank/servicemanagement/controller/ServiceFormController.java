@@ -17,33 +17,32 @@ import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.ServiceFormService;
 
 @RestController
-@RequestMapping("/v1/service-request-templates")
-public class ServiceRequestTemplateController {
+@RequestMapping("/v1/service-forms")
+public class ServiceFormController {
 
 	@Autowired
-	ServiceFormService serviceRequestTemplateService;
+	ServiceFormService serviceFormService;
 
 	@PostMapping
-	public JsonResponse createServiceRequestTemplate(
-			@RequestBody CreateServiceFormRequest createServiceRequestTemplateRequest) throws Exception {
+	public JsonResponse createServiceForm(
+			@RequestBody CreateServiceFormRequest createServiceFormRequest) throws Exception {
 		try {
-			serviceRequestTemplateService.createServiceForm(createServiceRequestTemplateRequest);
+			serviceFormService.createServiceForm(createServiceFormRequest);
 		} catch (Exception e) {
 			return error(e.getMessage());
 		}
 		return okay();
 	}
 
-	@Deprecated
 	@GetMapping("/available")
-	public JsonResponse getAllAvailableServiceTemplate() {
-		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceForm());
+	public JsonResponse getAllAvailableServiceForms() {
+		return okayWithData(serviceFormService.getAllAvailableServiceForms());
 	}
 
 	@GetMapping("/service-pipelines/{service-pipeline-id}")
-	public JsonResponse getServiceRequestTemplateByPipelineId(
+	public JsonResponse getServiceFormsByPipelineId(
 			@PathVariable(value = "service-pipeline-id") String servicePipelinId) {
-		return okayWithData(serviceRequestTemplateService.getServiceFormByPipelineId(servicePipelinId));
+		return okayWithData(serviceFormService.getServiceFormsByPipelineId(servicePipelinId));
 	}
 
 }

@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-public class ServiceRequestTemplateControllerTest extends AbstractControllerTest {
+public class ServiceFormControllerTest extends AbstractControllerTest {
 
 	@Test
 	public void createServiceRequestTemplateTest() throws Exception {
