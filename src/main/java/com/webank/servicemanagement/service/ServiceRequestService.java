@@ -75,9 +75,9 @@ public class ServiceRequestService {
             attachFileId = attachFileOptional.get().getId();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
-        ServiceRequest serviceRequest = serviceRequestRepository.save(
-                new ServiceRequest(serviceRequestTemplate, request.getName(), currentUserName, request.getEmergency(),
-                        request.getDescription(), STATUS_SUBMITTED, attachFileId, request.getEnvType()));
+        ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
+                request.getName(), currentUserName, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED,
+                attachFileId, request.getEnvType(), request.getRoleName()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
