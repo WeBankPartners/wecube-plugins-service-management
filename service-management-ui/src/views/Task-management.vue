@@ -44,8 +44,8 @@
             <Input v-model="requestForm.name" :placeholder="$t('service_request_name')"></Input>
           </FormItem>
           <FormItem :label="$t('service_request_role')">
-            <Select v-model="requestForm.roleId">
-              <Option v-for="role in currentUserRoles" :key="role.roleName" :value="role.roleName">{{role.description}}</Option>
+            <Select v-model="requestForm.roleName">
+              <Option v-for="role in currentUserRoles" :key="role.name" :value="role.name">{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('environment_type')">
@@ -133,7 +133,7 @@ export default {
         description: "",
         attachFileId: null,
         templateId:'',
-        roleId:'',
+        roleName:'',
       },
       handlerForm: {
         result: '',
@@ -445,7 +445,7 @@ export default {
       this.requestForm.emergency = ''
       this.requestForm.description = ''
       this.requestForm.templateId = ''
-      this.requestForm.roleId = ''
+      this.requestForm.roleName = ''
     },
     async requestSubmit() {
       const {status} = await createServiceRequest(this.requestForm)

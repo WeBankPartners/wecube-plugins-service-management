@@ -29,7 +29,7 @@ public class ServiceRequest {
     }
 
     public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter, String emergency,
-            String description, String status, String attachFileId, String envType) {
+            String description, String status, String attachFileId, String envType, String reportRole) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
         this.reporter = reporter;
@@ -38,6 +38,7 @@ public class ServiceRequest {
         this.status = status;
         this.attachFileId = attachFileId;
         this.envType = envType;
+        this.reportRole = reportRole;
         long currentTimeMillis = System.currentTimeMillis();
         this.reportTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(currentTimeMillis));
         this.requestNo = currentTimeMillis;
@@ -51,6 +52,8 @@ public class ServiceRequest {
     private String name;
     @Column(name = "reporter")
     private String reporter;
+    @Column(name = "report_role")
+    private String reportRole;
     @Column(name = "report_time")
     private String reportTime;
     @Column(name = "emergency")
