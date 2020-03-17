@@ -78,12 +78,12 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('process')" prop="attrName">
-            <Select v-model="form.processDefinitionKey">
+            <Select v-model="form.procDefKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.processDefinitionKey"
-                :value="process.processDefinitionKey"
-              >{{process.processDefinitionKey}}</Option>
+                :key="process.procDefKey"
+                :value="process.procDefKey"
+              >{{process.procDefName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')" prop="attrName">
@@ -181,9 +181,9 @@
             <Select v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
-                :key="role.roleName"
-                :value="role.roleName"
-              >{{role.description}}</Option>
+                :key="role.name"
+                :value="role.name"
+              >{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
