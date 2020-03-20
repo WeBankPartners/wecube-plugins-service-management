@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -163,13 +164,13 @@ public class ServiceRequestService {
         return response;
     }
 
-    public QueryResponse<ServiceRequest> queryServiceRequestByCurrentUserOrderByReportTimeDesc(
+    public QueryResponse<ServiceRequest> queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
             QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
-        String currentUserName = AuthenticationContextHolder.getCurrentUsername();
-        log.info("currentUserName={}", currentUserName);
-        queryRequest.addEqualsFilter("reporter", currentUserName);
+        Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
+        log.info("currentRoles={}", currentRoles);
+        queryRequest.addInFilter("report_role", new ArrayList<String>(currentRoles));
 
         QueryResponse<ServiceRequest> queryResult;
         try {
@@ -211,7 +212,7 @@ public class ServiceRequestService {
     }
 
     public List<ServiceRequest> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<ServiceRequest> response = queryServiceRequestByCurrentUserOrderByReportTimeDesc(
+        QueryResponse<ServiceRequest> response = queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
                 QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }

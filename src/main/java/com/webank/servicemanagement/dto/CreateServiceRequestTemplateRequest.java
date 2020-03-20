@@ -4,7 +4,7 @@ public class CreateServiceRequestTemplateRequest {
 	private String name;
 	private String description;
 	private String servicePipelineId;
-	private String processDefinitionKey;
+	private String procDefKey;
 
 	public String getName() {
 		return name;
@@ -30,11 +30,11 @@ public class CreateServiceRequestTemplateRequest {
 		this.servicePipelineId = servicePipelineId;
 	}
 
-	public String getProcessDefinitionKey() {
-		return processDefinitionKey;
+	public String getProcDefKey() {
+		return procDefKey;
 	}
 
-	public void setProcessDefinitionKey(String processDefinitionKey) {
-		this.processDefinitionKey = processDefinitionKey;
+	public void setProcDefKey(String procDefKey) {
+		this.procDefKey = procDefKey;
 	}
 }

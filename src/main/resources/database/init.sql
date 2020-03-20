@@ -49,6 +49,7 @@ CREATE TABLE `service_request` (
     `template_id` VARCHAR(32) NOT NULL ,
     `name` VARCHAR(255) NOT NULL,
     `reporter` VARCHAR(64) NULL DEFAULT NULL,
+    `report_role` VARCHAR(64) NULL DEFAULT NULL,
     `report_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `emergency` VARCHAR(32) NULL,
     `description` VARCHAR(255) NOT NULL,
