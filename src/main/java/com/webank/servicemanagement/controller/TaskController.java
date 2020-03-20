@@ -22,7 +22,6 @@ import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowJsonResponse;
-import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.service.TaskService;
 
@@ -43,11 +42,10 @@ public class TaskController {
         }
         return WorkflowJsonResponse.okayWithData(tasks);
     }
-
-    @Deprecated
-    @GetMapping
-    public JsonResponse getAllTask() {
-        return okayWithData(taskService.getAllTask());
+    
+    @GetMapping("/my-tasks")
+    public JsonResponse getMyTasks() {
+        return okayWithData(taskService.getTasksByCurrentUser());
     }
 
     @PutMapping("/{task-id}/takeover")
@@ -72,7 +70,7 @@ public class TaskController {
         return okay();
     }
 
-    @PostMapping("/query")
+    @PostMapping("/my-tasks/query")
     public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
         return okayWithData(taskService.queryTask(queryRequest));
     }
