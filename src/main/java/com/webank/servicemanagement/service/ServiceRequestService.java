@@ -170,7 +170,7 @@ public class ServiceRequestService {
 
         Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
         log.info("currentRoles={}", currentRoles);
-        queryRequest.addInFilter("report_role", new ArrayList<String>(currentRoles));
+        queryRequest.addInFilter("reportRole", new ArrayList<String>(currentRoles));
 
         QueryResponse<ServiceRequest> queryResult;
         try {
@@ -180,6 +180,7 @@ public class ServiceRequestService {
             }
             return queryResult;
         } catch (Exception e) {
+            log.error("Query service_request met error: {}",e.getMessage());
             return new QueryResponse<>();
         }
     }
