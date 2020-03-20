@@ -1,12 +1,11 @@
 package com.webank.servicemanagement.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -38,8 +37,6 @@ import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.s3.S3Client;
 import com.webank.servicemanagement.utils.JsonUtils;
 import com.webank.servicemanagement.utils.SystemUtils;
-
-import net.bytebuddy.asm.Advice.This;
 
 @Service
 public class ServiceRequestService {
@@ -79,9 +76,9 @@ public class ServiceRequestService {
             attachFileId = attachFileOptional.get().getId();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
-        ServiceRequest serviceRequest = serviceRequestRepository.save(
-                new ServiceRequest(serviceRequestTemplate, request.getName(), currentUserName, request.getEmergency(),
-                        request.getDescription(), STATUS_SUBMITTED, attachFileId, request.getEnvType()));
+        ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
+                request.getName(), currentUserName, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED,
+                attachFileId, request.getEnvType(), request.getRoleName()));
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
@@ -167,8 +164,13 @@ public class ServiceRequestService {
         return response;
     }
 
-    public QueryResponse<ServiceRequest> queryServiceRequest(QueryRequest queryRequest) {
+    public QueryResponse<ServiceRequest> queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
+            QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
+
+        Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
+        log.info("currentRoles={}", currentRoles);
+        queryRequest.addInFilter("reportRole", new ArrayList<String>(currentRoles));
 
         QueryResponse<ServiceRequest> queryResult;
         try {
@@ -178,6 +180,7 @@ public class ServiceRequestService {
             }
             return queryResult;
         } catch (Exception e) {
+            log.error("Query service_request met error: {}",e.getMessage());
             return new QueryResponse<>();
         }
     }
@@ -210,7 +213,7 @@ public class ServiceRequestService {
     }
 
     public List<ServiceRequest> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<ServiceRequest> response = queryServiceRequest(
+        QueryResponse<ServiceRequest> response = queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
                 QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
