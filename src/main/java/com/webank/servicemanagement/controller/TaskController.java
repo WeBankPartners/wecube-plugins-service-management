@@ -71,6 +71,11 @@ public class TaskController {
     }
 
     @PostMapping("/my-tasks/query")
+    public JsonResponse queryMyTask(@RequestBody QueryRequest queryRequest) throws Exception {
+        return okayWithData(taskService.queryTaskByCurrentRoles(queryRequest));
+    }
+
+    @PostMapping("/query")
     public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
         return okayWithData(taskService.queryTask(queryRequest));
     }
