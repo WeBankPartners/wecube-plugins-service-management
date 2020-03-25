@@ -145,13 +145,27 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
+    public QueryResponse<Task> queryTaskByCurrentRoles(QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
-        log.info("currentRoles:{}", currentRoles);
         queryRequest.addInFilter("operatorRole", currentRoles);
+
+        QueryResponse<Task> queryResult;
+        try {
+            queryResult = entityRepository.query(Task.class, queryRequest);
+            if (queryResult.getContents().size() == 0) {
+                return new QueryResponse<>();
+            }
+            return queryResult;
+        } catch (Exception e) {
+            return new QueryResponse<>();
+        }
+    }
+
+    public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
+        queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         QueryResponse<Task> queryResult;
         try {
@@ -193,7 +207,7 @@ public class TaskService {
     }
 
     public List<Task> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<Task> response = queryTask(QueryRequest.buildQueryRequest(filter, sorting, select));
+        QueryResponse<Task> response = queryTaskByCurrentRoles(QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
 
