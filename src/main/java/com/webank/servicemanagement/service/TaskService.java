@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
@@ -57,10 +59,12 @@ public class TaskService {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         for (CreateTaskRequestInputDto input : inputs) {
-            Task task = new Task(input.getCallbackUrl(), input.getTaskName(), input.getRoleName(),
-                    createTaskRequest.getOperator(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
-                    input.getTaskName(), STATUS_PENDING, createTaskRequest.getRequestId(),
-                    input.getCallbackParameter());
+            String taskName = input.getTaskName();
+            Task task = new Task(input.getCallbackUrl(),
+                    taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
+                    input.getRoleName(), createTaskRequest.getOperator(),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), input.getTaskDescription(),
+                    STATUS_PENDING, createTaskRequest.getRequestId(), input.getCallbackParameter());
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);

@@ -3,6 +3,7 @@ package com.webank.servicemanagement.dto;
 public class CreateTaskRequestInputDto {
     private String callbackUrl;
     private String taskName;
+    private String taskDescription;
     private String roleName;
     private String callbackParameter;
 
@@ -36,5 +37,13 @@ public class CreateTaskRequestInputDto {
 
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
     }
 }
