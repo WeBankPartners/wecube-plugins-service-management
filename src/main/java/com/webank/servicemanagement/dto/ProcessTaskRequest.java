@@ -2,8 +2,8 @@ package com.webank.servicemanagement.dto;
 
 public class ProcessTaskRequest {
 
-    public static final String RESULT_SUCCESSFUL="Successful";
-    public static final String RESULT_FAILED="Failed";
+    public static final String RESULT_SUCCESSFUL="Successful/Approved";
+    public static final String RESULT_FAILED="Failed/Rejected";
     
 	private String result;
 	private String resultMessage;

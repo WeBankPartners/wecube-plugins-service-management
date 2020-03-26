@@ -50,8 +50,8 @@ public class TaskService {
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
-    private final static String STATUS_SUCCESSFUL = "Successful/Approved";
-    private final static String STATUS_FAILED = "Failed/Rejected";
+//    private final static String STATUS_SUCCESSFUL = "Successful/Approved";
+//    private final static String STATUS_FAILED = "Failed/Rejected";
 
     @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
@@ -102,7 +102,7 @@ public class TaskService {
     }
 
     private boolean checkResultIsAvailable(String result) {
-        return STATUS_SUCCESSFUL.equals(result) || STATUS_FAILED.equals(result);
+        return ProcessTaskRequest.RESULT_SUCCESSFUL.equals(result) || ProcessTaskRequest.RESULT_FAILED.equals(result);
     }
 
     private void updateTaskByProcessTaskRequest(String taskId, ProcessTaskRequest processTaskRequest)
@@ -112,7 +112,7 @@ public class TaskService {
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
-        String errorCode = processTaskRequest.getResult().equals(STATUS_SUCCESSFUL)
+        String errorCode = processTaskRequest.getResult().equals(ProcessTaskRequest.RESULT_SUCCESSFUL)
                 ? CallbackRequestOutputsDto.ERROR_CODE_SUCCESSFUL
                 : CallbackRequestOutputsDto.ERROR_CODE_FAILED;
 
