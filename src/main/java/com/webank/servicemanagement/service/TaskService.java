@@ -1,7 +1,5 @@
 package com.webank.servicemanagement.service;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +58,7 @@ public class TaskService {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), createTaskRequest.getOperator(), String.valueOf(new Timestamp(System.currentTimeMillis())),
+                    input.getRoleName(), createTaskRequest.getOperator(), new Date(System.currentTimeMillis()),
                     input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
                     input.getCallbackParameter());
             Task savedTask = taskRepository.save(task);
@@ -138,7 +136,7 @@ public class TaskService {
             throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
         }
 
-        task.setOperateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
+        task.setOperateTime(new Date(System.currentTimeMillis()));
         task.setResult(processTaskRequest.getResult());
         task.setResultMessage(processTaskRequest.getResultMessage());
         task.setStatus(processTaskRequest.getResult());

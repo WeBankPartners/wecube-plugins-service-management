@@ -2,7 +2,6 @@ package com.webank.servicemanagement.service;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,6 +35,7 @@ import com.webank.servicemanagement.jpa.ServiceRequestTemplateRepository;
 import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.s3.S3Client;
+import com.webank.servicemanagement.utils.DateUtils;
 import com.webank.servicemanagement.utils.JsonUtils;
 import com.webank.servicemanagement.utils.SystemUtils;
 
@@ -85,7 +85,7 @@ public class ServiceRequestService {
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
                 serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), IS_NOTIFY_REQUIRED,
                 ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
-                serviceRequest.getReportTime(), serviceRequest.getEnvType());
+                DateUtils.formatDateToString(serviceRequest.getReportTime()), serviceRequest.getEnvType());
 
         try {
             coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
@@ -181,7 +181,7 @@ public class ServiceRequestService {
             }
             return queryResult;
         } catch (Exception e) {
-            log.error("Query service_request met error: {}",e.getMessage());
+            log.error("Query service_request met error: {}", e.getMessage());
             return new QueryResponse<>();
         }
     }
