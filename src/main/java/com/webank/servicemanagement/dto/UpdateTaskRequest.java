@@ -10,9 +10,9 @@ public class UpdateTaskRequest {
 	private String name;
 	private String processDefinitionKey;
 	private String reporter;
-	private Timestamp reportTime;
+	private String reportTime;
 	private String operator;
-	private Timestamp operateTime;
+	private String operateTime;
 	private String inputParameters;
 	private String description;
 	private String result;
@@ -112,11 +112,11 @@ public class UpdateTaskRequest {
 		this.reporter = reporter;
 	}
 
-	public Timestamp getReportTime() {
+	public String getReportTime() {
 		return reportTime;
 	}
 
-	public void setReportTime(Timestamp reportTime) {
+	public void setReportTime(String reportTime) {
 		this.reportTime = reportTime;
 	}
 
@@ -128,11 +128,11 @@ public class UpdateTaskRequest {
 		this.operator = operator;
 	}
 
-	public Timestamp getOperateTime() {
+	public String getOperateTime() {
 		return operateTime;
 	}
 
-	public void setOperateTime(Timestamp operateTime) {
+	public void setOperateTime(String operateTime) {
 		this.operateTime = operateTime;
 	}
 
