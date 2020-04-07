@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.xml.crypto.Data;
+
 import com.google.common.base.Strings;
 
 public class DateUtils {
@@ -45,6 +47,7 @@ public class DateUtils {
             return "";
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getDefault());
         return df.format(date);
     }
 
