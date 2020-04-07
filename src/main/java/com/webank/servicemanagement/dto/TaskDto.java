@@ -1,88 +1,77 @@
-package com.webank.servicemanagement.domain;
+package com.webank.servicemanagement.dto;
 
-import java.util.Date;
+import com.webank.servicemanagement.domain.Task;
+import com.webank.servicemanagement.utils.DateUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+public class TaskDto {
 
-import org.hibernate.annotations.GenericGenerator;
-
-@Entity
-@Table(name = "task")
-@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
-public class Task {
-
-    @Id
-    @GeneratedValue(generator = "jpa-uuid")
-    @Column(name = "id", length = 32)
     private String id;
 
-    public Task() {
+    public TaskDto() {
     }
 
-    public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
-            String description, String status, String requestId, String callbackParameter) {
+    private String serviceRequestId;
+
+    private String callbackUrl;
+
+    private String name;
+
+    private String reporter;
+
+    private String reportTime;
+
+    private String operatorRole;
+
+    private String operator;
+
+    private String operateTime;
+
+    private String inputParameters;
+
+    private String description;
+
+    private String result;
+
+    private String resultMessage;
+
+    private String status;
+
+    private String requestId;
+
+    private String callbackParameter;
+
+    public static TaskDto fromDomain(Task task) {
+        TaskDto taskDto = new TaskDto(task.getId(), task.getServiceRequest().getId(), task.getCallbackUrl(),
+                task.getName(), task.getReporter(), DateUtils.formatDateToString(task.getReportTime()),
+                task.getOperatorRole(), task.getOperator(), DateUtils.formatDateToString(task.getOperateTime()),
+                task.getInputParameters(), task.getDescription(), task.getResult(), task.getResultMessage(),
+                task.getStatus(), task.getRequestId(), task.getCallbackParameter());
+
+        return taskDto;
+    }
+
+    public TaskDto(String id, String serviceRequestId, String callbackUrl, String name, String reporter,
+            String reportTime, String operatorRole, String operator, String operateTime, String inputParameters,
+            String description, String result, String resultMessage, String status, String requestId,
+            String callbackParameter) {
+        super();
+        this.id = id;
+        this.serviceRequestId = serviceRequestId;
         this.callbackUrl = callbackUrl;
         this.name = name;
-        this.operatorRole = operatorRole;
         this.reporter = reporter;
         this.reportTime = reportTime;
+        this.operatorRole = operatorRole;
+        this.operator = operator;
+        this.operateTime = operateTime;
+        this.inputParameters = inputParameters;
         this.description = description;
+        this.result = result;
+        this.resultMessage = resultMessage;
         this.status = status;
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "service_request_id")
-    private ServiceRequest serviceRequest;
-
-    @Column(name = "callback_url")
-    private String callbackUrl;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "reporter")
-    private String reporter;
-
-    @Column(name = "report_time")
-    private Date reportTime;
-
-    @Column(name = "operator_role")
-    private String operatorRole;
-
-    @Column(name = "operator")
-    private String operator;
-
-    @Column(name = "operate_time")
-    private Date operateTime;
-
-    @Column(name = "input_parameters")
-    private String inputParameters;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "result")
-    private String result;
-
-    @Column(name = "result_message")
-    private String resultMessage;
-
-    @Column(name = "status")
-    private String status = "active";
-
-    @Column(name = "request_id")
-    private String requestId;
-
-    @Column(name = "callback_parameter")
-    private String callbackParameter;
 
     public String getId() {
         return id;
@@ -92,12 +81,12 @@ public class Task {
         this.id = id;
     }
 
-    public ServiceRequest getServiceRequest() {
-        return serviceRequest;
+    public String getServiceRequestId() {
+        return serviceRequestId;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
-        this.serviceRequest = serviceRequest;
+    public void setServiceRequestId(String serviceRequestId) {
+        this.serviceRequestId = serviceRequestId;
     }
 
     public String getCallbackUrl() {
@@ -124,12 +113,20 @@ public class Task {
         this.reporter = reporter;
     }
 
-    public Date getReportTime() {
+    public String getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(Date reportTime) {
+    public void setReportTime(String reportTime) {
         this.reportTime = reportTime;
+    }
+
+    public String getOperatorRole() {
+        return operatorRole;
+    }
+
+    public void setOperatorRole(String operatorRole) {
+        this.operatorRole = operatorRole;
     }
 
     public String getOperator() {
@@ -140,11 +137,11 @@ public class Task {
         this.operator = operator;
     }
 
-    public Date getOperateTime() {
+    public String getOperateTime() {
         return operateTime;
     }
 
-    public void setOperateTime(Date operateTime) {
+    public void setOperateTime(String operateTime) {
         this.operateTime = operateTime;
     }
 
@@ -194,14 +191,6 @@ public class Task {
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
-    }
-
-    public String getOperatorRole() {
-        return operatorRole;
-    }
-
-    public void setOperatorRole(String operatorRole) {
-        this.operatorRole = operatorRole;
     }
 
     public String getCallbackParameter() {
