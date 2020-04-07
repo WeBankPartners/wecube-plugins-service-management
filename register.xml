@@ -109,6 +109,7 @@
                     </parameter>
                     <parameter datatype="string" mappingType="constant" required="Y">taskName</parameter>
                     <parameter datatype="string" mappingType="constant" required="Y">roleName</parameter>
+                    <parameter datatype="string" mappingType="constant" required="N">reporter</parameter>
                     <parameter datatype="string" mappingType="constant" required="N">taskDescription</parameter>
                 </inputParameters>
                 <outputParameters>

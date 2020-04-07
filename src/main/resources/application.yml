@@ -9,7 +9,7 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db-server:port/database-name?characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://db-server:port/database-name?characterEncoding=utf8&useJDBCCompliantTimezoneShift=true&serverTimezone=Asia/Shanghai
     username: db-user
     password: db-password
 

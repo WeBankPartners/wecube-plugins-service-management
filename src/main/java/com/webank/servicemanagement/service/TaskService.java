@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
@@ -50,8 +49,6 @@ public class TaskService {
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
-//    private final static String STATUS_SUCCESSFUL = "Successful/Approved";
-//    private final static String STATUS_FAILED = "Failed/Rejected";
 
     @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
@@ -87,8 +84,10 @@ public class TaskService {
         if (!taskResult.isPresent()) {
             throw new Exception("Can not found the specified task, please check !");
         }
+
+        String operator = AuthenticationContextHolder.getCurrentUsername();
         task = taskResult.get();
-        task.setOperator(receiveTaskrequest.getOperator());
+        task.setOperator(operator);
         task.setStatus(STATUS_PROCESSING);
         taskRepository.save(task);
     }
