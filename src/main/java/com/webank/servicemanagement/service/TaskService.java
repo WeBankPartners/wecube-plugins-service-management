@@ -214,7 +214,8 @@ public class TaskService {
     }
 
     public List<TaskDto> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<TaskDto> response = queryTaskByCurrentRoles(QueryRequest.buildQueryRequest(filter, sorting, select));
+        QueryResponse<TaskDto> response = queryTaskByCurrentRoles(
+                QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
 

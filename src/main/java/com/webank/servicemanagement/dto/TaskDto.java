@@ -41,7 +41,8 @@ public class TaskDto {
     private String callbackParameter;
 
     public static TaskDto fromDomain(Task task) {
-        TaskDto taskDto = new TaskDto(task.getId(), task.getServiceRequest().getId(), task.getCallbackUrl(),
+        TaskDto taskDto = new TaskDto(task.getId(),
+                task.getServiceRequest() == null ? null : task.getServiceRequest().getId(), task.getCallbackUrl(),
                 task.getName(), task.getReporter(), DateUtils.formatDateToString(task.getReportTime()),
                 task.getOperatorRole(), task.getOperator(), DateUtils.formatDateToString(task.getOperateTime()),
                 task.getInputParameters(), task.getDescription(), task.getResult(), task.getResultMessage(),
