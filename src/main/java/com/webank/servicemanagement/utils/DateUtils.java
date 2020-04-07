@@ -41,6 +41,9 @@ public class DateUtils {
     }
 
     public static String formatDateToString(Date date) {
+        if (date == null) {
+            return "";
+        }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(date);
     }
