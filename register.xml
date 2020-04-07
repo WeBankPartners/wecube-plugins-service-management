@@ -146,6 +146,7 @@
                     </parameter>
                     <parameter datatype="string" mappingType="entity" mappingEntityExpression="wecube-monitor:alarm.subject" required="Y">taskName</parameter>
                     <parameter datatype="string" mappingType="entity" mappingEntityExpression="wecube-monitor:alarm.toRole" required="Y">roleName</parameter>
+                    <parameter datatype="string" mappingType="constant" required="N">reporter</parameter>
                     <parameter datatype="string" mappingType="entity" mappingEntityExpression="wecube-monitor:alarm.content" required="Y">taskDescription</parameter>
                 </inputParameters>
                 <outputParameters>
@@ -163,6 +164,7 @@
                     </parameter>
                     <parameter datatype="string" mappingType="constant" required="Y">taskName</parameter>
                     <parameter datatype="string" mappingType="constant" required="Y">roleName</parameter>
+                    <parameter datatype="string" mappingType="constant" required="N">reporter</parameter>
                     <parameter datatype="string" mappingType="constant" required="N">taskDescription</parameter>
                 </inputParameters>
                 <outputParameters>
