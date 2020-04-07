@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.webank.servicemanagement.utils.DateUtils;
+
 @Entity
 @Table(name = "task")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
@@ -124,8 +126,8 @@ public class Task {
         this.reporter = reporter;
     }
 
-    public Date getReportTime() {
-        return reportTime;
+    public String getReportTime() {
+        return DateUtils.formatDateToString(reportTime);
     }
 
     public void setReportTime(Date reportTime) {
@@ -140,8 +142,8 @@ public class Task {
         this.operator = operator;
     }
 
-    public Date getOperateTime() {
-        return operateTime;
+    public String getOperateTime() {
+        return DateUtils.formatDateToString(operateTime);
     }
 
     public void setOperateTime(Date operateTime) {
