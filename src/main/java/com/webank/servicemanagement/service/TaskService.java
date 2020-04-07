@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.Sorting;
+import com.webank.servicemanagement.dto.TaskDto;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.jpa.EntityRepository;
@@ -143,23 +145,30 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public QueryResponse<Task> queryTaskByCurrentRoles(QueryRequest queryRequest) {
+    public QueryResponse<TaskDto> queryTaskByCurrentRoles(QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
         queryRequest.addInFilter("operatorRole", currentRoles);
 
-        QueryResponse<Task> queryResult;
+        QueryResponse<Task> queryTaskResult;
+        QueryResponse<TaskDto> returnResult = new QueryResponse<TaskDto>();
         try {
-            queryResult = entityRepository.query(Task.class, queryRequest);
-            if (queryResult.getContents().size() == 0) {
+            queryTaskResult = entityRepository.query(Task.class, queryRequest);
+            if (queryTaskResult.getContents().size() == 0) {
                 return new QueryResponse<>();
             }
-            return queryResult;
         } catch (Exception e) {
             return new QueryResponse<>();
         }
+
+        List<TaskDto> taskDtoList = new ArrayList<TaskDto>();
+        returnResult.setPageInfo(queryTaskResult.getPageInfo());
+        taskDtoList.addAll(queryTaskResult.getContents().stream().map(task -> TaskDto.fromDomain(task))
+                .collect(Collectors.toList()));
+        returnResult.setContents(taskDtoList);
+        return returnResult;
     }
 
     public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
@@ -204,8 +213,8 @@ public class TaskService {
         return tasks;
     }
 
-    public List<Task> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<Task> response = queryTaskByCurrentRoles(QueryRequest.buildQueryRequest(filter, sorting, select));
+    public List<TaskDto> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+        QueryResponse<TaskDto> response = queryTaskByCurrentRoles(QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
 
