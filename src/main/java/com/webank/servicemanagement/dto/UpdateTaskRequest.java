@@ -1,5 +1,7 @@
 package com.webank.servicemanagement.dto;
 
+import java.sql.Timestamp;
+
 import com.webank.servicemanagement.domain.Task;
 
 public class UpdateTaskRequest {
@@ -8,7 +10,7 @@ public class UpdateTaskRequest {
 	private String name;
 	private String processDefinitionKey;
 	private String reporter;
-	private String reportTime;
+	private Timestamp reportTime;
 	private String operator;
 	private String operateTime;
 	private String inputParameters;
@@ -110,11 +112,11 @@ public class UpdateTaskRequest {
 		this.reporter = reporter;
 	}
 
-	public String getReportTime() {
+	public Timestamp getReportTime() {
 		return reportTime;
 	}
 
-	public void setReportTime(String reportTime) {
+	public void setReportTime(Timestamp reportTime) {
 		this.reportTime = reportTime;
 	}
 
