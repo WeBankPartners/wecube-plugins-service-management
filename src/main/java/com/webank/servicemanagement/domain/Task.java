@@ -26,7 +26,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String callbackUrl, String name, String operatorRole, String reporter, Timestamp reportTime,
+    public Task(String callbackUrl, String name, String operatorRole, String reporter, String reportTime,
             String description, String status, String requestId, String callbackParameter) {
         this.callbackUrl = callbackUrl;
         this.name = name;
@@ -53,7 +53,7 @@ public class Task {
     private String reporter;
 
     @Column(name = "report_time")
-    private Timestamp reportTime;
+    private String reportTime;
 
     @Column(name = "operator_role")
     private String operatorRole;
@@ -62,7 +62,7 @@ public class Task {
     private String operator;
 
     @Column(name = "operate_time")
-    private Timestamp operateTime;
+    private String operateTime;
 
     @Column(name = "input_parameters")
     private String inputParameters;
@@ -129,7 +129,7 @@ public class Task {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(reportTime);
     }
 
-    public void setReportTime(Timestamp reportTime) {
+    public void setReportTime(String reportTime) {
         this.reportTime = reportTime;
     }
 
@@ -145,7 +145,7 @@ public class Task {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(operateTime);
     }
 
-    public void setOperateTime(Timestamp operateTime) {
+    public void setOperateTime(String operateTime) {
         this.operateTime = operateTime;
     }
 

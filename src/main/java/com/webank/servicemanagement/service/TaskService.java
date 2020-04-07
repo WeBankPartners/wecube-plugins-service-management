@@ -60,7 +60,7 @@ public class TaskService {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), createTaskRequest.getOperator(), new Timestamp(System.currentTimeMillis()),
+                    input.getRoleName(), createTaskRequest.getOperator(), String.valueOf(new Timestamp(System.currentTimeMillis())),
                     input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
                     input.getCallbackParameter());
             Task savedTask = taskRepository.save(task);
@@ -138,7 +138,7 @@ public class TaskService {
             throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
         }
 
-        task.setOperateTime(new Timestamp(System.currentTimeMillis()));
+        task.setOperateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
         task.setResult(processTaskRequest.getResult());
         task.setResultMessage(processTaskRequest.getResultMessage());
         task.setStatus(processTaskRequest.getResult());
