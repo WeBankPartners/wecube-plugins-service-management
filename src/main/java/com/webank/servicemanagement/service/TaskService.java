@@ -1,5 +1,6 @@
 package com.webank.servicemanagement.service;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,9 +60,9 @@ public class TaskService {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), createTaskRequest.getOperator(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), input.getTaskDescription(),
-                    STATUS_PENDING, createTaskRequest.getRequestId(), input.getCallbackParameter());
+                    input.getRoleName(), createTaskRequest.getOperator(), new Timestamp(System.currentTimeMillis()),
+                    input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
+                    input.getCallbackParameter());
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
