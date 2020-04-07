@@ -138,7 +138,7 @@ public class TaskService {
             throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
         }
 
-        task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        task.setOperateTime(new Timestamp(System.currentTimeMillis()));
         task.setResult(processTaskRequest.getResult());
         task.setResultMessage(processTaskRequest.getResultMessage());
         task.setStatus(processTaskRequest.getResult());

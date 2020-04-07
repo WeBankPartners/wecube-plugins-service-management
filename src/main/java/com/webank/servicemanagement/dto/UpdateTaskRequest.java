@@ -12,7 +12,7 @@ public class UpdateTaskRequest {
 	private String reporter;
 	private Timestamp reportTime;
 	private String operator;
-	private String operateTime;
+	private Timestamp operateTime;
 	private String inputParameters;
 	private String description;
 	private String result;
@@ -128,11 +128,11 @@ public class UpdateTaskRequest {
 		this.operator = operator;
 	}
 
-	public String getOperateTime() {
+	public Timestamp getOperateTime() {
 		return operateTime;
 	}
 
-	public void setOperateTime(String operateTime) {
+	public void setOperateTime(Timestamp operateTime) {
 		this.operateTime = operateTime;
 	}
 

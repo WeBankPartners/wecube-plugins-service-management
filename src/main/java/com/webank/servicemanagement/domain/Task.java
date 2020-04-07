@@ -1,6 +1,7 @@
 package com.webank.servicemanagement.domain;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +62,7 @@ public class Task {
     private String operator;
 
     @Column(name = "operate_time")
-    private String operateTime;
+    private Timestamp operateTime;
 
     @Column(name = "input_parameters")
     private String inputParameters;
@@ -124,8 +125,8 @@ public class Task {
         this.reporter = reporter;
     }
 
-    public Timestamp getReportTime() {
-        return reportTime;
+    public String getReportTime() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(reportTime);
     }
 
     public void setReportTime(Timestamp reportTime) {
@@ -141,10 +142,10 @@ public class Task {
     }
 
     public String getOperateTime() {
-        return operateTime;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(operateTime);
     }
 
-    public void setOperateTime(String operateTime) {
+    public void setOperateTime(Timestamp operateTime) {
         this.operateTime = operateTime;
     }
 

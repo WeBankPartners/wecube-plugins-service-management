@@ -92,7 +92,7 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
-            <Input v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
+            <Input type="textarea" v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem> 
             <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
