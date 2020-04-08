@@ -1,11 +1,11 @@
 package com.webank.servicemanagement.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
@@ -23,6 +22,7 @@ import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.Sorting;
+import com.webank.servicemanagement.dto.TaskDto;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.jpa.EntityRepository;
@@ -50,8 +50,6 @@ public class TaskService {
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
-//    private final static String STATUS_SUCCESSFUL = "Successful/Approved";
-//    private final static String STATUS_FAILED = "Failed/Rejected";
 
     @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
@@ -62,9 +60,9 @@ public class TaskService {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), createTaskRequest.getOperator(),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), input.getTaskDescription(),
-                    STATUS_PENDING, createTaskRequest.getRequestId(), input.getCallbackParameter());
+                    input.getRoleName(), createTaskRequest.getOperator(), new Date(System.currentTimeMillis()),
+                    input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
+                    input.getCallbackParameter());
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
@@ -87,8 +85,10 @@ public class TaskService {
         if (!taskResult.isPresent()) {
             throw new Exception("Can not found the specified task, please check !");
         }
+
+        String operator = AuthenticationContextHolder.getCurrentUsername();
         task = taskResult.get();
-        task.setOperator(receiveTaskrequest.getOperator());
+        task.setOperator(operator);
         task.setStatus(STATUS_PROCESSING);
         taskRepository.save(task);
     }
@@ -138,30 +138,37 @@ public class TaskService {
             throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
         }
 
-        task.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        task.setOperateTime(new Date(System.currentTimeMillis()));
         task.setResult(processTaskRequest.getResult());
         task.setResultMessage(processTaskRequest.getResultMessage());
         task.setStatus(processTaskRequest.getResult());
         taskRepository.save(task);
     }
 
-    public QueryResponse<Task> queryTaskByCurrentRoles(QueryRequest queryRequest) {
+    public QueryResponse<TaskDto> queryTaskByCurrentRoles(QueryRequest queryRequest) {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
         queryRequest.addInFilter("operatorRole", currentRoles);
 
-        QueryResponse<Task> queryResult;
+        QueryResponse<Task> queryTaskResult;
+        QueryResponse<TaskDto> returnResult = new QueryResponse<TaskDto>();
         try {
-            queryResult = entityRepository.query(Task.class, queryRequest);
-            if (queryResult.getContents().size() == 0) {
+            queryTaskResult = entityRepository.query(Task.class, queryRequest);
+            if (queryTaskResult.getContents().size() == 0) {
                 return new QueryResponse<>();
             }
-            return queryResult;
         } catch (Exception e) {
             return new QueryResponse<>();
         }
+
+        List<TaskDto> taskDtoList = new ArrayList<TaskDto>();
+        returnResult.setPageInfo(queryTaskResult.getPageInfo());
+        taskDtoList.addAll(queryTaskResult.getContents().stream().map(task -> TaskDto.fromDomain(task))
+                .collect(Collectors.toList()));
+        returnResult.setContents(taskDtoList);
+        return returnResult;
     }
 
     public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
@@ -206,8 +213,9 @@ public class TaskService {
         return tasks;
     }
 
-    public List<Task> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<Task> response = queryTaskByCurrentRoles(QueryRequest.buildQueryRequest(filter, sorting, select));
+    public List<TaskDto> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+        QueryResponse<TaskDto> response = queryTaskByCurrentRoles(
+                QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
 

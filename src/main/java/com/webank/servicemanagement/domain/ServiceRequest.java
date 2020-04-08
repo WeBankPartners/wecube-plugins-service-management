@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.domain;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -40,7 +39,7 @@ public class ServiceRequest {
         this.envType = envType;
         this.reportRole = reportRole;
         long currentTimeMillis = System.currentTimeMillis();
-        this.reportTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(currentTimeMillis));
+        this.reportTime = new Date(currentTimeMillis);
         this.requestNo = currentTimeMillis;
     }
 
@@ -55,7 +54,7 @@ public class ServiceRequest {
     @Column(name = "report_role")
     private String reportRole;
     @Column(name = "report_time")
-    private String reportTime;
+    private Date reportTime;
     @Column(name = "emergency")
     private String emergency;
     @Column(name = "description")
@@ -103,11 +102,11 @@ public class ServiceRequest {
         this.reporter = reporter;
     }
 
-    public String getReportTime() {
+    public Date getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(String reportTime) {
+    public void setReportTime(Date reportTime) {
         this.reportTime = reportTime;
     }
 
