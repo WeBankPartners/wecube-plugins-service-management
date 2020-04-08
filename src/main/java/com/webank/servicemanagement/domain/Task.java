@@ -1,5 +1,7 @@
 package com.webank.servicemanagement.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String callbackUrl, String name, String operatorRole, String reporter, String reportTime,
+    public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
             String description, String status, String requestId, String callbackParameter) {
         this.callbackUrl = callbackUrl;
         this.name = name;
@@ -50,7 +52,7 @@ public class Task {
     private String reporter;
 
     @Column(name = "report_time")
-    private String reportTime;
+    private Date reportTime;
 
     @Column(name = "operator_role")
     private String operatorRole;
@@ -59,7 +61,7 @@ public class Task {
     private String operator;
 
     @Column(name = "operate_time")
-    private String operateTime;
+    private Date operateTime;
 
     @Column(name = "input_parameters")
     private String inputParameters;
@@ -122,11 +124,11 @@ public class Task {
         this.reporter = reporter;
     }
 
-    public String getReportTime() {
+    public Date getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(String reportTime) {
+    public void setReportTime(Date reportTime) {
         this.reportTime = reportTime;
     }
 
@@ -138,11 +140,11 @@ public class Task {
         this.operator = operator;
     }
 
-    public String getOperateTime() {
+    public Date getOperateTime() {
         return operateTime;
     }
 
-    public void setOperateTime(String operateTime) {
+    public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime;
     }
 
