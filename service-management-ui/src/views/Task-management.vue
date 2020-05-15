@@ -34,18 +34,22 @@
       @on-cancel="requestModalHide"
     >
       <div style="width:600px;margin:0 auto;">
-        <Form ref="request" :model="requestForm" :label-width="100">
+        <Form ref="requestForm" :rules="ruleValidate" :model="requestForm" :label-width="110">
           <FormItem :label="$t('template')">
-            <Select v-model="requestForm.templateId">
+            <Select @on-open-change="getTemplates" v-model="requestForm.templateId">
               <Option v-for="tem in allTemplates" :key="tem.id" :value="tem.id">{{tem.name}}</Option>
             </Select>
           </FormItem>
-          <FormItem :label="$t('service_request_name')">
+          <FormItem :label="$t('service_request_name')" prop="name">
             <Input v-model="requestForm.name" :placeholder="$t('service_request_name')"></Input>
           </FormItem>
           <FormItem :label="$t('service_request_role')">
-            <Select v-model="requestForm.roleId">
-              <Option v-for="role in currentUserRoles" :key="role.roleName" :value="role.roleName">{{role.description}}</Option>
+            <Select @on-open-change="getRolesByCurrentUser" v-model="requestForm.roleId">
+              <Option
+                v-for="role in currentUserRoles"
+                :key="role.roleName"
+                :value="role.roleName"
+              >{{role.description}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('environment_type')">
@@ -65,11 +69,15 @@
             <Input type="textarea" v-model="requestForm.description" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem :label="$t('reqest_attachment')">
-            <Upload :on-success="uploadSuccess" ref="upload" action="/service-mgmt/v1/service-requests/attach-file">
-                <Button icon="ios-cloud-upload-outline">{{$t('upload_attachment')}}</Button>
+            <Upload
+              :on-success="uploadSuccess"
+              ref="upload"
+              action="/service-mgmt/v1/service-requests/attach-file"
+            >
+              <Button icon="ios-cloud-upload-outline">{{$t('upload_attachment')}}</Button>
             </Upload>
           </FormItem>
-          <FormItem> 
+          <FormItem>
             <Button type="primary" @click="requestSubmit">{{$t('submit')}}</Button>
             <Button style="margin-left: 8px" @click="requestCancel">{{$t('cancle')}}</Button>
           </FormItem>
@@ -94,7 +102,7 @@
           <FormItem :label="$t('describe')">
             <Input v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
           </FormItem>
-          <FormItem> 
+          <FormItem>
             <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
             <Button style="margin-left: 8px" @click="handlerCancel">{{$t('cancle')}}</Button>
           </FormItem>
@@ -125,34 +133,43 @@ export default {
   },
   data() {
     return {
-      currentUserRoles:[],
-      allTemplates:[],
+      ruleValidate: {
+        name: [
+          {
+            required: true,
+            message: "The name cannot be empty",
+            trigger: "blur"
+          }
+        ]
+      },
+      currentUserRoles: [],
+      allTemplates: [],
       requestForm: {
         name: "",
         emergency: "",
         description: "",
         attachFileId: null,
-        templateId:'',
-        roleId:'',
+        templateId: "",
+        roleId: ""
       },
       handlerForm: {
-        result: '',
-        resultMessage:'',
+        result: "",
+        resultMessage: "",
         taskId: 0
       },
-      handlerModalVisible:false,
+      handlerModalVisible: false,
       requestModalVisible: false,
       currentTab: "requset",
       requestColumns: [
         {
-          title: this.$t('service_request_name'),
+          title: this.$t("service_request_name"),
           key: "name",
           inputKey: "name",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('status'),
+          title: this.$t("status"),
           key: "status",
           inputKey: "status",
           component: "PluginSelect",
@@ -160,27 +177,27 @@ export default {
           options: [
             {
               value: "Summitted",
-              label: this.$t('summitted'),
+              label: this.$t("summitted")
             },
             {
               value: "Processing",
-              label: this.$t('processing')
+              label: this.$t("processing")
             },
             {
               value: "Done",
-              label: this.$t('done')
+              label: this.$t("done")
             }
-          ],
+          ]
         },
         {
-          title: this.$t('reporter'),
+          title: this.$t("reporter"),
           key: "reporter",
           inputKey: "reporter",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('reporting_time'),
+          title: this.$t("reporting_time"),
           key: "reportTime",
           inputKey: "reportTime",
           component: "DatePicker",
@@ -188,7 +205,7 @@ export default {
           inputType: "date"
         },
         {
-          title: this.$t('environment_type'),
+          title: this.$t("environment_type"),
           key: "envType",
           inputKey: "envType",
           component: "PluginSelect",
@@ -209,31 +226,31 @@ export default {
           inputType: "select"
         },
         {
-          title: this.$t('emergency_level'),
+          title: this.$t("emergency_level"),
           key: "emergency",
           inputKey: "emergency",
           component: "PluginSelect",
           options: [
             {
               value: "normal",
-              label: this.$t('not_urgent')
+              label: this.$t("not_urgent")
             },
             {
               value: "urgent",
-              label: this.$t('emergency')
+              label: this.$t("emergency")
             }
           ],
           inputType: "select"
         },
         {
-          title: this.$t('describe'),
+          title: this.$t("describe"),
           key: "description",
           inputKey: "description",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('action'),
+          title: this.$t("action"),
           key: "action",
           width: 150,
           align: "center",
@@ -241,13 +258,15 @@ export default {
           render: (h, params) => {
             return (
               <div>
-                {params.row.attachFile && <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => this.downloadFile(params.row.id)}
-                >
-                  {this.$t('download_attachment')}
-                </Button>}
+                {params.row.attachFile && (
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => this.downloadFile(params.row.id)}
+                  >
+                    {this.$t("download_attachment")}
+                  </Button>
+                )}
               </div>
             );
           }
@@ -256,21 +275,21 @@ export default {
       requestTableData: [],
       handlerColumns: [
         {
-          title: this.$t('service_request_ID'),
+          title: this.$t("service_request_ID"),
           key: "serviceRequestId",
           inputKey: "serviceRequestId",
           component: "Input",
           isNotFilterable: true
         },
         {
-          title: this.$t('task_name'),
+          title: this.$t("task_name"),
           key: "name",
           inputKey: "name",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('status'),
+          title: this.$t("status"),
           key: "status",
           inputKey: "status",
           component: "PluginSelect",
@@ -278,31 +297,31 @@ export default {
           options: [
             {
               value: "Pending",
-              label: this.$t('pending')
+              label: this.$t("pending")
             },
             {
               value: "Processing",
-              label: this.$t('processing')
+              label: this.$t("processing")
             },
             {
               value: "Successful/Approved",
-              label: this.$t('success_or_approve')
+              label: this.$t("success_or_approve")
             },
             {
               value: "Failed/Rejected",
-              label: this.$t('fail_or_reject')
+              label: this.$t("fail_or_reject")
             }
-          ],
+          ]
         },
         {
-          title: this.$t('reporter'),
+          title: this.$t("reporter"),
           key: "reporter",
           inputKey: "reporter",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('reporting_time'),
+          title: this.$t("reporting_time"),
           key: "reportTime",
           inputKey: "reportTime",
           component: "DatePicker",
@@ -310,14 +329,14 @@ export default {
           inputType: "date"
         },
         {
-          title: this.$t('operator'),
+          title: this.$t("operator"),
           key: "operator",
           inputKey: "operator",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('operate_time'),
+          title: this.$t("operate_time"),
           key: "operateTime",
           inputKey: "operateTime",
           component: "DatePicker",
@@ -325,14 +344,14 @@ export default {
           inputType: "date"
         },
         {
-          title: this.$t('describe'),
+          title: this.$t("describe"),
           key: "description",
           inputKey: "description",
           component: "Input",
           inputType: "text"
         },
         {
-          title: this.$t('action'),
+          title: this.$t("action"),
           key: "action",
           width: 150,
           align: "center",
@@ -347,7 +366,7 @@ export default {
                       size="small"
                       onClick={() => this.taskTakeOver(params.row.id)}
                     >
-                      {this.$t('receive')}
+                      {this.$t("receive")}
                     </Button>
                   </div>
                 );
@@ -358,32 +377,30 @@ export default {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => {this.handlerForm.taskId = params.row.id; this.handlerModalVisible = true}}
+                      onClick={() => {
+                        this.handlerForm.taskId = params.row.id;
+                        this.handlerModalVisible = true;
+                      }}
                     >
-                      {this.$t('deal_with')}
+                      {this.$t("deal_with")}
                     </Button>
                   </div>
                 );
                 break;
               case "Successful/Approved":
-                return (
-                  <div></div>
-                );
+                return <div></div>;
                 break;
               case "Failed/Rejected":
-                return (
-                  <div></div>
-                );
+                return <div></div>;
                 break;
             }
-            
           }
         }
       ],
       handlerTableData: [],
       tableOuterActions: [
         {
-          label: this.$t('add'),
+          label: this.$t("add"),
           props: {
             type: "success",
             icon: "md-add",
@@ -424,14 +441,17 @@ export default {
     downloadFile(id) {
       let a = document.createElement("a");
       const body = document.body;
-      a.setAttribute("href", `/service-mgmt/v1/service-requests/${id}/attach-file`);
+      a.setAttribute(
+        "href",
+        `/service-mgmt/v1/service-requests/${id}/attach-file`
+      );
       a.setAttribute("id", "downloadFile");
       body.appendChild(a);
       a.click();
       body.removeChild(document.getElementById("downloadFile"));
     },
     uploadSuccess(res, file, fileList) {
-      this.requestForm.attachFileId = res.data
+      this.requestForm.attachFileId = res.data;
     },
     requestModalHide() {
       this.requestModalVisible = false;
@@ -441,30 +461,35 @@ export default {
     },
     requestCancel() {
       this.requestModalVisible = false;
-      this.requestForm.name = ''
-      this.requestForm.emergency = ''
-      this.requestForm.description = ''
-      this.requestForm.templateId = ''
-      this.requestForm.roleId = ''
+      this.requestForm.name = "";
+      this.requestForm.emergency = "";
+      this.requestForm.description = "";
+      this.requestForm.templateId = "";
+      this.requestForm.roleId = "";
     },
-    async requestSubmit() {
-      const {status} = await createServiceRequest(this.requestForm)
-      if(status === 'OK') {
-        this.requestCancel()
-        this.getData();
-        this.requestForm.attachFileId = null
-        this.$refs.upload.clearFiles()
-      }
+    requestSubmit() {
+      this.$refs.requestForm.validate(async valid => {
+        console.log(valid);
+        if (valid) {
+          const { status } = await createServiceRequest(this.requestForm);
+          if (status === "OK") {
+            this.requestCancel();
+            this.getData();
+            this.requestForm.attachFileId = null;
+            this.$refs.upload.clearFiles();
+          }
+        }
+      });
     },
     handlerCancel() {
       this.handlerModalVisible = false;
-      this.handlerForm.result = ''
-      this.handlerForm.resultMessage = ''
+      this.handlerForm.result = "";
+      this.handlerForm.resultMessage = "";
     },
     async handlerSubmit() {
-      const {status} = await taskProcess(this.handlerForm)
-      if(status === 'OK') {
-        this.handlerCancel()
+      const { status } = await taskProcess(this.handlerForm);
+      if (status === "OK") {
+        this.handlerCancel();
         this.getProcessData();
       }
     },
@@ -500,9 +525,9 @@ export default {
       this.getProcessData();
     },
     handleTabClick(tab) {
-      if(tab === 'requset'){
+      if (tab === "requset") {
         this.getData();
-      }else{
+      } else {
         this.getProcessData();
       }
     },
@@ -511,9 +536,7 @@ export default {
       this.handlerPayload.pageable.startIndex =
         this.handlerPagination.pageSize *
         (this.handlerPagination.currentPage - 1);
-      const { status, message, data } = await queryTask(
-        this.handlerPayload
-      );
+      const { status, message, data } = await queryTask(this.handlerPayload);
       if (status === "OK") {
         this.handlerTableData = data.contents;
         this.handlerPagination.total = data.pageInfo.totalRows;
@@ -533,22 +556,22 @@ export default {
       }
     },
     async taskTakeOver(id) {
-      await taskTakeover({taskId:id});
+      await taskTakeover({ taskId: id });
       this.getProcessData();
     },
     async getTemplates() {
-      const {data} = await getAllAvailableServiceTemplate()
-      this.allTemplates = data
+      const { data } = await getAllAvailableServiceTemplate();
+      this.allTemplates = data;
     },
     async getRolesByCurrentUser() {
-      const {data} = await getCurrentUserRoles()
-      this.currentUserRoles = data
-    },
+      const { data } = await getCurrentUserRoles();
+      this.currentUserRoles = data;
+    }
   },
   async mounted() {
     this.getData();
     this.getTemplates();
-    this.getRolesByCurrentUser()
+    this.getRolesByCurrentUser();
   }
 };
 </script>
