@@ -109,22 +109,17 @@ public class TaskService {
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
-        String errorCode = processTaskRequest.getResult();
-
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
         CallbackRequestResultDataDto callbackRequestResultDataDto = new CallbackRequestResultDataDto();
         callbackRequestResultDataDto.setRequestId(task.getRequestId());
-        callbackRequestResultDataDto.setOutputs(
-                Lists.newArrayList(new CallbackRequestOutputsDto(errorCode, processTaskRequest.getResultMessage(),
-                        processTaskRequest.getResultMessage(), task.getCallbackParameter())));
+        callbackRequestResultDataDto.setOutputs(Lists.newArrayList(new CallbackRequestOutputsDto(
+                CallbackRequestOutputsDto.ERROR_CODE_SUCCESSFUL, processTaskRequest.getResultMessage(),
+                processTaskRequest.getResultMessage(), task.getCallbackParameter())));
 
         callbackRequest.setResults(callbackRequestResultDataDto);
         callbackRequest.setResultMessage(processTaskRequest.getResultMessage());
-        if (ProcessTaskRequest.RESULT_SUCCESSFUL.equals(processTaskRequest.getResult())) {
-            callbackRequest.setResultCode("0");
-        } else {
-            callbackRequest.setResultCode("1");
-        }
+
+        callbackRequest.setResultCode(processTaskRequest.getResult());
 
         try {
             coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
