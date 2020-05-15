@@ -88,7 +88,7 @@ public class TaskDto {
         this.status = status;
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
-        this.allowedOptions = allowedOptions;
+        this.setAllowedOptions(allowedOptions);
     }
 
     public String getId() {
@@ -217,5 +217,13 @@ public class TaskDto {
 
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
+    }
+
+    public List<String> getAllowedOptions() {
+        return allowedOptions;
+    }
+
+    public void setAllowedOptions(List<String> allowedOptions) {
+        this.allowedOptions = allowedOptions;
     }
 }
