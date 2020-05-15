@@ -51,10 +51,10 @@ public class ServiceRequestController {
     @PostMapping("/query")
     public JsonResponse queryServiceRequest(@RequestBody QueryRequest queryRequest, HttpServletRequest httpRequest)
             throws Exception {
-        return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
+        return okayWithData(serviceRequestService.queryServiceRequestByCurrentRolesOrderByReportTimeDesc(queryRequest));
     }
 
-    @PostMapping(ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST)
+    @PostMapping(ApiInfo.API_RESOURCE_SERVICE_REQUEST_DONE)
     public JsonResponse updateServiceRequest(@RequestBody DoneServiceRequestRequest request,
             HttpServletRequest httpRequest) throws Exception {
         try {

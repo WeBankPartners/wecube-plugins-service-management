@@ -1,6 +1,9 @@
 package com.webank.servicemanagement.dto;
 
+import java.text.ParseException;
+
 import com.webank.servicemanagement.domain.ServiceRequest;
+import com.webank.servicemanagement.utils.DateUtils;
 
 public class UpdateServiceRequestRequest {
     private String name;
@@ -14,7 +17,7 @@ public class UpdateServiceRequestRequest {
     private String status;
 
     public static ServiceRequest toDomain(UpdateServiceRequestRequest updateServiceRequestRequest,
-            ServiceRequest existedServiceRequest) {
+            ServiceRequest existedServiceRequest) throws ParseException {
         ServiceRequest serviceRequest = existedServiceRequest;
         if (serviceRequest == null) {
             serviceRequest = new ServiceRequest();
@@ -29,7 +32,7 @@ public class UpdateServiceRequestRequest {
         }
 
         if (updateServiceRequestRequest.getReportTime() != null) {
-            serviceRequest.setReportTime(updateServiceRequestRequest.getReportTime());
+            serviceRequest.setReportTime(DateUtils.formatStringToDate((updateServiceRequestRequest.getReportTime())));
         }
 
         if (updateServiceRequestRequest.getEmergency() != null) {

@@ -81,9 +81,9 @@
             <Select @on-open-change="getAllProcessDefinitionKeys" v-model="form.processDefinitionKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.processDefinitionKey"
-                :value="process.processDefinitionKey"
-              >{{process.processDefinitionKey}}</Option>
+                :key="process.procDefKey"
+                :value="process.procDefKey"
+              >{{process.procDefName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')" prop="attrName">
@@ -181,9 +181,9 @@
             <Select @on-open-change="getAllRoles" v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
-                :key="role.roleName"
-                :value="role.roleName"
-              >{{role.description}}</Option>
+                :key="role.name"
+                :value="role.name"
+              >{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
