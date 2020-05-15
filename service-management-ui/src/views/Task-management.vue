@@ -87,8 +87,7 @@
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem :label="$t('process_result')">
             <Select v-model="handlerForm.result">
-              <Option value="Failed/Rejected">{{$t('fail_or_reject')}}</Option>
-              <Option value="Successful/Approved">{{$t('success_or_approve')}}</Option>
+              <Option v-for="item in nextActions" :key="item" :value="item">{{item}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
@@ -140,6 +139,7 @@ export default {
         resultMessage:'',
         taskId: 0
       },
+      nextActions: [],
       handlerModalVisible:false,
       requestModalVisible: false,
       currentTab: "requset",
@@ -358,7 +358,7 @@ export default {
                     <Button
                       type="primary"
                       size="small"
-                      onClick={() => {this.handlerForm.taskId = params.row.id; this.handlerModalVisible = true}}
+                      onClick={() => {this.handlerForm.taskId = params.row.id;this.nextActions = params.row.allowedOptions; this.handlerModalVisible = true}}
                     >
                       {this.$t('deal_with')}
                     </Button>
@@ -438,6 +438,7 @@ export default {
     },
     handlerModalHide() {
       this.handlerModalVisible = false;
+      this.nextActions = []
     },
     requestCancel() {
       this.requestModalVisible = false;
@@ -460,6 +461,7 @@ export default {
       this.handlerModalVisible = false;
       this.handlerForm.result = ''
       this.handlerForm.resultMessage = ''
+      this.nextActions = []
     },
     async handlerSubmit() {
       const {status} = await taskProcess(this.handlerForm)

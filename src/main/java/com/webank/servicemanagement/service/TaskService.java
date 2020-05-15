@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
@@ -51,18 +52,18 @@ public class TaskService {
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
 
-    @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
             throws Exception {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
+        String allowedOptionsString = JSON.toJSONString(createTaskRequest.getAllowedOptions());
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), createTaskRequest.getOperator(), new Date(System.currentTimeMillis()),
+                    input.getRoleName(), input.getReporter(), new Date(System.currentTimeMillis()),
                     input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
-                    input.getCallbackParameter());
+                    input.getCallbackParameter(), allowedOptionsString);
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
@@ -94,10 +95,6 @@ public class TaskService {
     }
 
     public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {
-        if (!checkResultIsAvailable(processTaskRequest.getResult()))
-            throw new Exception(
-                    String.format("Result[%s] is invalid, Only support 'Successfule/Approved' and 'Failed/Rejected'",
-                            processTaskRequest.getResult()));
         updateTaskByProcessTaskRequest(taskId, processTaskRequest);
     }
 
@@ -112,9 +109,7 @@ public class TaskService {
             throw new Exception("Can not found the specified task, please check !");
         Task task = taskResult.get();
 
-        String errorCode = processTaskRequest.getResult().equals(ProcessTaskRequest.RESULT_SUCCESSFUL)
-                ? CallbackRequestOutputsDto.ERROR_CODE_SUCCESSFUL
-                : CallbackRequestOutputsDto.ERROR_CODE_FAILED;
+        String errorCode = processTaskRequest.getResult();
 
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
         CallbackRequestResultDataDto callbackRequestResultDataDto = new CallbackRequestResultDataDto();
