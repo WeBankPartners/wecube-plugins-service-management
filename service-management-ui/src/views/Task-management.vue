@@ -44,12 +44,12 @@
             <Input v-model="requestForm.name" :placeholder="$t('service_request_name')"></Input>
           </FormItem>
           <FormItem :label="$t('service_request_role')">
-            <Select @on-open-change="getRolesByCurrentUser" v-model="requestForm.roleId">
+            <Select @on-open-change="getRolesByCurrentUser" v-model="requestForm.roleName">
               <Option
                 v-for="role in currentUserRoles"
-                :key="role.roleName"
-                :value="role.roleName"
-              >{{role.description}}</Option>
+                :key="role.name"
+                :value="role.name"
+              >{{role.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('environment_type')">
@@ -100,7 +100,7 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
-            <Input v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
+            <Input type="textarea" v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
           </FormItem>
           <FormItem>
             <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
@@ -121,7 +121,7 @@ import {
   updateServiceRequest,
   getAllAvailableServiceTemplate,
   taskProcess,
-  queryTask,
+  queryMyTask,
   taskTakeover,
   getCurrentUserRoles
 } from "../api/server";
@@ -149,8 +149,8 @@ export default {
         emergency: "",
         description: "",
         attachFileId: null,
-        templateId: "",
-        roleId: ""
+        templateId:'',
+        roleName:'',
       },
       handlerForm: {
         result: "",
@@ -536,7 +536,9 @@ export default {
       this.handlerPayload.pageable.startIndex =
         this.handlerPagination.pageSize *
         (this.handlerPagination.currentPage - 1);
-      const { status, message, data } = await queryTask(this.handlerPayload);
+      const { status, message, data } = await queryMyTask(
+        this.handlerPayload
+      );
       if (status === "OK") {
         this.handlerTableData = data.contents;
         this.handlerPagination.total = data.pageInfo.totalRows;
