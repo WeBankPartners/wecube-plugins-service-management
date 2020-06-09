@@ -31,7 +31,7 @@ public class JsonUtils {
     }
 
     public static <T> T toObject(String jsonContent, Class<T> clzz) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
         JavaType javaType = mapper.getTypeFactory().constructType(clzz);
         return mapper.readValue(jsonContent.getBytes(Charset.forName("UTF-8")), javaType);
     }

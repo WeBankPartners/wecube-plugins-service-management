@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.domain.Task;
@@ -56,7 +55,7 @@ public class TaskService {
             throws Exception {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
-        String allowedOptionsString = JSON.toJSONString(createTaskRequest.getAllowedOptions());
+        String allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
