@@ -1,12 +1,12 @@
 package com.webank.servicemanagement.dto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.service.TaskService;
 import com.webank.servicemanagement.utils.DateUtils;
@@ -55,7 +55,13 @@ public class TaskDto {
 
     public static TaskDto fromDomain(Task task) {
         List<String> allowedOptionList = new ArrayList<String>();
-        allowedOptionList = JSON.parseObject(task.getAllowedOptions(), allowedOptionList.getClass());
+        try {
+            allowedOptionList = JsonUtils.toObject(task.getAllowedOptions(), allowedOptionList.getClass());
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error(String.format("Parse 'allowedOptions' meet error: %s",e.getMessage()));
+            return new TaskDto();
+        }
 
         TaskDto taskDto = new TaskDto(task.getId(),
                 task.getServiceRequest() == null ? null : task.getServiceRequest().getId(), task.getCallbackUrl(),
