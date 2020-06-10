@@ -233,8 +233,19 @@ export default {
         }
       ],
       requestTableData: [],
-      
-      
+      handlerPayload: {
+        filters: [],
+        pageable: {
+          pageSize: 10,
+          startIndex: 0
+        },
+        paging: true
+      },
+      handlerPagination: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
+      },
       tableOuterActions: [
         {
           label: this.$t("add"),

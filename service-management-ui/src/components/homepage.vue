@@ -44,6 +44,9 @@ import {
   taskTakeover
 } from "../api/server";
 export default {
+  components: {
+    PluginTable
+  },
   data() {
     return {
       handlerForm: {
@@ -198,6 +201,12 @@ export default {
     this.getProcessData()
   },
   methods: {
+    actionFun(type, data) {
+      switch (type) {
+        case "add":
+          break;
+      }
+    },
     async handlerSubmit() {
       const { status } = await taskProcess(this.handlerForm);
       if (status === "OK") {
