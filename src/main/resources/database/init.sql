@@ -82,6 +82,7 @@ CREATE TABLE `task` (
     `status` VARCHAR(32) NULL DEFAULT NULL,
     `request_id` VARCHAR(255) NULL ,
     `callback_parameter` VARCHAR(255) NULL ,
+    `allowed_options` text NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
