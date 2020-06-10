@@ -14,16 +14,7 @@
         />
       </TabPane>
       <TabPane :closable="false" name="handler" :label="$t('same_group_processing')">
-        <PluginTable
-          :tableColumns="handlerColumns"
-          :tableData="handlerTableData"
-          :tableOuterActions="[]"
-          :pagination="handlerPagination"
-          @actionFun="actionFun"
-          @handleSubmit="handleSubmitForprocess"
-          @pageChange="handlerPageChange"
-          @pageSizeChange="handlerPageSizeChange"
-        />
+        <HomePage/>
       </TabPane>
     </Tabs>
     <Modal
@@ -84,52 +75,27 @@
         </Form>
       </div>
     </Modal>
-    <Modal
-      v-model="handlerModalVisible"
-      :title="$t('task_processing')"
-      footer-hide
-      width="50"
-      @on-cancel="handlerModalHide"
-    >
-      <div style="width:600px;margin:0 auto;">
-        <Form ref="request" :model="handlerForm" :label-width="100">
-          <FormItem :label="$t('process_result')">
-            <Select v-model="handlerForm.result">
-              <Option value="Failed/Rejected">{{$t('fail_or_reject')}}</Option>
-              <Option value="Successful/Approved">{{$t('success_or_approve')}}</Option>
-            </Select>
-          </FormItem>
-          <FormItem :label="$t('describe')">
-            <Input type="textarea" v-model="handlerForm.resultMessage" :placeholder="$t('describe')"></Input>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" @click="handlerSubmit">{{$t('submit')}}</Button>
-            <Button style="margin-left: 8px" @click="handlerCancel">{{$t('cancle')}}</Button>
-          </FormItem>
-        </Form>
-      </div>
-    </Modal>
   </div>
 </template>
 
 <script>
 import PluginTable from "../components/table";
+import HomePage from "../components/homepage"
 import {
   queryServiceRequest,
   getAllServiceRequest,
   createServiceRequest,
   updateServiceRequest,
   getAllAvailableServiceTemplate,
-  taskProcess,
   queryMyTask,
-  taskTakeover,
   getCurrentUserRoles
 } from "../api/server";
 
 export default {
   name: "home",
   components: {
-    PluginTable
+    PluginTable,
+    HomePage
   },
   data() {
     return {
@@ -152,12 +118,6 @@ export default {
         templateId:'',
         roleName:'',
       },
-      handlerForm: {
-        result: "",
-        resultMessage: "",
-        taskId: 0
-      },
-      handlerModalVisible: false,
       requestModalVisible: false,
       currentTab: "requset",
       requestColumns: [
@@ -273,131 +233,8 @@ export default {
         }
       ],
       requestTableData: [],
-      handlerColumns: [
-        {
-          title: this.$t("service_request_ID"),
-          key: "serviceRequestId",
-          inputKey: "serviceRequestId",
-          component: "Input",
-          isNotFilterable: true
-        },
-        {
-          title: this.$t("task_name"),
-          key: "name",
-          inputKey: "name",
-          component: "Input",
-          inputType: "text"
-        },
-        {
-          title: this.$t("status"),
-          key: "status",
-          inputKey: "status",
-          component: "PluginSelect",
-          inputType: "select",
-          options: [
-            {
-              value: "Pending",
-              label: this.$t("pending")
-            },
-            {
-              value: "Processing",
-              label: this.$t("processing")
-            },
-            {
-              value: "Successful/Approved",
-              label: this.$t("success_or_approve")
-            },
-            {
-              value: "Failed/Rejected",
-              label: this.$t("fail_or_reject")
-            }
-          ]
-        },
-        {
-          title: this.$t("reporter"),
-          key: "reporter",
-          inputKey: "reporter",
-          component: "Input",
-          inputType: "text"
-        },
-        {
-          title: this.$t("reporting_time"),
-          key: "reportTime",
-          inputKey: "reportTime",
-          component: "DatePicker",
-          type: "datetimerange",
-          inputType: "date"
-        },
-        {
-          title: this.$t("operator"),
-          key: "operator",
-          inputKey: "operator",
-          component: "Input",
-          inputType: "text"
-        },
-        {
-          title: this.$t("operate_time"),
-          key: "operateTime",
-          inputKey: "operateTime",
-          component: "DatePicker",
-          type: "datetimerange",
-          inputType: "date"
-        },
-        {
-          title: this.$t("describe"),
-          key: "description",
-          inputKey: "description",
-          component: "Input",
-          inputType: "text"
-        },
-        {
-          title: this.$t("action"),
-          key: "action",
-          width: 150,
-          align: "center",
-          isNotFilterable: true,
-          render: (h, params) => {
-            switch (params.row.status) {
-              case "Pending":
-                return (
-                  <div>
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() => this.taskTakeOver(params.row.id)}
-                    >
-                      {this.$t("receive")}
-                    </Button>
-                  </div>
-                );
-                break;
-              case "Processing":
-                return (
-                  <div>
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() => {
-                        this.handlerForm.taskId = params.row.id;
-                        this.handlerModalVisible = true;
-                      }}
-                    >
-                      {this.$t("deal_with")}
-                    </Button>
-                  </div>
-                );
-                break;
-              case "Successful/Approved":
-                return <div></div>;
-                break;
-              case "Failed/Rejected":
-                return <div></div>;
-                break;
-            }
-          }
-        }
-      ],
-      handlerTableData: [],
+      
+      
       tableOuterActions: [
         {
           label: this.$t("add"),
@@ -417,24 +254,13 @@ export default {
         },
         paging: true
       },
-      handlerPayload: {
-        filters: [],
-        pageable: {
-          pageSize: 10,
-          startIndex: 0
-        },
-        paging: true
-      },
+      
       requestPagination: {
         currentPage: 1,
         pageSize: 10,
         total: 0
       },
-      handlerPagination: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 0
-      }
+      
     };
   },
   methods: {
@@ -456,9 +282,7 @@ export default {
     requestModalHide() {
       this.requestModalVisible = false;
     },
-    handlerModalHide() {
-      this.handlerModalVisible = false;
-    },
+    
     requestCancel() {
       this.requestModalVisible = false;
       this.requestForm.name = "";
@@ -481,18 +305,6 @@ export default {
         }
       });
     },
-    handlerCancel() {
-      this.handlerModalVisible = false;
-      this.handlerForm.result = "";
-      this.handlerForm.resultMessage = "";
-    },
-    async handlerSubmit() {
-      const { status } = await taskProcess(this.handlerForm);
-      if (status === "OK") {
-        this.handlerCancel();
-        this.getProcessData();
-      }
-    },
     actionFun(type, data) {
       switch (type) {
         case "add":
@@ -508,22 +320,12 @@ export default {
       this.requestPagination.pageSize = size;
       this.getData();
     },
-    handlerPageChange(current) {
-      this.handlerPagination.currentPage = current;
-      this.getProcessData();
-    },
-    handlerPageSizeChange(size) {
-      this.handlerPagination.pageSize = size;
-      this.getProcessData();
-    },
+    
     handleSubmit(filters) {
       this.requestPayload.filters = filters;
       this.getData();
     },
-    handleSubmitForprocess(filters) {
-      this.handlerPayload.filters = filters;
-      this.getProcessData();
-    },
+    
     handleTabClick(tab) {
       if (tab === "requset") {
         this.getData();
@@ -556,10 +358,6 @@ export default {
         this.requestTableData = data.contents;
         this.requestPagination.total = data.pageInfo.totalRows;
       }
-    },
-    async taskTakeOver(id) {
-      await taskTakeover({ taskId: id });
-      this.getProcessData();
     },
     async getTemplates() {
       const { data } = await getAllAvailableServiceTemplate();
