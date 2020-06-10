@@ -26,7 +26,7 @@ public class Task {
     }
 
     public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
-            String description, String status, String requestId, String callbackParameter) {
+            String description, String status, String requestId, String callbackParameter, String allowedOptions) {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.operatorRole = operatorRole;
@@ -36,6 +36,7 @@ public class Task {
         this.status = status;
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
+        this.allowedOptions = allowedOptions;
     }
 
     @ManyToOne
@@ -83,6 +84,9 @@ public class Task {
 
     @Column(name = "callback_parameter")
     private String callbackParameter;
+
+    @Column(name = "allowed_options")
+    private String allowedOptions;
 
     public String getId() {
         return id;
@@ -210,5 +214,13 @@ public class Task {
 
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
+    }
+
+    public String getAllowedOptions() {
+        return allowedOptions;
+    }
+
+    public void setAllowedOptions(String allowedOptions) {
+        this.allowedOptions = allowedOptions;
     }
 }

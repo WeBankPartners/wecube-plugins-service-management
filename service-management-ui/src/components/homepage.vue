@@ -21,8 +21,7 @@
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem :label="$t('process_result')">
             <Select v-model="handlerForm.result">
-              <Option value="Failed/Rejected">{{$t('fail_or_reject')}}</Option>
-              <Option value="Successful/Approved">{{$t('success_or_approve')}}</Option>
+              <Option v-for="item in nextActions" :key="item" :value="item">{{item}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('describe')">
@@ -52,6 +51,7 @@ export default {
         resultMessage: "",
         taskId: 0
       },
+      nextActions: [],
       handlerModalVisible: false,
       handlerPagination: {
         currentPage: 1,
@@ -173,6 +173,7 @@ export default {
                       size="small"
                       onClick={() => {
                         this.handlerForm.taskId = params.row.id;
+                        this.nextActions = params.row.allowedOptions;
                         this.handlerModalVisible = true;
                       }}
                     >
@@ -206,11 +207,13 @@ export default {
     },
     handlerModalHide() {
       this.handlerModalVisible = false;
+      this.nextActions = []
     },
      handlerCancel() {
       this.handlerModalVisible = false;
       this.handlerForm.result = "";
       this.handlerForm.resultMessage = "";
+      this.nextActions = []
     },
     handlerPageChange(current) {
       this.handlerPagination.currentPage = current;

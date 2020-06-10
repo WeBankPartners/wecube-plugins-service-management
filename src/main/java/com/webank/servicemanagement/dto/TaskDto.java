@@ -1,9 +1,20 @@
 package com.webank.servicemanagement.dto;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.webank.servicemanagement.domain.Task;
+import com.webank.servicemanagement.service.TaskService;
 import com.webank.servicemanagement.utils.DateUtils;
+import com.webank.servicemanagement.utils.JsonUtils;
 
 public class TaskDto {
+
+    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
 
     private String id;
 
@@ -40,13 +51,24 @@ public class TaskDto {
 
     private String callbackParameter;
 
+    private List<String> allowedOptions;
+
     public static TaskDto fromDomain(Task task) {
+        List<String> allowedOptionList = new ArrayList<String>();
+        try {
+            allowedOptionList = JsonUtils.toObject(task.getAllowedOptions(), allowedOptionList.getClass());
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error(String.format("Parse 'allowedOptions' meet error: %s",e.getMessage()));
+            return new TaskDto();
+        }
+
         TaskDto taskDto = new TaskDto(task.getId(),
                 task.getServiceRequest() == null ? null : task.getServiceRequest().getId(), task.getCallbackUrl(),
                 task.getName(), task.getReporter(), DateUtils.formatDateToString(task.getReportTime()),
                 task.getOperatorRole(), task.getOperator(), DateUtils.formatDateToString(task.getOperateTime()),
                 task.getInputParameters(), task.getDescription(), task.getResult(), task.getResultMessage(),
-                task.getStatus(), task.getRequestId(), task.getCallbackParameter());
+                task.getStatus(), task.getRequestId(), task.getCallbackParameter(), allowedOptionList);
 
         return taskDto;
     }
@@ -54,7 +76,7 @@ public class TaskDto {
     public TaskDto(String id, String serviceRequestId, String callbackUrl, String name, String reporter,
             String reportTime, String operatorRole, String operator, String operateTime, String inputParameters,
             String description, String result, String resultMessage, String status, String requestId,
-            String callbackParameter) {
+            String callbackParameter, List<String> allowedOptions) {
         super();
         this.id = id;
         this.serviceRequestId = serviceRequestId;
@@ -72,6 +94,7 @@ public class TaskDto {
         this.status = status;
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
+        this.setAllowedOptions(allowedOptions);
     }
 
     public String getId() {
@@ -200,5 +223,13 @@ public class TaskDto {
 
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
+    }
+
+    public List<String> getAllowedOptions() {
+        return allowedOptions;
+    }
+
+    public void setAllowedOptions(List<String> allowedOptions) {
+        this.allowedOptions = allowedOptions;
     }
 }
