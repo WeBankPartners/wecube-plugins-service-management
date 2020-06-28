@@ -250,25 +250,7 @@ export default {
         this.handlerPayload
       );
       if (status === "OK") {
-        this.handlerTableData = [{
-          allowedOptions: ["deny", "approval"],
-callbackParameter: "0022_0000000002",
-callbackUrl: "/platform/v1/process/instances/callback",
-description: "我想吃顿大餐",
-id: "2c918084721762870172178d6b410003",
-inputParameters: null,
-name: "审批 - 吃大餐",
-operateTime: "2020-05-15 16:57:48",
-operator: "umadmin",
-operatorRole: "SUPER_ADMIN",
-reportTime: "2020-05-15 16:57:24",
-reporter: "workflow",
-requestId: "9e636a2f-9081-4ec7-8267-401aeede6df7",
-result: "deny",
-resultMessage: "666",
-serviceRequestId: null,
-status: "deny"
-        }]
+        this.handlerTableData = data.contents
         this.handlerPagination.total = data.pageInfo.totalRows;
       }
     },
