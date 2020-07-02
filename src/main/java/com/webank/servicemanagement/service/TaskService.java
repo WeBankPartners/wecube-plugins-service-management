@@ -33,6 +33,7 @@ import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestOutputsDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDataDto;
+import com.webank.servicemanagement.utils.DateUtils;
 import com.webank.servicemanagement.utils.JsonUtils;
 
 @Service
@@ -56,13 +57,27 @@ public class TaskService {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         String allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
+
+        long nowLongTime = System.currentTimeMillis();
+        Date nowDateTime = new Date(nowLongTime);
+
         for (CreateTaskRequestInputDto input : inputs) {
+            String expectedResolveDuration = new String();
+            Date expectedResolveTime = new Date();
+            if (!input.getExpectedResolveDuration().isEmpty()) {
+                expectedResolveDuration = input.getExpectedResolveDuration();
+                expectedResolveTime = calculateExpectedResolveTime(input.getExpectedResolveDuration(), nowLongTime);
+            } else {
+                expectedResolveTime = input.getExpectedResolveTime();
+                expectedResolveDuration = calculateExpectedResolveDuration(input.getExpectedResolveTime(), nowLongTime);
+            }
+
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), input.getReporter(), new Date(System.currentTimeMillis()),
-                    input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
-                    input.getCallbackParameter(), allowedOptionsString);
+                    input.getRoleName(), input.getReporter(), nowDateTime, input.getTaskDescription(), STATUS_PENDING,
+                    createTaskRequest.getRequestId(), input.getCallbackParameter(), allowedOptionsString,
+                    expectedResolveDuration, expectedResolveTime);
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
@@ -70,6 +85,16 @@ public class TaskService {
         }
 
         return savedTasks;
+    }
+    
+    private Date calculateExpectedResolveTime(String duration, long nowLongTime) {
+        long min = DateUtils.parseDurationToMinutes(duration);
+        return new Date(nowLongTime + min * 60 * 60);
+    }
+
+    private String calculateExpectedResolveDuration(Date expectedResolveTime, long nowLongTime) {
+        long expectedResolveTimeLong = expectedResolveTime.getTime();
+        return DateUtils.formatDurationToReadableValue((expectedResolveTimeLong - nowLongTime) * 60);
     }
 
     public List<Task> getTasksByCurrentUser() {
@@ -138,6 +163,7 @@ public class TaskService {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
+//        List<String> currentRoles = Lists.newArrayList("SUPER_ADMIN");
 
         queryRequest.addInFilter("operatorRole", currentRoles);
 

@@ -1,5 +1,7 @@
 package com.webank.servicemanagement.dto;
 
+import java.util.Date;
+
 public class CreateTaskRequestInputDto {
     private String callbackUrl;
     private String taskName;
@@ -7,6 +9,8 @@ public class CreateTaskRequestInputDto {
     private String roleName;
     private String callbackParameter;
     private String reporter;
+    private String expectedResolveDuration; //Format: "3" - means 3 days
+    private Date expectedResolveTime; //Format: "yyyy-MM-dd HH:mm:ss"
 
     public String getCallbackUrl() {
         return callbackUrl;
@@ -54,5 +58,21 @@ public class CreateTaskRequestInputDto {
 
     public void setReporter(String reporter) {
         this.reporter = reporter;
+    }
+
+    public String getExpectedResolveDuration() {
+        return expectedResolveDuration;
+    }
+
+    public void setExpectedResolveDuration(String expectedResolveDuration) {
+        this.expectedResolveDuration = expectedResolveDuration;
+    }
+
+    public Date getExpectedResolveTime() {
+        return expectedResolveTime;
+    }
+
+    public void setExpectedResolveTime(Date expectedResolveTime) {
+        this.expectedResolveTime = expectedResolveTime;
     }
 }
