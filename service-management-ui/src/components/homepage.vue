@@ -121,7 +121,7 @@ export default {
           className: "reporter-container",
           render: (h, params) => {
             return (
-              <div class="reporter" style={`background: ${this.colorHash.hex('workflow')};`}>{params.row.reporter}</div>
+              <div class="reporter" style={`background: ${this.colorHash.hex(params.row.reporter)};`}>{params.row.reporter}</div>
             )
           }
         },
