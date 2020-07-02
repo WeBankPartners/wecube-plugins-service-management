@@ -78,7 +78,7 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('process')" prop="attrName">
-            <Select @on-open-change="getAllProcessDefinitionKeys" v-model="form.processDefinitionKey">
+            <Select @on-open-change="getAllProcessDefinitionKeys" v-model="form.procDefKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
                 :key="process.procDefKey"
@@ -286,7 +286,7 @@ export default {
       form: {
         name: "",
         description: "",
-        processDefinitionKey: "",
+        procDefKey: "",
         servicePipelineId: ""
       }
     };
@@ -345,7 +345,7 @@ export default {
         this.form = {
           name: "",
           description: "",
-          processDefinitionKey: "",
+          procDefKey: "",
           servicePipelineId: ""
         };
       }
