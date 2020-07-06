@@ -62,7 +62,7 @@ public class TaskService {
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
                     input.getRoleName(), input.getReporter(), new Date(System.currentTimeMillis()),
                     input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
-                    input.getCallbackParameter(), allowedOptionsString);
+                    input.getCallbackParameter(), allowedOptionsString,input.getOverTime());
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);

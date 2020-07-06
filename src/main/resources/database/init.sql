@@ -83,6 +83,7 @@ CREATE TABLE `task` (
     `request_id` VARCHAR(255) NULL ,
     `callback_parameter` VARCHAR(255) NULL ,
     `allowed_options` text NULL,
+    `over_time` INT(11) NULL ,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
