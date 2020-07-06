@@ -26,7 +26,7 @@ public class Task {
     }
 
     public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
-            String description, String status, String requestId, String callbackParameter, String allowedOptions) {
+            String description, String status, String requestId, String callbackParameter, String allowedOptions,Integer overTime) {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.operatorRole = operatorRole;
@@ -37,6 +37,7 @@ public class Task {
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
         this.allowedOptions = allowedOptions;
+        this.overTime = overTime;
     }
 
     @ManyToOne
@@ -87,6 +88,9 @@ public class Task {
 
     @Column(name = "allowed_options")
     private String allowedOptions;
+
+    @Column(name = "over_time")
+    private Integer overTime;
 
     public String getId() {
         return id;
@@ -223,4 +227,8 @@ public class Task {
     public void setAllowedOptions(String allowedOptions) {
         this.allowedOptions = allowedOptions;
     }
+
+    public Integer getOverTime() { return overTime; }
+
+    public void setOverTime(Integer overTime) { this.overTime = overTime; }
 }

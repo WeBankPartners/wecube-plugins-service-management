@@ -7,6 +7,7 @@ public class CreateTaskRequestInputDto {
     private String roleName;
     private String callbackParameter;
     private String reporter;
+    private Integer overTime;
 
     public String getCallbackUrl() {
         return callbackUrl;
@@ -55,4 +56,8 @@ public class CreateTaskRequestInputDto {
     public void setReporter(String reporter) {
         this.reporter = reporter;
     }
+
+    public Integer getOverTime() { return overTime;}
+
+    public void setOverTime(Integer overTime) { this.overTime = overTime; }
 }
