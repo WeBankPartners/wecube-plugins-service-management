@@ -6,6 +6,7 @@ public class CreateTaskRequestDto {
     private List<CreateTaskRequestInputDto> inputs;
     private String requestId;
     private List<String> allowedOptions;
+    private String duaDate;
 
 
     public List<CreateTaskRequestInputDto> getInputs() {
@@ -31,4 +32,8 @@ public class CreateTaskRequestDto {
     public void setAllowedOptions(List<String> allowedOptions) {
         this.allowedOptions = allowedOptions;
     }
+
+    public String getDuaDate() { return duaDate; }
+
+    public void setDuaDate(String duaDate) { this.duaDate = duaDate; }
 }

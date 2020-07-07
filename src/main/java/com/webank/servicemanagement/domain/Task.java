@@ -26,7 +26,8 @@ public class Task {
     }
 
     public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
-            String description, String status, String requestId, String callbackParameter, String allowedOptions,Integer overTime) {
+            String description, String status, String requestId, String callbackParameter, String allowedOptions,
+                Date overTime, String dueDate) {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.operatorRole = operatorRole;
@@ -38,6 +39,7 @@ public class Task {
         this.callbackParameter = callbackParameter;
         this.allowedOptions = allowedOptions;
         this.overTime = overTime;
+        this.dueDate = dueDate;
     }
 
     @ManyToOne
@@ -90,7 +92,10 @@ public class Task {
     private String allowedOptions;
 
     @Column(name = "over_time")
-    private Integer overTime;
+    private Date overTime;
+
+    @Column(name = "due_date")
+    private String dueDate;
 
     public String getId() {
         return id;
@@ -228,7 +233,11 @@ public class Task {
         this.allowedOptions = allowedOptions;
     }
 
-    public Integer getOverTime() { return overTime; }
+    public Date getOverTime() { return overTime; }
 
-    public void setOverTime(Integer overTime) { this.overTime = overTime; }
+    public void setOverTime(Date overTime) { this.overTime = overTime; }
+
+    public String getDueDate() { return dueDate; }
+
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
 }

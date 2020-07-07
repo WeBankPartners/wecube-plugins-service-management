@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.webank.servicemanagement.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,14 +56,16 @@ public class TaskService {
             throws Exception {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
+        Date reportTime = new Date(System.currentTimeMillis());
+        String duaDate = createTaskRequest.getDuaDate();
+        Date overTime = DateUtils.addDateMinute(reportTime,duaDate);
         String allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), input.getReporter(), new Date(System.currentTimeMillis()),
-                    input.getTaskDescription(), STATUS_PENDING, createTaskRequest.getRequestId(),
-                    input.getCallbackParameter(), allowedOptionsString,input.getOverTime());
+                    input.getRoleName(), input.getReporter(), reportTime,input.getTaskDescription(), STATUS_PENDING,
+                    createTaskRequest.getRequestId(),input.getCallbackParameter(), allowedOptionsString, overTime,duaDate);
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
