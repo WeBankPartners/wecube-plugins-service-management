@@ -2,6 +2,7 @@ package com.webank.servicemanagement.dto;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -53,6 +54,10 @@ public class TaskDto {
 
     private List<String> allowedOptions;
 
+    private String overTime;
+
+    private String dueDate;
+
     public static TaskDto fromDomain(Task task) {
         List<String> allowedOptionList = new ArrayList<String>();
         try {
@@ -68,7 +73,8 @@ public class TaskDto {
                 task.getName(), task.getReporter(), DateUtils.formatDateToString(task.getReportTime()),
                 task.getOperatorRole(), task.getOperator(), DateUtils.formatDateToString(task.getOperateTime()),
                 task.getInputParameters(), task.getDescription(), task.getResult(), task.getResultMessage(),
-                task.getStatus(), task.getRequestId(), task.getCallbackParameter(), allowedOptionList);
+                task.getStatus(), task.getRequestId(), task.getCallbackParameter(), allowedOptionList,
+                DateUtils.formatDateToString(task.getOverTime()), task.getDueDate());
 
         return taskDto;
     }
@@ -76,7 +82,7 @@ public class TaskDto {
     public TaskDto(String id, String serviceRequestId, String callbackUrl, String name, String reporter,
             String reportTime, String operatorRole, String operator, String operateTime, String inputParameters,
             String description, String result, String resultMessage, String status, String requestId,
-            String callbackParameter, List<String> allowedOptions) {
+            String callbackParameter, List<String> allowedOptions, String overTime, String dueDate) {
         super();
         this.id = id;
         this.serviceRequestId = serviceRequestId;
@@ -95,6 +101,8 @@ public class TaskDto {
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
         this.setAllowedOptions(allowedOptions);
+        this.overTime = overTime;
+        this.dueDate = dueDate;
     }
 
     public String getId() {
@@ -232,4 +240,12 @@ public class TaskDto {
     public void setAllowedOptions(List<String> allowedOptions) {
         this.allowedOptions = allowedOptions;
     }
+
+    public String getDueDate() { return dueDate; }
+
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
+
+    public String getOverTime() { return overTime; }
+
+    public void setOverTime(String overTime) { this.overTime = overTime; }
 }
