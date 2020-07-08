@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,9 @@ public class TaskDto {
     public static TaskDto fromDomain(Task task) {
         List<String> allowedOptionList = new ArrayList<String>();
         try {
-            allowedOptionList = JsonUtils.toObject(task.getAllowedOptions(), allowedOptionList.getClass());
+            if(StringUtils.isNotBlank(task.getAllowedOptions())){
+                allowedOptionList = JsonUtils.toObject(task.getAllowedOptions(), allowedOptionList.getClass());
+            }
         } catch (IOException e) {
             e.printStackTrace();
             log.error(String.format("Parse 'allowedOptions' meet error: %s",e.getMessage()));
