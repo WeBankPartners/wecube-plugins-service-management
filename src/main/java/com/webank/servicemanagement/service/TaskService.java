@@ -59,7 +59,11 @@ public class TaskService {
         Date reportTime = new Date(System.currentTimeMillis());
         String dueDate = createTaskRequest.getDueDate();
         Date overTime = DateUtils.addDateMinute(reportTime,dueDate);
-        String allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
+        List<String> allowedOptions = createTaskRequest.getAllowedOptions();
+        String allowedOptionsString = null;
+        if(allowedOptions != null && allowedOptions.size() > 0){
+            allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
+        }
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
@@ -141,6 +145,7 @@ public class TaskService {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
+        currentRoles.add("SUPER_ADMIN");
 
         queryRequest.addInFilter("operatorRole", currentRoles);
 
