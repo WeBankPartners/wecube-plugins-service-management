@@ -57,15 +57,15 @@ public class TaskService {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         Date reportTime = new Date(System.currentTimeMillis());
-        String duaDate = createTaskRequest.getDuaDate();
-        Date overTime = DateUtils.addDateMinute(reportTime,duaDate);
+        String dueDate = createTaskRequest.getDueDate();
+        Date overTime = DateUtils.addDateMinute(reportTime,dueDate);
         String allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
                     input.getRoleName(), input.getReporter(), reportTime,input.getTaskDescription(), STATUS_PENDING,
-                    createTaskRequest.getRequestId(),input.getCallbackParameter(), allowedOptionsString, overTime,duaDate);
+                    createTaskRequest.getRequestId(),input.getCallbackParameter(), allowedOptionsString, overTime,dueDate);
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
