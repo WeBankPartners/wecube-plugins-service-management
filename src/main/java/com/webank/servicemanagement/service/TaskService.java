@@ -145,7 +145,6 @@ public class TaskService {
         queryRequest.setSorting(new Sorting(false, "reportTime"));
 
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
-        currentRoles.add("SUPER_ADMIN");
 
         queryRequest.addInFilter("operatorRole", currentRoles);
 
