@@ -135,8 +135,9 @@ public class TaskService {
     }
 
     public QueryResponse<TaskDto> queryTaskByCurrentRoles(QueryRequest queryRequest) {
-        queryRequest.setSorting(new Sorting(false, "reportTime"));
-
+        if (queryRequest.getSorting() == null || queryRequest.getSorting().getField() == null) {
+            queryRequest.setSorting(new Sorting(false, "reportTime"));
+        }
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
         queryRequest.addInFilter("operatorRole", currentRoles);
@@ -161,8 +162,9 @@ public class TaskService {
     }
 
     public QueryResponse<Task> queryTask(QueryRequest queryRequest) {
-        queryRequest.setSorting(new Sorting(false, "reportTime"));
-
+        if (queryRequest.getSorting() == null || queryRequest.getSorting().getField() == null) {
+            queryRequest.setSorting(new Sorting(false, "reportTime"));
+        }
         QueryResponse<Task> queryResult;
         try {
             queryResult = entityRepository.query(Task.class, queryRequest);
