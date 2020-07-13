@@ -3,6 +3,7 @@ package com.webank.servicemanagement.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -53,4 +54,12 @@ public class DateUtils {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.parse(dateString);
     }
+
+    public static Date addDateMinute(Date date,String minute)  {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, Integer.parseInt(minute));
+        return calendar.getTime();
+    }
+
 }
