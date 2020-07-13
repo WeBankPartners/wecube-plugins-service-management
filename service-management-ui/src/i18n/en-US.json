@@ -55,5 +55,6 @@
     "operate_time": "Time",
     "receive": "Assign to me",
     "deal_with": "Action",
-    "add": "Add"
+    "add": "Add",
+    "over_time": "Expired"
 }

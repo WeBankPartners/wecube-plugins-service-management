@@ -55,5 +55,6 @@
     "operate_time": "处理时间",
     "receive": "领取",
     "deal_with": "处理",
-    "add": "新增"
+    "add": "新增",
+    "over_time": "过期时间"
 }
