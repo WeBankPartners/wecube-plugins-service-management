@@ -9,6 +9,7 @@
           :pagination="requestPagination"
           @actionFun="actionFun"
           @handleSubmit="handleSubmit"
+          @sortHandler="sortHandler"
           @pageChange="requestPageChange"
           @pageSizeChange="requestPageSizeChange"
         />
@@ -126,7 +127,8 @@ export default {
           key: "name",
           inputKey: "name",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom',
         },
         {
           title: this.$t("status"),
@@ -134,6 +136,7 @@ export default {
           inputKey: "status",
           component: "PluginSelect",
           inputType: "select",
+          sortable: 'custom',
           options: [
             {
               value: "Summitted",
@@ -154,7 +157,8 @@ export default {
           key: "reporter",
           inputKey: "reporter",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom',
         },
         {
           title: this.$t("reporting_time"),
@@ -162,13 +166,15 @@ export default {
           inputKey: "reportTime",
           component: "DatePicker",
           type: "datetimerange",
-          inputType: "date"
+          inputType: "date",
+          sortable: 'custom',
         },
         {
           title: this.$t("environment_type"),
           key: "envType",
           inputKey: "envType",
           component: "PluginSelect",
+          sortable: 'custom',
           options: [
             {
               value: "test",
@@ -190,6 +196,7 @@ export default {
           key: "emergency",
           inputKey: "emergency",
           component: "PluginSelect",
+          sortable: 'custom',
           options: [
             {
               value: "normal",
@@ -207,7 +214,8 @@ export default {
           key: "description",
           inputKey: "description",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom',
         },
         {
           title: this.$t("action"),
@@ -356,6 +364,17 @@ export default {
         this.handlerTableData = data.contents;
         this.handlerPagination.total = data.pageInfo.totalRows;
       }
+    },
+    sortHandler (data) {
+      if (data.order === 'normal') {
+        delete this.requestPayload.sorting
+      } else {
+        this.requestPayload.sorting = {
+          asc: data.order === 'asc',
+          field: data.key
+        }
+      }
+      this.getData()
     },
     async getData() {
       this.requestPayload.pageable.pageSize = this.requestPagination.pageSize;

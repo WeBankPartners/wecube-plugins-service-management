@@ -8,6 +8,7 @@
       @actionFun="actionFun"
       @handleSubmit="handleSubmitForprocess"
       @pageChange="handlerPageChange"
+      @sortHandler="sortHandler"
       @pageSizeChange="handlerPageSizeChange"
     />
     <Modal
@@ -78,14 +79,16 @@ export default {
           key: "serviceRequestId",
           inputKey: "serviceRequestId",
           component: "Input",
-          isNotFilterable: true
+          isNotFilterable: true,
+          sortable: 'custom'
         },
         {
           title: this.$t("task_name"),
           key: "name",
           inputKey: "name",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom'
         },
         {
           title: this.$t("status"),
@@ -93,6 +96,7 @@ export default {
           inputKey: "status",
           component: "PluginSelect",
           inputType: "select",
+          sortable: 'custom',
           options: [
             {
               value: "Pending",
@@ -119,6 +123,7 @@ export default {
           component: "Input",
           inputType: "text",
           className: "reporter-container",
+          sortable: 'custom',
           render: (h, params) => {
             return (
               <div class="reporter" style={`background: ${this.colorHash.hex(params.row.reporter)};`}>{params.row.reporter}</div>
@@ -131,14 +136,16 @@ export default {
           inputKey: "reportTime",
           component: "DatePicker",
           type: "datetimerange",
-          inputType: "date"
+          inputType: "date",
+          sortable: 'custom'
         },
         {
           title: this.$t("operator"),
           key: "operator",
           inputKey: "operator",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom'
         },
         {
           title: this.$t("operate_time"),
@@ -146,14 +153,31 @@ export default {
           inputKey: "operateTime",
           component: "DatePicker",
           type: "datetimerange",
-          inputType: "date"
+          inputType: "date",
+          sortable: 'custom'
+        },
+        {
+          title: this.$t("over_time"),
+          key: "overTime",
+          inputKey: "overTime",
+          component: "DatePicker",
+          type: "datetimerange",
+          inputType: "date",
+          className: "reporter-container",
+          sortable: 'custom',
+          render: (h, params) => {
+            return (
+              <div class="reporter" style={`background: ${this.getColor(params.row.reportTime, params.row.overTime)};`}>{params.row.overTime}</div>
+            )
+          }
         },
         {
           title: this.$t("describe"),
           key: "description",
           inputKey: "description",
           component: "Input",
-          inputType: "text"
+          inputType: "text",
+          sortable: 'custom'
         },
         {
           title: this.$t("action"),
@@ -206,10 +230,41 @@ export default {
     }
   },
   mounted() {
-    
     this.getProcessData()
   },
   methods: {
+     getColor(reportTime,overTime) {
+      if (!reportTime || !overTime) {
+        return '#fff'
+      }
+      const report = (new Date(reportTime.replace(new RegExp("-","gm"),"/"))).getTime()
+      const over = (new Date(overTime.replace(new RegExp("-","gm"),"/"))).getTime()
+      const current = new Date().getTime()
+      const step = (over - report) / 3
+      if (over < current) {
+        return '#ed4014'
+      }
+      if (current < (report + step)) {
+        return '#fff'
+      }
+      if ((report + step) < current < (report + step * 2)) {
+        return '#2db7f5'
+      }
+      if ((report + step * 2) < current < over) {
+        return '#ff9900'
+      }
+    },
+    sortHandler (data) {
+      if (data.order === 'normal') {
+        delete this.handlerPayload.sorting
+      } else {
+        this.handlerPayload.sorting = {
+          asc: data.order === 'asc',
+          field: data.key
+        }
+      }
+      this.getProcessData()
+    },
     actionFun(type, data) {
       switch (type) {
         case "add":
