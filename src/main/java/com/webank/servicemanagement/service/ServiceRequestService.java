@@ -1,11 +1,7 @@
 package com.webank.servicemanagement.service;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -167,8 +163,9 @@ public class ServiceRequestService {
 
     public QueryResponse<ServiceRequest> queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
             QueryRequest queryRequest) {
-        queryRequest.setSorting(new Sorting(false, "reportTime"));
-
+        if (queryRequest.getSorting() == null || queryRequest.getSorting().getField() == null) {
+            queryRequest.setSorting(new Sorting(false, "reportTime"));
+        }
         Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
         log.info("currentRoles={}", currentRoles);
         queryRequest.addInFilter("reportRole", new ArrayList<String>(currentRoles));
