@@ -167,7 +167,7 @@ export default {
           sortable: 'custom',
           render: (h, params) => {
             return (
-              <div class="reporter" style={`background: ${this.getColor(params.row.reportTime, params.row.overTime)};`}>{params.row.overTime}</div>
+              <div class="reporter" style={`background: ${params.row.status === "Processing" || params.row.status === "Pending" ? this.getColor(params.row.reportTime, params.row.overTime) : '#fff'};`}>{params.row.overTime}</div>
             )
           }
         },
@@ -230,6 +230,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.getColor('2020-07-14 17:29:06','2020-07-14 17:31:06'))
     this.getProcessData()
   },
   methods: {
@@ -241,16 +242,17 @@ export default {
       const over = (new Date(overTime.replace(new RegExp("-","gm"),"/"))).getTime()
       const current = new Date().getTime()
       const step = (over - report) / 3
+      console.log(report ,step, step * 2, over - report)
       if (over < current) {
         return '#ed4014'
       }
       if (current < (report + step)) {
         return '#fff'
       }
-      if ((report + step) < current < (report + step * 2)) {
+      if ((report + step) < current && current < (report + step * 2)) {
         return '#2db7f5'
       }
-      if ((report + step * 2) < current < over) {
+      if ((report + step + step) < current && current < over) {
         return '#ff9900'
       }
     },
@@ -334,6 +336,9 @@ export default {
     height: 100%;
     width: 100%;
     padding: 0;
+    .ivu-table-cell-sort {
+      margin-left: 18px;
+    }
   }
 }
 </style>
