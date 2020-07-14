@@ -230,7 +230,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.getColor('2020-07-14 17:29:06','2020-07-14 17:31:06'))
     this.getProcessData()
   },
   methods: {
