@@ -83,9 +83,13 @@ CREATE TABLE `task` (
     `request_id` VARCHAR(255) NULL ,
     `callback_parameter` VARCHAR(255) NULL ,
     `allowed_options` text NULL,
-    `over_time` datetime DEFAULT NULL ,
-    `due_date` VARCHAR(32) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+#@v0.5.1.11-begin@;
+ALTER TABLE `task` ADD COLUMN `over_time` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `task` ADD COLUMN `due_date` VARCHAR(32) NULL DEFAULT NULL ;
+#@v0.5.1.11-end@;
