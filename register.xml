@@ -139,6 +139,10 @@
         <!--最佳实践-->
 
         <plugin name="task"  targetPackage="wecube-monitor" targetEntity="alarm" registerName="alarm">
+            <roleBinds>
+                <roleBind permission="MGMT" roleName="SUPER_ADMIN"/>
+                <roleBind permission="USE" roleName="SUPER_ADMIN"/>
+            </roleBinds>
             <interface action="create" path="/service-mgmt/v1/tasks" httpMethod="POST" isAsyncProcessing="Y" type="APPROVAL">
                 <inputParameters>
                     <parameter datatype="string" mappingType="system_variable" mappingSystemVariableName="CALLBACK_URL" required="Y">
@@ -157,6 +161,10 @@
             </interface>
         </plugin>
         <plugin name="task" registerName="custom">
+            <roleBinds>
+                <roleBind permission="MGMT" roleName="SUPER_ADMIN"/>
+                <roleBind permission="USE" roleName="SUPER_ADMIN"/>
+            </roleBinds>
             <interface action="create" path="/service-mgmt/v1/tasks" httpMethod="POST" isAsyncProcessing="Y" type="APPROVAL">
                 <inputParameters>
                     <parameter datatype="string" mappingType="system_variable" mappingSystemVariableName="CALLBACK_URL" required="Y">
