@@ -45,6 +45,9 @@ public class ServiceRequestTemplateService {
 
     public void createServiceRequestTemplate(CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest)
             throws Exception {
+        if(StringUtils.isBlank(createServiceRequestTemplateRequest.getName())){
+            throw new Exception("The name is required!");
+        }
         if(StringUtils.isBlank(createServiceRequestTemplateRequest.getProcDefKey())){
             throw new Exception("The procDefKey is required!");
         }
