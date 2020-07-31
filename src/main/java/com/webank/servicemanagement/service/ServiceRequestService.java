@@ -6,6 +6,7 @@ import java.util.*;
 import com.webank.servicemanagement.dto.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class ServiceRequestService {
     private final static String IS_NOTIFY_REQUIRED = "Y";
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
+        if(StringUtils.isBlank(request.getEnvType())){
+            throw new Exception("The envType is required!");
+        }
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
