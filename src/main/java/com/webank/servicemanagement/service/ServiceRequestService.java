@@ -3,8 +3,10 @@ package com.webank.servicemanagement.service;
 import java.io.File;
 import java.util.*;
 
+import com.webank.servicemanagement.dto.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,6 @@ import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
-import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
-import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
-import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
-import com.webank.servicemanagement.dto.QueryRequest;
-import com.webank.servicemanagement.dto.QueryResponse;
-import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
@@ -59,6 +55,9 @@ public class ServiceRequestService {
     private final static String IS_NOTIFY_REQUIRED = "Y";
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
+        if(StringUtils.isBlank(request.getEnvType())){
+            throw new Exception("The envType is required!");
+        }
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
@@ -161,22 +160,26 @@ public class ServiceRequestService {
         return response;
     }
 
-    public QueryResponse<ServiceRequest> queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
+    public QueryResponse<ServiceRequestDto> queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
             QueryRequest queryRequest) {
         if (queryRequest.getSorting() == null || queryRequest.getSorting().getField() == null) {
             queryRequest.setSorting(new Sorting(false, "reportTime"));
         }
         Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
         log.info("currentRoles={}", currentRoles);
-        queryRequest.addInFilter("reportRole", new ArrayList<String>(currentRoles));
+        if(currentRoles!=null && !currentRoles.isEmpty()){
+            queryRequest.addInFilter("reportRole", new ArrayList<>(currentRoles));
+        }
 
-        QueryResponse<ServiceRequest> queryResult;
+        List<ServiceRequestDto> queryResultDtos;
         try {
-            queryResult = entityRepository.query(ServiceRequest.class, queryRequest);
+            QueryResponse<ServiceRequest> queryResult = entityRepository.query(ServiceRequest.class, queryRequest);
             if (queryResult.getContents().size() == 0) {
                 return new QueryResponse<>();
             }
-            return queryResult;
+            queryResultDtos = Lists.transform(queryResult.getContents(),
+                    x -> ServiceRequestDto.fromDomain(x));
+            return new QueryResponse<>(new PageInfo(), queryResultDtos);
         } catch (Exception e) {
             log.error("Query service_request met error: {}", e.getMessage());
             return new QueryResponse<>();
@@ -210,8 +213,8 @@ public class ServiceRequestService {
         return serviceRequests;
     }
 
-    public List<ServiceRequest> getDataWithConditions(String filter, String sorting, String select) throws Exception {
-        QueryResponse<ServiceRequest> response = queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
+    public List<ServiceRequestDto> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+        QueryResponse<ServiceRequestDto> response = queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
                 QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();
     }
