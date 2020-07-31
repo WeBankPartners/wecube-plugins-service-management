@@ -179,7 +179,7 @@ public class ServiceRequestService {
             }
             queryResultDtos = Lists.transform(queryResult.getContents(),
                     x -> ServiceRequestDto.fromDomain(x));
-            return new QueryResponse<>(new PageInfo(), queryResultDtos);
+            return new QueryResponse<>(queryResult.getPageInfo(), queryResultDtos);
         } catch (Exception e) {
             log.error("Query service_request met error: {}", e.getMessage());
             return new QueryResponse<>();
