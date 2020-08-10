@@ -52,9 +52,8 @@ public class TaskService {
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
 
-    public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
-            throws Exception {
-        List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
+    public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest) {
+        List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         Date reportTime = new Date(System.currentTimeMillis());
         String dueDate = createTaskRequest.getDueDate();
@@ -63,6 +62,8 @@ public class TaskService {
         String allowedOptionsString = null;
         if(allowedOptions != null && allowedOptions.size() > 0){
             allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
+        }else{
+            allowedOptionsString = "[\"deny\",\"approval\"]";
         }
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
