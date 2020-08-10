@@ -6,14 +6,9 @@ import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 import java.util.List;
 import java.util.Map;
 
+import com.webank.servicemanagement.dto.QueryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.service.AttachFileService;
@@ -53,6 +48,25 @@ public class DataModelController {
             @RequestParam(value = "sorting", required = false) String sorting,
             @RequestParam(value = "select", required = false) String select) throws Exception {
         return okayWithData(serviceCatalogueService.getDataWithConditions(filter, sorting, select));
+    }
+
+    @PostMapping("/{packageName}/query")
+    @ResponseBody
+    public JsonResponse queryDataModel(@PathVariable String packageName, @RequestBody QueryRequest queryRequest) {
+        if(packageName.equals(SERVICE_CATALOGUE)){
+            return okayWithData(serviceCatalogueService.queryServiceCatalogue(queryRequest));
+        }else if(packageName.equals(SERVICE_PIPELINE)){
+            return okayWithData(servicePipelineService.queryServicePipeline(queryRequest));
+        }else if(packageName.equals(SERVICE_REQUEST_TEMPLATE)){
+            return okayWithData(serviceRequestTemplateService.queryServiceRequestTemplate(queryRequest));
+        }else if(packageName.equals(SERVICE_REQUEST)){
+            return okayWithData(serviceRequestService.queryServiceRequestByCurrentRolesOrderByReportTimeDesc(queryRequest));
+        }else if(packageName.equals(TASK)){
+            return okayWithData(taskService.queryTaskByCurrentRoles(queryRequest));
+        }else if(packageName.equals(ATTACH_FILE)){
+            return okayWithData(attachFileService.queryAttachFile(queryRequest));
+        }
+        return okay();
     }
 
     @PostMapping("/" + SERVICE_CATALOGUE + "/create")
