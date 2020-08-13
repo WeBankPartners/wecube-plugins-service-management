@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.webank.servicemanagement.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.domain.Task;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
@@ -34,6 +34,7 @@ import com.webank.servicemanagement.support.core.CoreServiceStub;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestOutputsDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestResultDataDto;
+import com.webank.servicemanagement.utils.DateUtils;
 import com.webank.servicemanagement.utils.JsonUtils;
 
 @Service
@@ -52,6 +53,7 @@ public class TaskService {
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
 
+    @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
             throws Exception {
         List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
@@ -90,7 +92,7 @@ public class TaskService {
         Task task;
         Optional<Task> taskResult = taskRepository.findById(taskId);
         if (!taskResult.isPresent()) {
-            throw new Exception("Can not found the specified task, please check !");
+            throw new ServiceMgmtException("3013", "Can not found the specified task, please check !");
         }
 
         String operator = AuthenticationContextHolder.getCurrentUsername();
@@ -104,15 +106,12 @@ public class TaskService {
         updateTaskByProcessTaskRequest(taskId, processTaskRequest);
     }
 
-    private boolean checkResultIsAvailable(String result) {
-        return ProcessTaskRequest.RESULT_SUCCESSFUL.equals(result) || ProcessTaskRequest.RESULT_FAILED.equals(result);
-    }
-
     private void updateTaskByProcessTaskRequest(String taskId, ProcessTaskRequest processTaskRequest)
             throws Exception, CoreRemoteCallException {
         Optional<Task> taskResult = taskRepository.findById(taskId);
-        if (!taskResult.isPresent())
-            throw new Exception("Can not found the specified task, please check !");
+        if (!taskResult.isPresent()){
+            throw new ServiceMgmtException("3013", "Can not found the specified task, please check !");
+        }
         Task task = taskResult.get();
 
         CallbackRequestDto callbackRequest = new CallbackRequestDto();
@@ -130,8 +129,9 @@ public class TaskService {
         try {
             coreServiceStub.callback(task.getCallbackUrl(), callbackRequest);
         } catch (CoreRemoteCallException e) {
-            log.error(String.format("Callback wecube meet error: %s", e.getMessage()));
-            throw new CoreRemoteCallException(String.format("Callback wecube meet error: %s", e.getMessage()));
+            String msg = String.format("Callback wecube meet error: %s", e.getMessage());
+            log.error(msg);
+            throw new ServiceMgmtException("3014", msg, e.getMessage());
         }
 
         task.setOperateTime(new Date(System.currentTimeMillis()));

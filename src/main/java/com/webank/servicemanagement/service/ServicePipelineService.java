@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.domain.ServiceCatalogue;
 import com.webank.servicemanagement.domain.ServicePipeline;
 import com.webank.servicemanagement.dto.CreateServicePipelineRequest;
@@ -41,16 +42,20 @@ public class ServicePipelineService {
         Optional<ServiceCatalogue> serviceCatalogue = ServiceCatalogueRepository
                 .findById(createServicePipelineRequest.getServiceCatalogueId());
 
-        if (!serviceCatalogue.isPresent())
-            throw new Exception(String.format("Service catalogue ID [%d] does not exist",
-                    createServicePipelineRequest.getServiceCatalogueId()));
+        if (!serviceCatalogue.isPresent()) {
+            String msg = String.format("Service catalogue ID [%s] does not exist",
+                    createServicePipelineRequest.getServiceCatalogueId());
+            throw new ServiceMgmtException("3002", msg, createServicePipelineRequest.getServiceCatalogueId());
+        }
 
         if (servicePipelineRepository
                 .findAllByServiceCatalogueIdAndName(createServicePipelineRequest.getServiceCatalogueId(),
                         createServicePipelineRequest.getName())
-                .size() > 0)
-            throw new Exception(
-                    String.format("Service pipeline [%s] already exists", createServicePipelineRequest.getName()));
+                .size() > 0) {
+
+            String msg = String.format("Service pipeline [%s] already exists", createServicePipelineRequest.getName());
+            throw new ServiceMgmtException("3003", msg, createServicePipelineRequest.getName());
+        }
 
         ServicePipeline servicePipeline = new ServicePipeline(serviceCatalogue.get(),
                 createServicePipelineRequest.getName(), createServicePipelineRequest.getDescription(),
