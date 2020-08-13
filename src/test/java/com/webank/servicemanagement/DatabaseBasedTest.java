@@ -32,7 +32,7 @@ public abstract class DatabaseBasedTest extends ServiceManagementApplicationTest
 	}
 
 	private void prepareDatabase() {
-		executeSqlScripts(newArrayList(new ClassPathResource("/database/init.sql"),
+		executeSqlScripts(newArrayList(new ClassPathResource("/database/test.init.sql"),
 				new ClassPathResource("/database/test.data.sql")));
 	}
 
