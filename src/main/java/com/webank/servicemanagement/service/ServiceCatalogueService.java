@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.domain.ServiceCatalogue;
 import com.webank.servicemanagement.dto.CreateServiceCatalogueRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
@@ -31,9 +32,12 @@ public class ServiceCatalogueService {
     }
 
     public void createServiceCatalogue(CreateServiceCatalogueRequest createServiceCatalogueRequest) throws Exception {
-        if (serviceCatalogueRepository.findAllByName(createServiceCatalogueRequest.getName()).size() > 0)
-            throw new Exception(
-                    String.format("Service catalogue [%d] already exists", createServiceCatalogueRequest.getName()));
+        if (serviceCatalogueRepository.findAllByName(createServiceCatalogueRequest.getName()).size() > 0) {
+
+            String msg = String.format("Service catalogue [%s] already exists",
+                    createServiceCatalogueRequest.getName());
+            throw new ServiceMgmtException("3001", msg, createServiceCatalogueRequest.getName());
+        }
 
         ServiceCatalogue serviceCatalogue = new ServiceCatalogue(createServiceCatalogueRequest.getName(),
                 createServiceCatalogueRequest.getDescription(), AVAILABLE_STATU_STRING);
