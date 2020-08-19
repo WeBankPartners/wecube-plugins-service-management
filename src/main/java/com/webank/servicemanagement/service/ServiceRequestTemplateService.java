@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,12 @@ public class ServiceRequestTemplateService {
 
     public void createServiceRequestTemplate(CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest)
             throws Exception {
+        if(StringUtils.isBlank(createServiceRequestTemplateRequest.getName())){
+            throw new Exception("The name is required!");
+        }
+        if(StringUtils.isBlank(createServiceRequestTemplateRequest.getProcDefKey())){
+            throw new Exception("The procDefKey is required!");
+        }
         Optional<ServicePipeline> servicePipelineOptional = servicePipelineRepository
                 .findById(createServiceRequestTemplateRequest.getServicePipelineId());
         if (!servicePipelineOptional.isPresent()) {

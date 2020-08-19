@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
-import com.webank.servicemanagement.dto.PageInfo;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.ServiceRequestDto;
@@ -66,6 +66,9 @@ public class ServiceRequestService {
     private final static String IS_NOTIFY_REQUIRED = "Y";
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
+        if(StringUtils.isBlank(request.getEnvType())){
+            throw new Exception("The envType is required!");
+        }
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
@@ -193,8 +196,10 @@ public class ServiceRequestService {
             if (queryResult.getContents().size() == 0) {
                 return new QueryResponse<>();
             }
-            queryResultDtos = Lists.transform(queryResult.getContents(), x -> ServiceRequestDto.fromDomain(x));
-            return new QueryResponse<>(new PageInfo(), queryResultDtos);
+
+            queryResultDtos = Lists.transform(queryResult.getContents(),
+                    x -> ServiceRequestDto.fromDomain(x));
+            return new QueryResponse<>(queryResult.getPageInfo(), queryResultDtos);
         } catch (Exception e) {
             log.error("Query service_request met error: {}", e.getMessage());
             return new QueryResponse<>();

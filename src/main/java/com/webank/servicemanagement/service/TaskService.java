@@ -54,24 +54,26 @@ public class TaskService {
     private final static String STATUS_PROCESSING = "Processing";
 
     @SuppressWarnings("rawtypes")
-    public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest)
-            throws Exception {
-        List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<WorkflowResultDataOutputJsonResponse>();
+    public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest) {
+        List<WorkflowResultDataOutputJsonResponse> savedTasks = new ArrayList<>();
         List<CreateTaskRequestInputDto> inputs = createTaskRequest.getInputs();
         Date reportTime = new Date(System.currentTimeMillis());
         String dueDate = createTaskRequest.getDueDate();
-        Date overTime = DateUtils.addDateMinute(reportTime,dueDate);
+        Date overTime = DateUtils.addDateMinute(reportTime, dueDate);
         List<String> allowedOptions = createTaskRequest.getAllowedOptions();
         String allowedOptionsString = null;
-        if(allowedOptions != null && allowedOptions.size() > 0){
+        if (allowedOptions != null && allowedOptions.size() > 0) {
             allowedOptionsString = JsonUtils.toJsonString(createTaskRequest.getAllowedOptions());
+        } else {
+            allowedOptionsString = "[\"deny\",\"approval\"]";
         }
         for (CreateTaskRequestInputDto input : inputs) {
             String taskName = input.getTaskName();
             Task task = new Task(input.getCallbackUrl(),
                     taskName.length() > 255 ? StringUtils.substring(taskName, 0, 252) + "..." : taskName,
-                    input.getRoleName(), input.getReporter(), reportTime,input.getTaskDescription(), STATUS_PENDING,
-                    createTaskRequest.getRequestId(),input.getCallbackParameter(), allowedOptionsString, overTime,dueDate);
+                    input.getRoleName(), input.getReporter(), reportTime, input.getTaskDescription(), STATUS_PENDING,
+                    createTaskRequest.getRequestId(), input.getCallbackParameter(), allowedOptionsString, overTime,
+                    dueDate);
             Task savedTask = taskRepository.save(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
@@ -109,7 +111,7 @@ public class TaskService {
     private void updateTaskByProcessTaskRequest(String taskId, ProcessTaskRequest processTaskRequest)
             throws Exception, CoreRemoteCallException {
         Optional<Task> taskResult = taskRepository.findById(taskId);
-        if (!taskResult.isPresent()){
+        if (!taskResult.isPresent()) {
             throw new ServiceMgmtException("3013", "Can not found the specified task, please check !");
         }
         Task task = taskResult.get();
