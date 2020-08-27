@@ -10,8 +10,15 @@ s3_endpoint=$7
 s3_access_key=$8
 s3_secret_key=$9
 
+/bin/sh /scripts/tomcat_exporter/start.sh
 mkdir -p /log
-java -Djava.security.egd=file:/dev/urandom -Duser.timezone=Asia/Shanghai -jar /service-management/service-management.jar  --server.address=0.0.0.0 --server.port=21000 \
+java -Djava.security.egd=file:/dev/urandom -Duser.timezone=Asia/Shanghai \
+-Dcom.sun.management.jmxremote \
+-Dcom.sun.management.jmxremote.port=18082 \
+-Dcom.sun.management.jmxremote.rmi.port=18082 \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.ssl=false \
+-jar /service-management/service-management.jar  --server.address=0.0.0.0 --server.port=21000 \
 --spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver \
 --spring.datasource.url=jdbc:mysql://${db_host}:${db_port}/${db_schema}?characterEncoding=utf8\&serverTimezone=Asia\/Shanghai \
 --spring.datasource.username=${db_username} \
