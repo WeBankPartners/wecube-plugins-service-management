@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -42,7 +41,7 @@ public class TaskController {
         }
         return WorkflowJsonResponse.okayWithData(tasks);
     }
-    
+
     @GetMapping("/my-tasks")
     public JsonResponse getMyTasks() {
         return okayWithData(taskService.getTasksByCurrentUser());
@@ -51,22 +50,14 @@ public class TaskController {
     @PutMapping("/{task-id}/takeover")
     public JsonResponse takeoverTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
-        try {
-            taskService.takeoverTask(taskId, takeOverTaskrequest);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        taskService.takeoverTask(taskId, takeOverTaskrequest);
         return okay();
     }
 
     @PutMapping("/{task-id}/process")
     public JsonResponse processTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
-        try {
-            taskService.processTask(taskId, processTaskRequest);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        taskService.processTask(taskId, processTaskRequest);
         return okay();
     }
 

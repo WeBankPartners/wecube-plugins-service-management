@@ -1,9 +1,12 @@
 package com.webank.servicemanagement.service;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import com.webank.servicemanagement.dto.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,11 +18,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
-import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
+import com.webank.servicemanagement.commons.AuthenticationContextHolder;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
+import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
+import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
+import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
+import com.webank.servicemanagement.dto.QueryRequest;
+import com.webank.servicemanagement.dto.QueryResponse;
+import com.webank.servicemanagement.dto.ServiceRequestDto;
+import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
@@ -61,14 +72,17 @@ public class ServiceRequestService {
         String currentUserName = AuthenticationContextHolder.getCurrentUsername();
         Optional<ServiceRequestTemplate> serviceRequestTemplateOptional = serviceRequestTemplateRepository
                 .findById(request.getTemplateId());
-        if (!serviceRequestTemplateOptional.isPresent())
-            throw new Exception("Invalid service request template ID !");
+        if (!serviceRequestTemplateOptional.isPresent()) {
+            throw new ServiceMgmtException("3004", "Invalid service request template ID !");
+        }
 
         String attachFileId = null;
         if (request.getAttachFileId() != null && !request.getAttachFileId().isEmpty()) {
             Optional<AttachFile> attachFileOptional = attachFileRepository.findById(request.getAttachFileId());
-            if (!attachFileOptional.isPresent())
-                throw new Exception(String.format("Attach file ID [%s] not found", request.getAttachFileId()));
+            if (!attachFileOptional.isPresent()) {
+                String msg = String.format("Attach file ID [%s] not found", request.getAttachFileId());
+                throw new ServiceMgmtException("3005", msg, request.getAttachFileId());
+            }
             attachFileId = attachFileOptional.get().getId();
         }
         ServiceRequestTemplate serviceRequestTemplate = serviceRequestTemplateOptional.get();
@@ -88,7 +102,8 @@ public class ServiceRequestService {
             serviceRequest.setStatus(STATUS_DONE);
             serviceRequest.setResult("Report to Core Error: " + e.getMessage());
             serviceRequestRepository.save(serviceRequest);
-            throw new Exception("Report to Core Error: " + e.getMessage());
+            String msg = String.format("Failed to report to platform caused by:%s.", e.getMessage());
+            throw new ServiceMgmtException("3006", msg, e.getMessage());
         }
 
         serviceRequest.setStatus(STATUS_PROCESSING);
@@ -102,9 +117,10 @@ public class ServiceRequestService {
     public void doneServiceRequest(DoneServiceRequestRequest completedRequest) throws Exception {
         Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository
                 .findById(completedRequest.getServiceRequestId());
-        if (!serviceRequestResult.isPresent())
-            throw new Exception(
-                    String.format("Service Request [%d] not found", completedRequest.getServiceRequestId()));
+        if (!serviceRequestResult.isPresent()) {
+            String msg = String.format("Service Request [%s] not found", completedRequest.getServiceRequestId());
+            throw new ServiceMgmtException("3007", msg, completedRequest.getServiceRequestId());
+        }
         ServiceRequest serviceRequest = serviceRequestResult.get();
         serviceRequest.setResult(completedRequest.getResult());
         serviceRequest.setStatus(STATUS_DONE);
@@ -113,12 +129,12 @@ public class ServiceRequestService {
 
     public String uploadServiceRequestAttachFile(MultipartFile attachFile) throws Exception {
         if (attachFile.isEmpty()) {
-            throw new Exception("Empty file!");
+            throw new ServiceMgmtException("3008", "Empty file!");
         }
 
         String fileExtension = FilenameUtils.getExtension(attachFile.getOriginalFilename());
         if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
-            throw new IllegalArgumentException("Only support Excel file");
+            throw new ServiceMgmtException("3009", "Only support Excel file");
         }
 
         String tmpFileName = String.valueOf(System.currentTimeMillis());
@@ -139,13 +155,16 @@ public class ServiceRequestService {
 
     public DownloadAttachFileResponse downloadServiceRequestAttachFile(String serviceRequestId) throws Exception {
         Optional<ServiceRequest> serviceRequestResult = serviceRequestRepository.findById(serviceRequestId);
-        if (!serviceRequestResult.isPresent())
-            throw new Exception(String.format("The service request ID [%d] not found", serviceRequestId));
+        if (!serviceRequestResult.isPresent()){
+            String msg = String.format("The service request ID [%s] not found", serviceRequestId);
+            throw new ServiceMgmtException("3010", msg, serviceRequestId);
+        }
         ServiceRequest serviceRequest = serviceRequestResult.get();
 
         Optional<AttachFile> attachFileOptional = attachFileRepository.findById(serviceRequest.getAttachFileId());
-        if (!attachFileOptional.isPresent())
-            throw new Exception("This service request has no attach file");
+        if (!attachFileOptional.isPresent()){
+            throw new ServiceMgmtException("3011", "This service request has no attach file");
+        }
         AttachFile attachFile = attachFileOptional.get();
         String fileName = attachFile.getAttachFileName();
 
@@ -167,7 +186,7 @@ public class ServiceRequestService {
         }
         Set<String> currentRoles = AuthenticationContextHolder.getCurrentUserRoles();
         log.info("currentRoles={}", currentRoles);
-        if(currentRoles!=null && !currentRoles.isEmpty()){
+        if (currentRoles != null && !currentRoles.isEmpty()) {
             queryRequest.addInFilter("reportRole", new ArrayList<>(currentRoles));
         }
 
@@ -177,6 +196,7 @@ public class ServiceRequestService {
             if (queryResult.getContents().size() == 0) {
                 return new QueryResponse<>();
             }
+
             queryResultDtos = Lists.transform(queryResult.getContents(),
                     x -> ServiceRequestDto.fromDomain(x));
             return new QueryResponse<>(queryResult.getPageInfo(), queryResultDtos);
@@ -213,7 +233,8 @@ public class ServiceRequestService {
         return serviceRequests;
     }
 
-    public List<ServiceRequestDto> getDataWithConditions(String filter, String sorting, String select) throws Exception {
+    public List<ServiceRequestDto> getDataWithConditions(String filter, String sorting, String select)
+            throws Exception {
         QueryResponse<ServiceRequestDto> response = queryServiceRequestByCurrentRolesOrderByReportTimeDesc(
                 QueryRequest.buildQueryRequest(filter, sorting, select));
         return response.getContents();

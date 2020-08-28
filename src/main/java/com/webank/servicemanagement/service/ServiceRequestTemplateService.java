@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.domain.ServicePipeline;
-import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.dto.CreateServiceRequestTemplateRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
@@ -53,9 +53,11 @@ public class ServiceRequestTemplateService {
         }
         Optional<ServicePipeline> servicePipelineOptional = servicePipelineRepository
                 .findById(createServiceRequestTemplateRequest.getServicePipelineId());
-        if (!servicePipelineOptional.isPresent())
-            throw new Exception(String.format("Service Pipeline ID [%d] does not exist",
-                    createServiceRequestTemplateRequest.getServicePipelineId()));
+        if (!servicePipelineOptional.isPresent()) {
+            String msg = String.format("Service Pipeline ID [%s] does not exist",
+                    createServiceRequestTemplateRequest.getServicePipelineId());
+            throw new ServiceMgmtException("3012", msg, createServiceRequestTemplateRequest.getServicePipelineId());
+        }
 
         ServiceRequestTemplate serviceRequestTemplate = new ServiceRequestTemplate(servicePipelineOptional.get(),
                 createServiceRequestTemplateRequest.getName(), createServiceRequestTemplateRequest.getDescription(),

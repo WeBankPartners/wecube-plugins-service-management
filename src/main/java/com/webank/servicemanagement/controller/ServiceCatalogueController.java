@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -19,23 +18,19 @@ import com.webank.servicemanagement.service.ServiceCatalogueService;
 @RequestMapping("/v1/service-catalogues")
 public class ServiceCatalogueController {
 
-	@Autowired
-	ServiceCatalogueService serviceCatalogueService;
+    @Autowired
+    ServiceCatalogueService serviceCatalogueService;
 
-	@PostMapping
-	public JsonResponse createServiceCatalogue(@RequestBody CreateServiceCatalogueRequest createServiceCatalogueRequest)
-			throws Exception {
-		try {
-		serviceCatalogueService.createServiceCatalogue(createServiceCatalogueRequest);
-		}catch (Exception e) {
-			return error(e.getMessage());
-		}
-		return okay();
-	}
+    @PostMapping
+    public JsonResponse createServiceCatalogue(@RequestBody CreateServiceCatalogueRequest createServiceCatalogueRequest)
+            throws Exception {
+        serviceCatalogueService.createServiceCatalogue(createServiceCatalogueRequest);
+        return okay();
+    }
 
-	@GetMapping("/available")
-	public JsonResponse getAllAvailableServiceCatalogues() {
-		return okayWithData(serviceCatalogueService.getAllAvailableServiceCatalogue());
-	}
+    @GetMapping("/available")
+    public JsonResponse getAllAvailableServiceCatalogues() {
+        return okayWithData(serviceCatalogueService.getAllAvailableServiceCatalogue());
+    }
 
 }

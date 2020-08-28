@@ -12,6 +12,9 @@ spring:
     url: jdbc:mysql://db-server:port/database-name?characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: db-user
     password: db-password
+  messages:
+    basename: message/service_mgmt_err_message
+    encoding: UTF-8
 
   banner:
     location: classpath:/banner.txt
