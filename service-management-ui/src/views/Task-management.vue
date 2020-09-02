@@ -312,7 +312,6 @@ export default {
     },
     requestSubmit() {
       this.$refs.requestForm.validate(async valid => {
-        console.log(valid);
         if (valid) {
           const { status } = await createServiceRequest(this.requestForm);
           if (status === "OK") {
