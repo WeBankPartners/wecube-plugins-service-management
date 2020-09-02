@@ -96,7 +96,7 @@ export default {
             let bytes_length = content.replace(/[^\x00-\xff]/g, '**').length
             if (bytes_length >= max_chars){
               let chinese_count = content.match(/[^\x00-\xff]/g) ? content.match(/[^\x00-\xff]/g).length : 0
-              cut_content = content.substring(0, max_chars - Math.ceil(chinese_count/2)) + '...'
+              cut_content = content.substring(0, max_chars - Math.min(Math.ceil(chinese_count/2), max_chars/2)) + '...'
             }
             return (
               <span title={content}>{cut_content}</span>
@@ -198,7 +198,7 @@ export default {
             let bytes_length = content.replace(/[^\x00-\xff]/g, '**').length
             if (bytes_length >= max_chars){
               let chinese_count = content.match(/[^\x00-\xff]/g) ? content.match(/[^\x00-\xff]/g).length : 0
-              cut_content = content.substring(0, max_chars - Math.ceil(chinese_count/2)) + '...'
+              cut_content = content.substring(0, max_chars - Math.min(Math.ceil(chinese_count/2), max_chars/2)) + '...'
             }
             return (
               <span title={content}>{cut_content}</span>
