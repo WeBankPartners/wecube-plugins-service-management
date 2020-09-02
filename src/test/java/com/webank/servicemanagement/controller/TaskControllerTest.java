@@ -1,18 +1,17 @@
 package com.webank.servicemanagement.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,18 +26,11 @@ public class TaskControllerTest extends AbstractControllerTest {
     public void createTaskTest() throws Exception {
         Date before = new Date();
 
-        mvc.perform(post("/v1/tasks").contentType(MediaType.APPLICATION_JSON).content(
-                "{\r\n" + 
-                "  \"inputs\": [\r\n" + 
-                "    {\r\n" + 
-                "      \"callbackUrl\": \"callbackUrl-test\",\r\n" + 
-                "      \"roleName\": \"roleName\",\r\n" + 
-                "      \"taskName\": \"name-createTaskTest\"\r\n" + 
-                "    }\r\n" + 
-                "  ],\r\n" + 
-                "  \"operator\": \"reporter-test\",\r\n" + 
-                "  \"requestId\": \"999\"\r\n" + 
-                "}"))
+        mvc.perform(post("/v1/tasks").contentType(MediaType.APPLICATION_JSON)
+                .content("{\r\n" + "  \"inputs\": [\r\n" + "    {\r\n"
+                        + "      \"callbackUrl\": \"callbackUrl-test\",\r\n" + "      \"roleName\": \"roleName\",\r\n"
+                        + "      \"taskName\": \"name-createTaskTest\"\r\n" + "    }\r\n" + "  ],\r\n"
+                        + "  \"operator\": \"reporter-test\",\r\n" + "  \"requestId\": \"999\",\r\n" + "  \"dueDate\": \"30\"\r\n" + "}"))
                 .andExpect(jsonPath("$.resultCode", is("0")));
         Date after = new Date();
 
@@ -51,11 +43,37 @@ public class TaskControllerTest extends AbstractControllerTest {
                 .andReturn();
 
         JsonResponse jsonResponse = toObject(result.getResponse().getContentAsString(), JsonResponse.class);
-        String reportTime = (String) ((Map) (((List) ((Map) jsonResponse.getData()).get("contents")).get(0)))
+        long reportTime =  (Long)((Map) (((List) ((Map) jsonResponse.getData()).get("contents")).get(0)))
                 .get("reportTime");
-        Date reportTimeDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(reportTime);
+        Date reportTimeDate = new Date(reportTime);
         assertThat(reportTimeDate.after(before));
         assertThat(reportTimeDate.before(after));
+    }
+
+    @Test
+    public void createTaskWithNameLengthGreaterThan255Test() throws Exception {
+
+        String taskName = RandomStringUtils.randomAlphanumeric(300);
+
+        mvc.perform(post("/v1/tasks").contentType(MediaType.APPLICATION_JSON)
+                .content("{\r\n" + "  \"inputs\": [\r\n" + "    {\r\n"
+                        + "      \"callbackUrl\": \"callbackUrl-test\",\r\n" + "      \"roleName\": \"roleName\",\r\n"
+                        + "      \"taskDescription\": \"description-test\",\r\n" + "      \"taskName\": \"" + taskName
+                        + "\"\r\n" + "    }\r\n" + "  ],\r\n" + "  \"operator\": \"reporter-test\",\r\n"
+                        + "  \"requestId\": \"999\",\r\n" + "  \"dueDate\": \"30\"\r\n" +  "}"))
+                .andExpect(jsonPath("$.resultCode", is("0")));
+
+        MvcResult result = mvc.perform(post("/v1/tasks/query").contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(jsonPath("$.status", is("OK"))).andExpect(jsonPath("$.data.length()", greaterThan(0)))
+                .andReturn();
+
+        JsonResponse jsonResponse = toObject(result.getResponse().getContentAsString(), JsonResponse.class);
+        String name = (String) ((Map) (((List) ((Map) jsonResponse.getData()).get("contents")).get(0))).get("name");
+        assertThat(name.length() == 255);
+        String description = (String) ((Map) (((List) ((Map) jsonResponse.getData()).get("contents")).get(0)))
+                .get("description");
+
+        assertThat(description.equals("description-test"));
     }
 
     public static <T> T toObject(String jsonContent, Class<T> clzz) throws IOException {

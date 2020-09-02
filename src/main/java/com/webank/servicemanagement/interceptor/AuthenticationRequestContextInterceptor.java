@@ -29,6 +29,7 @@ public class AuthenticationRequestContextInterceptor implements HandlerIntercept
             request.setAttribute(REQ_ATTR_KEY_CURRENT_USER, currentUser);
         }
         // TODO - for test
+        /*
         if (userPrincipal == null) {
             AuthenticatedUser currentUser = new AuthenticatedUser("umadmin");
             currentUser.setToken(
@@ -36,7 +37,7 @@ public class AuthenticationRequestContextInterceptor implements HandlerIntercept
             AuthenticationContextHolder.setAuthenticatedUser(currentUser);
 
             request.setAttribute(REQ_ATTR_KEY_CURRENT_USER, currentUser);
-        }
+        }*/
 
         return true;
     }

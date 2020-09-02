@@ -1,12 +1,13 @@
 package com.webank.servicemanagement.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -21,21 +22,25 @@ public class ServiceRequest {
     @Column(name = "id", length = 32)
     private String id;
 
+    private long requestNo;
+
     public ServiceRequest() {
     }
 
-    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter,
-            String reportTime, String emergency, String description, String status, String attachFileId,
-            String envType) {
+    public ServiceRequest(ServiceRequestTemplate serviceRequestTemplate, String name, String reporter, String emergency,
+            String description, String status, String attachFileId, String envType, String reportRole) {
         this.serviceRequestTemplate = serviceRequestTemplate;
         this.name = name;
         this.reporter = reporter;
-        this.reportTime = reportTime;
         this.emergency = emergency;
         this.description = description;
         this.status = status;
         this.attachFileId = attachFileId;
         this.envType = envType;
+        this.reportRole = reportRole;
+        long currentTimeMillis = System.currentTimeMillis();
+        this.reportTime = new Date(currentTimeMillis);
+        this.requestNo = currentTimeMillis;
     }
 
     @ManyToOne
@@ -46,8 +51,10 @@ public class ServiceRequest {
     private String name;
     @Column(name = "reporter")
     private String reporter;
+    @Column(name = "report_role")
+    private String reportRole;
     @Column(name = "report_time")
-    private String reportTime;
+    private Date reportTime;
     @Column(name = "emergency")
     private String emergency;
     @Column(name = "description")
@@ -95,11 +102,11 @@ public class ServiceRequest {
         this.reporter = reporter;
     }
 
-    public String getReportTime() {
+    public Date getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(String reportTime) {
+    public void setReportTime(Date reportTime) {
         this.reportTime = reportTime;
     }
 
@@ -149,5 +156,13 @@ public class ServiceRequest {
 
     public void setAttachFileId(String attachFileId) {
         this.attachFileId = attachFileId;
+    }
+
+    public long getRequestNo() {
+        return requestNo;
+    }
+
+    public void setRequestNo(long requestNo) {
+        this.requestNo = requestNo;
     }
 }

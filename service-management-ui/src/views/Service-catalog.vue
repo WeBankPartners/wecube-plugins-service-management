@@ -60,7 +60,7 @@
             <Input v-model="form.name"></Input>
           </FormItem>
           <FormItem :label="$t('service_directory')" prop="attrName">
-            <Select v-model="form.serviceCatalogId" @on-change="serviceCatalogChangeHandler" >
+            <Select @on-open-change="getAllAvailableServiceCatalogues" v-model="form.serviceCatalogId" @on-change="serviceCatalogChangeHandler" >
               <Option
                 v-for="item in serviceCatalogues"
                 :key="item.id"
@@ -78,7 +78,7 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('process')" prop="attrName">
-            <Select v-model="form.processDefinitionKey">
+            <Select @on-open-change="getAllProcessDefinitionKeys" v-model="form.procDefKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
                 :key="process.procDefKey"
@@ -145,7 +145,7 @@
     </Tabs>
     <Modal
       v-model="catalogModalVisible"
-      :title="$t('add_service_channel')"
+      :title="$t('add_service_directory')"
       footer-hide
       width="50"
       @on-cancel="catalogModalHide"
@@ -178,7 +178,7 @@
             <Input v-model="pipelineForm.name" :placeholder="$t('service_channel_name')"></Input>
           </FormItem>
           <FormItem :label="$t('processing_roles')">
-            <Select v-model="pipelineForm.ownerRole">
+            <Select @on-open-change="getAllRoles" v-model="pipelineForm.ownerRole">
               <Option
                 v-for="role in allRoles"
                 :key="role.name"
@@ -286,7 +286,7 @@ export default {
       form: {
         name: "",
         description: "",
-        processDefinitionKey: "",
+        procDefKey: "",
         servicePipelineId: ""
       }
     };
@@ -345,7 +345,7 @@ export default {
         this.form = {
           name: "",
           description: "",
-          processDefinitionKey: "",
+          procDefKey: "",
           servicePipelineId: ""
         };
       }

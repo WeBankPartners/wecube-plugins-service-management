@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -22,7 +21,6 @@ import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowJsonResponse;
-import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
 import com.webank.servicemanagement.service.TaskService;
 
@@ -44,32 +42,28 @@ public class TaskController {
         return WorkflowJsonResponse.okayWithData(tasks);
     }
 
-    @Deprecated
-    @GetMapping
-    public JsonResponse getAllTask() {
-        return okayWithData(taskService.getAllTask());
+    @GetMapping("/my-tasks")
+    public JsonResponse getMyTasks() {
+        return okayWithData(taskService.getTasksByCurrentUser());
     }
 
     @PutMapping("/{task-id}/takeover")
     public JsonResponse takeoverTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody UpdateTaskRequest takeOverTaskrequest) throws Exception {
-        try {
-            taskService.takeoverTask(taskId, takeOverTaskrequest);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        taskService.takeoverTask(taskId, takeOverTaskrequest);
         return okay();
     }
 
     @PutMapping("/{task-id}/process")
     public JsonResponse processTask(@PathVariable(value = "task-id") String taskId,
             @RequestBody ProcessTaskRequest processTaskRequest) throws Exception {
-        try {
-            taskService.processTask(taskId, processTaskRequest);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        taskService.processTask(taskId, processTaskRequest);
         return okay();
+    }
+
+    @PostMapping("/my-tasks/query")
+    public JsonResponse queryMyTask(@RequestBody QueryRequest queryRequest) throws Exception {
+        return okayWithData(taskService.queryTaskByCurrentRoles(queryRequest));
     }
 
     @PostMapping("/query")

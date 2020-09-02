@@ -34,12 +34,12 @@ package:
 	sh build/build_plugin_xml.sh $(version)
 	cd package && cp ../register.xml .
 	
-	cd package && rm -f service-mgmt-$(version).zip
-	cd package && zip -r service-mgmt-$(version).zip .
+	cd package && rm -f wecube-plugins-service-mgmt-$(version).zip
+	cd package && zip -r wecube-plugins-service-mgmt-$(version).zip .
 	
 	docker run --name minio-client-service-mgmt -v `pwd`/package:/package -itd --entrypoint=/bin/sh minio/mc
 	docker exec minio-client-service-mgmt mc config host add wecubeS3 $(s3_server_url) $(s3_access_key) $(s3_secret_key) wecubeS3
-	docker exec minio-client-service-mgmt mc cp /package/$(project_name)-$(version).zip wecubeS3/wecube-plugin-package-bucket
+	docker exec minio-client-service-mgmt mc cp /package/wecube-plugins-$(project_name)-$(version).zip wecubeS3/wecube-plugin-package-bucket
 	docker rm -f minio-client-service-mgmt
 	
 	docker rmi $(project_name):$(version)

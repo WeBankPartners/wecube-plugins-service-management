@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -20,30 +19,26 @@ import com.webank.servicemanagement.service.ServiceRequestTemplateService;
 @RequestMapping("/v1/service-request-templates")
 public class ServiceRequestTemplateController {
 
-	@Autowired
-	ServiceRequestTemplateService serviceRequestTemplateService;
+    @Autowired
+    ServiceRequestTemplateService serviceRequestTemplateService;
 
-	@PostMapping
-	public JsonResponse createServiceRequestTemplate(
-			@RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest) throws Exception {
-		try {
-			serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
-		} catch (Exception e) {
-			return error(e.getMessage());
-		}
-		return okay();
-	}
+    @PostMapping
+    public JsonResponse createServiceRequestTemplate(
+            @RequestBody CreateServiceRequestTemplateRequest createServiceRequestTemplateRequest) throws Exception {
+        serviceRequestTemplateService.createServiceRequestTemplate(createServiceRequestTemplateRequest);
+        return okay();
+    }
 
-	@Deprecated
-	@GetMapping("/available")
-	public JsonResponse getAllAvailableServiceTemplate() {
-		return okayWithData(serviceRequestTemplateService.getAllAvailableServiceRequestTemplate());
-	}
+    @Deprecated
+    @GetMapping("/available")
+    public JsonResponse getAllAvailableServiceTemplate() {
+        return okayWithData(serviceRequestTemplateService.getAllAvailableServiceRequestTemplate());
+    }
 
-	@GetMapping("/service-pipelines/{service-pipeline-id}")
-	public JsonResponse getServiceRequestTemplateByPipelineId(
-			@PathVariable(value = "service-pipeline-id") String servicePipelinId) {
-		return okayWithData(serviceRequestTemplateService.getServiceRequestTemplateByPipelineId(servicePipelinId));
-	}
+    @GetMapping("/service-pipelines/{service-pipeline-id}")
+    public JsonResponse getServiceRequestTemplateByPipelineId(
+            @PathVariable(value = "service-pipeline-id") String servicePipelinId) {
+        return okayWithData(serviceRequestTemplateService.getServiceRequestTemplateByPipelineId(servicePipelinId));
+    }
 
 }

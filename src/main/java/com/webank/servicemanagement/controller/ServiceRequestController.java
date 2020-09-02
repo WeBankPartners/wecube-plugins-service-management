@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.webank.servicemanagement.commons.AppProperties;
 import com.webank.servicemanagement.commons.ApplicationConstants.ApiInfo;
+import com.webank.servicemanagement.commons.ServiceMgmtException;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
@@ -40,28 +40,20 @@ public class ServiceRequestController {
 
     @PostMapping
     public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request) throws Exception {
-        try {
-            serviceRequestService.createNewServiceRequest(request);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        serviceRequestService.createNewServiceRequest(request);
         return okay();
     }
 
     @PostMapping("/query")
     public JsonResponse queryServiceRequest(@RequestBody QueryRequest queryRequest, HttpServletRequest httpRequest)
             throws Exception {
-        return okayWithData(serviceRequestService.queryServiceRequest(queryRequest));
+        return okayWithData(serviceRequestService.queryServiceRequestByCurrentRolesOrderByReportTimeDesc(queryRequest));
     }
 
-    @PostMapping(ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST)
+    @PostMapping(ApiInfo.API_RESOURCE_SERVICE_REQUEST_DONE)
     public JsonResponse updateServiceRequest(@RequestBody DoneServiceRequestRequest request,
             HttpServletRequest httpRequest) throws Exception {
-        try {
-            serviceRequestService.doneServiceRequest(request);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        serviceRequestService.doneServiceRequest(request);
         return okay();
     }
 
@@ -69,11 +61,7 @@ public class ServiceRequestController {
     public JsonResponse uploadServiceRequestAttachFile(@RequestParam(value = "file") MultipartFile attachFile)
             throws Exception {
         String attachFileId;
-        try {
-            attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile);
-        } catch (Exception e) {
-            return error(e.getMessage());
-        }
+        attachFileId = serviceRequestService.uploadServiceRequestAttachFile(attachFile);
 
         return okayWithData(attachFileId);
     }
@@ -99,7 +87,7 @@ public class ServiceRequestController {
         } catch (Exception e) {
             String errorMessage = String.format("Failed to download attach file(service request Id:%d) due to %s ",
                     serviceRequestId, e.getMessage());
-            throw new Exception(errorMessage);
+            throw new ServiceMgmtException("3000", errorMessage, serviceRequestId, e.getMessage());
         }
     }
 

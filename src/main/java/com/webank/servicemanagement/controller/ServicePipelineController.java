@@ -1,6 +1,5 @@
 package com.webank.servicemanagement.controller;
 
-import static com.webank.servicemanagement.dto.JsonResponse.error;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
@@ -20,24 +19,20 @@ import com.webank.servicemanagement.service.ServicePipelineService;
 @RequestMapping("/v1/service-pipelines")
 public class ServicePipelineController {
 
-	@Autowired
-	ServicePipelineService servicePipelineService;
+    @Autowired
+    ServicePipelineService servicePipelineService;
 
-	@PostMapping
-	public JsonResponse createServicePipeline(@RequestBody CreateServicePipelineRequest createServicePipelineRequest)
-			throws Exception {
-		try {
-			servicePipelineService.createServicePipeline(createServicePipelineRequest);
-		} catch (Exception e) {
-			return error(e.getMessage());
-		}
-		return okay();
-	}
+    @PostMapping
+    public JsonResponse createServicePipeline(@RequestBody CreateServicePipelineRequest createServicePipelineRequest)
+            throws Exception {
+        servicePipelineService.createServicePipeline(createServicePipelineRequest);
+        return okay();
+    }
 
-	@GetMapping("/service-catalogues/{service-catalogue-id}")
-	public JsonResponse getServicePipelineByCatalogueId(
-			@PathVariable(value = "service-catalogue-id") String serviceCatalogueId) {
-		return okayWithData(servicePipelineService.getServicePipelineByCatalogueId(serviceCatalogueId));
-	}
+    @GetMapping("/service-catalogues/{service-catalogue-id}")
+    public JsonResponse getServicePipelineByCatalogueId(
+            @PathVariable(value = "service-catalogue-id") String serviceCatalogueId) {
+        return okayWithData(servicePipelineService.getServicePipelineByCatalogueId(serviceCatalogueId));
+    }
 
 }

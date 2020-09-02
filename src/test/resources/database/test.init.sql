@@ -89,7 +89,7 @@ CREATE TABLE `task` (
 SET FOREIGN_KEY_CHECKS = 1;
 
 
-#@v0.5.1.11-begin@;
+--#@v0.5.1.11-begin@;
 ALTER TABLE `task` ADD COLUMN `over_time` DATETIME NULL DEFAULT NULL;
 ALTER TABLE `task` ADD COLUMN `due_date` VARCHAR(32) NULL DEFAULT NULL ;
-#@v0.5.1.11-end@;
+--#@v0.5.1.11-end@;

@@ -1,5 +1,7 @@
 package com.webank.servicemanagement.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +25,9 @@ public class Task {
     public Task() {
     }
 
-    public Task(String callbackUrl, String name, String operatorRole, String reporter, String reportTime,
-            String description, String status, String requestId, String callbackParameter) {
+    public Task(String callbackUrl, String name, String operatorRole, String reporter, Date reportTime,
+            String description, String status, String requestId, String callbackParameter, String allowedOptions,
+                Date overTime, String dueDate) {
         this.callbackUrl = callbackUrl;
         this.name = name;
         this.operatorRole = operatorRole;
@@ -34,6 +37,9 @@ public class Task {
         this.status = status;
         this.requestId = requestId;
         this.callbackParameter = callbackParameter;
+        this.allowedOptions = allowedOptions;
+        this.overTime = overTime;
+        this.dueDate = dueDate;
     }
 
     @ManyToOne
@@ -50,7 +56,7 @@ public class Task {
     private String reporter;
 
     @Column(name = "report_time")
-    private String reportTime;
+    private Date reportTime;
 
     @Column(name = "operator_role")
     private String operatorRole;
@@ -59,7 +65,7 @@ public class Task {
     private String operator;
 
     @Column(name = "operate_time")
-    private String operateTime;
+    private Date operateTime;
 
     @Column(name = "input_parameters")
     private String inputParameters;
@@ -81,6 +87,15 @@ public class Task {
 
     @Column(name = "callback_parameter")
     private String callbackParameter;
+
+    @Column(name = "allowed_options")
+    private String allowedOptions;
+
+    @Column(name = "over_time")
+    private Date overTime;
+
+    @Column(name = "due_date")
+    private String dueDate;
 
     public String getId() {
         return id;
@@ -122,11 +137,11 @@ public class Task {
         this.reporter = reporter;
     }
 
-    public String getReportTime() {
+    public Date getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(String reportTime) {
+    public void setReportTime(Date reportTime) {
         this.reportTime = reportTime;
     }
 
@@ -138,11 +153,11 @@ public class Task {
         this.operator = operator;
     }
 
-    public String getOperateTime() {
+    public Date getOperateTime() {
         return operateTime;
     }
 
-    public void setOperateTime(String operateTime) {
+    public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime;
     }
 
@@ -209,4 +224,20 @@ public class Task {
     public void setCallbackParameter(String callbackParameter) {
         this.callbackParameter = callbackParameter;
     }
+
+    public String getAllowedOptions() {
+        return allowedOptions;
+    }
+
+    public void setAllowedOptions(String allowedOptions) {
+        this.allowedOptions = allowedOptions;
+    }
+
+    public Date getOverTime() { return overTime; }
+
+    public void setOverTime(Date overTime) { this.overTime = overTime; }
+
+    public String getDueDate() { return dueDate; }
+
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
 }
