@@ -38,6 +38,7 @@ service:
     s3-secret-key: secret_key
     s3-default-bucket: service-mgmt 
     system-code: SYS_SRV_MGMT
+    jwt-signing-key: 
 
 logging:
   level:

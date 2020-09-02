@@ -9,7 +9,7 @@ core_addr=$6
 s3_endpoint=$7
 s3_access_key=$8
 s3_secret_key=$9
-jwt_signing_key=$10
+jwt_signing_key=${10}
 
 /bin/sh /scripts/tomcat_exporter/start.sh
 mkdir -p /log

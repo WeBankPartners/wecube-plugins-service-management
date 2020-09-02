@@ -21,7 +21,7 @@ public class DefaultJwtSsoTokenParser implements JwtSsoTokenParser {
     private JwtParser jwtParser;
 
     public DefaultJwtSsoTokenParser(String jwtSigningKey) {
-        if (jwtSigningKey == null) {
+        if (jwtSigningKey == null || jwtSigningKey.trim().length() < 1) {
             this.jwtSigningKey = SIGNING_KEY;
         } else {
             this.jwtSigningKey = jwtSigningKey;
