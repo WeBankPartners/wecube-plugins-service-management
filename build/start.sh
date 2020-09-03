@@ -9,7 +9,6 @@ core_addr=$6
 s3_endpoint=$7
 s3_access_key=$8
 s3_secret_key=$9
-jwt_signing_key=${10}
 
 /bin/sh /scripts/tomcat_exporter/start.sh
 mkdir -p /log
@@ -27,5 +26,4 @@ java -Djava.security.egd=file:/dev/urandom -Duser.timezone=Asia/Shanghai \
 --service.management.wecube-core-address=${core_addr} \
 --service.management.s3-endpoint=${s3_endpoint} \
 --service.management.s3-access-key=${s3_access_key} \
---service.management.s3-secret-key=${s3_secret_key} \
---service.management.jwt-signing-key=${jwt_signing_key} >> /log/service-management.log
+--service.management.s3-secret-key=${s3_secret_key}  >> /log/service-management.log
