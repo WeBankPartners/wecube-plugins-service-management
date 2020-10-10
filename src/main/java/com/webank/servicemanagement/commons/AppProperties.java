@@ -81,6 +81,7 @@ public class AppProperties {
         private String s3Endpoint = "";
         private String s3DefaultBucket = "";
         private String systemCode = "";
+        private String jwtSigningKey = "Platform+Auth+Server+Secret";
 
         public String getWecubeCoreAddress() {
             return wecubeCoreAddress;
@@ -137,6 +138,16 @@ public class AppProperties {
         public void setSystemCode(String systemCode) {
             this.systemCode = systemCode;
         }
+
+        public String getJwtSigningKey() {
+            return jwtSigningKey;
+        }
+
+        public void setJwtSigningKey(String jwtSigningKey) {
+            this.jwtSigningKey = jwtSigningKey;
+        }
+        
+        
     }
 
 }
