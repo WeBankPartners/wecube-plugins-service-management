@@ -88,7 +88,20 @@ export default {
           inputKey: "name",
           component: "Input",
           inputType: "text",
-          sortable: 'custom'
+          sortable: 'custom',
+          render: (h, params) => {
+            let max_chars = 50
+            let content = params.row.name || ''
+            let cut_content = content
+            let bytes_length = content.replace(/[^\x00-\xff]/g, '**').length
+            if (bytes_length >= max_chars){
+              let chinese_count = content.match(/[^\x00-\xff]/g) ? content.match(/[^\x00-\xff]/g).length : 0
+              cut_content = content.substring(0, max_chars - Math.min(Math.ceil(chinese_count/2), max_chars/2)) + '...'
+            }
+            return (
+              <span title={content}>{cut_content}</span>
+            )
+          }
         },
         {
           title: this.$t("status"),
@@ -177,7 +190,20 @@ export default {
           inputKey: "description",
           component: "Input",
           inputType: "text",
-          sortable: 'custom'
+          sortable: 'custom',
+          render: (h, params) => {
+            let max_chars = 50
+            let content = params.row.description || ''
+            let cut_content = content
+            let bytes_length = content.replace(/[^\x00-\xff]/g, '**').length
+            if (bytes_length >= max_chars){
+              let chinese_count = content.match(/[^\x00-\xff]/g) ? content.match(/[^\x00-\xff]/g).length : 0
+              cut_content = content.substring(0, max_chars - Math.min(Math.ceil(chinese_count/2), max_chars/2)) + '...'
+            }
+            return (
+              <span title={content}>{cut_content}</span>
+            )
+          }
         },
         {
           title: this.$t("action"),
@@ -241,7 +267,6 @@ export default {
       const over = (new Date(overTime.replace(new RegExp("-","gm"),"/"))).getTime()
       const current = new Date().getTime()
       const step = (over - report) / 3
-      console.log(report ,step, step * 2, over - report)
       if (over < current) {
         return '#ed4014'
       }
