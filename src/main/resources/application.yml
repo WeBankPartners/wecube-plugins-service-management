@@ -39,6 +39,7 @@ service:
     s3-default-bucket: service-mgmt 
     system-code: SYS_SRV_MGMT
     jwt-signing-key: ${JWT_SIGNING_KEY:}
+    property-encrypt-key-path: ${PROPERTY_ENCRYPT_KEY_PATH:/data/certs/rsa_key}
 
 logging:
   level:
