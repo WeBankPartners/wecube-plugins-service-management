@@ -3,6 +3,9 @@ package com.webank.servicemanagement.controller;
 import static com.webank.servicemanagement.dto.JsonResponse.okay;
 import static com.webank.servicemanagement.dto.JsonResponse.okayWithData;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +45,13 @@ public class ServiceRequestController {
     public JsonResponse createServiceRequest(@RequestBody CreateServiceRequestRequest request) throws Exception {
         serviceRequestService.createNewServiceRequest(request);
         return okay();
+    }
+    
+    //#162
+    @GetMapping("/serive-requests/service-templates/{service-template-id}/root-entities")
+    public JsonResponse queryTemplateRootEntities(@PathVariable(value = "service-template-id") String serviceRequestTemplateId){
+        List<Map<String, Object>>  rootEntityMaps = serviceRequestService.queryTemplateRootEntities(serviceRequestTemplateId);
+        return okayWithData(rootEntityMaps);
     }
 
     @PostMapping("/query")

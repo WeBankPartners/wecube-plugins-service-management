@@ -116,6 +116,7 @@
                     <parameter datatype="string" mappingType="constant" required="Y">roleName</parameter>
                     <parameter datatype="string" mappingType="constant" required="N">reporter</parameter>
                     <parameter datatype="string" mappingType="constant" required="N">taskDescription</parameter>
+                    <parameter datatype="string" mappingType="context" required="Y">procInstId</parameter>
                 </inputParameters>
                 <outputParameters>
                      <parameter datatype="string" mappingType="context">errorCode</parameter>

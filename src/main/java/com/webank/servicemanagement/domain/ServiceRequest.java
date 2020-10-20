@@ -69,6 +69,14 @@ public class ServiceRequest {
     private String status = "active";
     @Column(name = "env_type")
     private String envType;
+    
+    //#162
+    @Column(name = "root_data_id")
+    private String rootDataId;
+    
+    //#162
+    @Column(name = "proc_inst_id")
+    private String procInstId;
 
     public String getId() {
         return id;
@@ -164,5 +172,29 @@ public class ServiceRequest {
 
     public void setRequestNo(long requestNo) {
         this.requestNo = requestNo;
+    }
+
+    public String getReportRole() {
+        return reportRole;
+    }
+
+    public void setReportRole(String reportRole) {
+        this.reportRole = reportRole;
+    }
+
+    public String getRootDataId() {
+        return rootDataId;
+    }
+
+    public void setRootDataId(String rootDataId) {
+        this.rootDataId = rootDataId;
+    }
+
+    public String getProcInstId() {
+        return procInstId;
+    }
+
+    public void setProcInstId(String procInstId) {
+        this.procInstId = procInstId;
     }
 }

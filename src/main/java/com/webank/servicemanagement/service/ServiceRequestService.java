@@ -64,6 +64,11 @@ public class ServiceRequestService {
     private final static String STATUS_PROCESSING = "Processing";
     private final static String STATUS_DONE = "Done";
     private final static String IS_NOTIFY_REQUIRED = "Y";
+    
+    public List<Map<String, Object>> queryTemplateRootEntities(String serviceRequestTemplateId){
+        //TODO
+        return null;
+    }
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         if(StringUtils.isBlank(request.getEnvType())){

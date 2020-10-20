@@ -19,6 +19,7 @@ import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
+import com.webank.servicemanagement.dto.TaskPreviewDto;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowJsonResponse;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
@@ -69,5 +70,12 @@ public class TaskController {
     @PostMapping("/query")
     public JsonResponse queryTask(@RequestBody QueryRequest queryRequest) throws Exception {
         return okayWithData(taskService.queryTask(queryRequest));
+    }
+
+    // #162
+    @GetMapping("/{task-id}/preprocess")
+    public JsonResponse preprocessTask(@PathVariable(value = "task-id") String taskId) {
+        TaskPreviewDto taskPreview = taskService.preprocess(taskId);
+        return okayWithData(taskPreview);
     }
 }
