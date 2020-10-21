@@ -8,6 +8,9 @@ public class CreateServiceRequestRequest {
     private String emergency;
     private String description;
     private String envType;
+    
+    //#162
+    private String rootDataId;
 
     public String getTemplateId() {
         return templateId;
@@ -64,4 +67,14 @@ public class CreateServiceRequestRequest {
     public void setEnvType(String envType) {
         this.envType = envType;
     }
+
+    public String getRootDataId() {
+        return rootDataId;
+    }
+
+    public void setRootDataId(String rootDataId) {
+        this.rootDataId = rootDataId;
+    }
+    
+    
 }

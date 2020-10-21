@@ -62,6 +62,7 @@ public class ServiceRequestTemplateService {
         ServiceRequestTemplate serviceRequestTemplate = new ServiceRequestTemplate(servicePipelineOptional.get(),
                 createServiceRequestTemplateRequest.getName(), createServiceRequestTemplateRequest.getDescription(),
                 createServiceRequestTemplateRequest.getProcDefKey(), AVAILABLE_STATU_STRING);
+        serviceRequestTemplate.setProcDefName(createServiceRequestTemplateRequest.getProcDefName());
 
         serviceRequestTemplateRepository.save(serviceRequestTemplate);
     }

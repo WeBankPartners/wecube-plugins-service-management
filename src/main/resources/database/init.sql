@@ -93,3 +93,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 ALTER TABLE `task` ADD COLUMN `over_time` DATETIME NULL DEFAULT NULL;
 ALTER TABLE `task` ADD COLUMN `due_date` VARCHAR(32) NULL DEFAULT NULL ;
 #@v0.5.1.11-end@;
+
+#@v0.6.3.0-begin@;
+ALTER TABLE `service_request` ADD COLUMN `root_data_id` VARCHAR(255) NULL DEFAULT NULL;
+ALTER TABLE `service_request` ADD COLUMN `proc_inst_id` VARCHAR(255) NULL DEFAULT NULL;
+ALTER TABLE `service_request_template` ADD COLUMN `proc_def_name` VARCHAR(255) NULL DEFAULT NULL;
+#@v0.6.3.0-end@;
