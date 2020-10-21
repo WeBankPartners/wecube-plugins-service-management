@@ -127,6 +127,8 @@ public class ServiceRequestService {
         try {
             //#162 proc inst id
             Object result = coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            
+            log.info("result type:{}", result.getClass().getName());
             if(result instanceof OperationEventResultDto) {
                 OperationEventResultDto eventDto = (OperationEventResultDto)result;
                 serviceRequest.setProcInstId(eventDto.getProcInstId());
