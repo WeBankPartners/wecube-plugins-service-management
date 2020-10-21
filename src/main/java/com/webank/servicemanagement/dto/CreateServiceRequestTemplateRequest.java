@@ -5,6 +5,9 @@ public class CreateServiceRequestTemplateRequest {
 	private String description;
 	private String servicePipelineId;
 	private String procDefKey;
+	
+	//#162
+	private String procDefName;
 
 	public String getName() {
 		return name;
@@ -37,4 +40,14 @@ public class CreateServiceRequestTemplateRequest {
 	public void setProcDefKey(String procDefKey) {
 		this.procDefKey = procDefKey;
 	}
+
+    public String getProcDefName() {
+        return procDefName;
+    }
+
+    public void setProcDefName(String procDefName) {
+        this.procDefName = procDefName;
+    }
+	
+	
 }
