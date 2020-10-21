@@ -111,6 +111,8 @@ public class ServiceRequestService {
         ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
                 request.getName(), currentUserName, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED,
                 attachFileId, request.getEnvType(), request.getRoleName()));
+        //
+        serviceRequest.setRootDataId(request.getRootDataId());
 
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),

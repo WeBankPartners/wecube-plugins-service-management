@@ -48,7 +48,7 @@ public class ServiceRequestController {
     }
     
     //#162
-    @GetMapping("/serive-requests/service-templates/{service-template-id}/root-entities")
+    @GetMapping("/service-templates/{service-template-id}/root-entities")
     public JsonResponse queryTemplateRootEntities(@PathVariable(value = "service-template-id") String serviceRequestTemplateId){
         List<Map<String, Object>>  rootEntityMaps = serviceRequestService.queryTemplateRootEntities(serviceRequestTemplateId);
         return okayWithData(rootEntityMaps);

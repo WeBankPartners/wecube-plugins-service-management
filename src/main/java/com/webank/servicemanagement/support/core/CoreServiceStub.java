@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
+import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CoreProcessDefinitionDto;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.DefaultCoreResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllProcessKeysResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllRolesResponse;
-import com.webank.servicemanagement.support.core.dto.CoreResponse.GetRootEntitiesResponse;
 import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
 
@@ -35,8 +35,8 @@ public class CoreServiceStub {
     
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> getRootEntitiesByProcDefKey(String procDefKey){
-        GetRootEntitiesResponse response = template.get(asCoreUrl(GET_ROOT_ENTITIES, procDefKey), GetRootEntitiesResponse.class);
-        return (List<Map<String, Object>>)response.getData();
+        Object responseData = template.get(asCoreUrl(GET_ROOT_ENTITIES, procDefKey), JsonResponse.class);
+        return (List<Map<String, Object>>)responseData;
     }
 
     public List<RolesDataResponse> getAllRoles() {
