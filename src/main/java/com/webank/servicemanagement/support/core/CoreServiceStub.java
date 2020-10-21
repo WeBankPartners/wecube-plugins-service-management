@@ -49,8 +49,8 @@ public class CoreServiceStub {
         return template.get(asCoreUrl(GET_ROLES_BY_USER_NAME, userName), GetAllRolesResponse.class);
     }
 
-    public OperationEventResultDto reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
-        OperationEventResultDto result = template.postForResponse(asCoreUrl(REPORT_OPERATION_EVENTS), reportServiceRequest, OperationEventResultResponse.class);
+    public Object reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
+        Object result = template.postForResponse(asCoreUrl(REPORT_OPERATION_EVENTS), reportServiceRequest, OperationEventResultResponse.class);
         return result;
     }
 
