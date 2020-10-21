@@ -2,27 +2,28 @@ package com.webank.servicemanagement.support.core;
 
 import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.support.RemoteCallException;
+import com.webank.servicemanagement.support.core.dto.CoreResponse;
 
 public class CoreRemoteCallException extends RemoteCallException {
 
     private static final long serialVersionUID = 1L;
-    private transient JsonResponse jsonResponse;
+    private transient CoreResponse jsonResponse;
 
     public CoreRemoteCallException(String message) {
         super(message);
     }
 
-    public CoreRemoteCallException(String message, JsonResponse cmdbResponse) {
+    public CoreRemoteCallException(String message, CoreResponse cmdbResponse) {
         super(message);
         this.jsonResponse = cmdbResponse;
     }
 
-    public CoreRemoteCallException(String message, JsonResponse cmdbResponse, Throwable cause) {
+    public CoreRemoteCallException(String message, CoreResponse cmdbResponse, Throwable cause) {
         super(message, cause);
         this.jsonResponse = cmdbResponse;
     }
 
-    public JsonResponse getCmdbResponse() {
+    public CoreResponse getCmdbResponse() {
         return jsonResponse;
     }
 
@@ -36,7 +37,7 @@ public class CoreRemoteCallException extends RemoteCallException {
         return jsonResponse == null ? null : jsonResponse.getData();
     }
 
-    private String getStatusCode(JsonResponse jsonResponse) {
+    private String getStatusCode(CoreResponse jsonResponse) {
         return jsonResponse == null ? null : jsonResponse.getStatus();
     }
 }

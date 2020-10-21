@@ -2,10 +2,9 @@ package com.webank.servicemanagement.support.core.dto;
 
 import java.util.List;
 
-import com.webank.servicemanagement.dto.JsonResponse;
 import com.webank.servicemanagement.dto.OperationEventResultDto;
 
-public class CoreResponse<DATATYPE> extends JsonResponse {
+public class CoreResponse<DATATYPE> {
 
     private String status;
     private String message;
@@ -28,6 +27,9 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
     }
 
     public static class GetAllRolesResponse extends CoreResponse<List<RolesDataResponse>> {
+    }
+    
+    public static class GetRootEntitiesResponse extends CoreResponse<Object> {
     }
     
     public static class GetAllProcessKeysResponse extends CoreResponse<List<CoreProcessDefinitionDto>> {
