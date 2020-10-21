@@ -27,6 +27,7 @@ import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
+import com.webank.servicemanagement.dto.OperationEventResultDto;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.ServiceRequestDto;
@@ -64,6 +65,7 @@ public class ServiceRequestService {
     private final static String STATUS_PROCESSING = "Processing";
     private final static String STATUS_DONE = "Done";
     private final static String IS_NOTIFY_REQUIRED = "Y";
+    public static final String OPER_MODE_INSTANT = "instant";
     
     public List<Map<String, Object>> queryTemplateRootEntities(String serviceRequestTemplateId){
         if(StringUtils.isBlank(serviceRequestTemplateId)){
@@ -114,14 +116,18 @@ public class ServiceRequestService {
         //
         serviceRequest.setRootDataId(request.getRootDataId());
 
+        //#162 root entity data
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
-                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), IS_NOTIFY_REQUIRED,
+                serviceRequestTemplate.getProcessDefinitionKey(), request.getRootDataId(), IS_NOTIFY_REQUIRED,
                 ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
                 DateUtils.formatDateToString(serviceRequest.getReportTime()), serviceRequest.getEnvType());
 
+        reportServiceRequest.setOperationMode(OPER_MODE_INSTANT);
         try {
-            coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            //#162 proc inst id
+            OperationEventResultDto result = coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            serviceRequest.setProcInstId(result.getProcInstId());
         } catch (Exception e) {
             serviceRequest.setStatus(STATUS_DONE);
             serviceRequest.setResult("Report to Core Error: " + e.getMessage());

@@ -12,6 +12,9 @@ public class ReportServiceRequest {
     private String reportTime;
     private String envType;
 
+    // #162
+    private String operationMode;
+
     public ReportServiceRequest() {
         super();
     }
@@ -112,12 +115,41 @@ public class ReportServiceRequest {
         this.envType = envType;
     }
 
+    public String getOperationMode() {
+        return operationMode;
+    }
+
+    public void setOperationMode(String operationMode) {
+        this.operationMode = operationMode;
+    }
+
     @Override
     public String toString() {
-        return "ReportServiceRequest [eventSeqNo=" + eventSeqNo + ", eventType=" + eventType + ", sourceSubSystem="
-                + sourceSubSystem + ", operationKey=" + operationKey + ", operationData=" + operationData
-                + ", notifyRequired=" + notifyRequired + ", notifyEndpoint=" + notifyEndpoint + ", operationUser="
-                + operationUser + ", reportTime=" + reportTime + ", envType=" + envType + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("ReportServiceRequest [eventSeqNo=");
+        builder.append(eventSeqNo);
+        builder.append(", eventType=");
+        builder.append(eventType);
+        builder.append(", sourceSubSystem=");
+        builder.append(sourceSubSystem);
+        builder.append(", operationKey=");
+        builder.append(operationKey);
+        builder.append(", operationData=");
+        builder.append(operationData);
+        builder.append(", notifyRequired=");
+        builder.append(notifyRequired);
+        builder.append(", notifyEndpoint=");
+        builder.append(notifyEndpoint);
+        builder.append(", operationUser=");
+        builder.append(operationUser);
+        builder.append(", reportTime=");
+        builder.append(reportTime);
+        builder.append(", envType=");
+        builder.append(envType);
+        builder.append(", operationMode=");
+        builder.append(operationMode);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

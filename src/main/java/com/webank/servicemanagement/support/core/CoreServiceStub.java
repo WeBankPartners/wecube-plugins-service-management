@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.webank.servicemanagement.commons.AppProperties.ServiceManagementProperties;
 import com.webank.servicemanagement.dto.JsonResponse;
+import com.webank.servicemanagement.dto.OperationEventResultDto;
 import com.webank.servicemanagement.support.core.dto.CallbackRequestDto;
 import com.webank.servicemanagement.support.core.dto.CoreProcessDefinitionDto;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.DefaultCoreResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllProcessKeysResponse;
 import com.webank.servicemanagement.support.core.dto.CoreResponse.GetAllRolesResponse;
+import com.webank.servicemanagement.support.core.dto.CoreResponse.OperationEventResultResponse;
 import com.webank.servicemanagement.support.core.dto.ReportServiceRequest;
 import com.webank.servicemanagement.support.core.dto.RolesDataResponse;
 
@@ -47,8 +49,9 @@ public class CoreServiceStub {
         return template.get(asCoreUrl(GET_ROLES_BY_USER_NAME, userName), GetAllRolesResponse.class);
     }
 
-    public void reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
-        template.postForResponse(asCoreUrl(REPORT_OPERATION_EVENTS), reportServiceRequest, DefaultCoreResponse.class);
+    public OperationEventResultDto reportOperationEventsToCore(ReportServiceRequest reportServiceRequest) {
+        OperationEventResultDto result = template.postForResponse(asCoreUrl(REPORT_OPERATION_EVENTS), reportServiceRequest, OperationEventResultResponse.class);
+        return result;
     }
 
     public Object callback(String callbackUrl, CallbackRequestDto callbackRequest) {

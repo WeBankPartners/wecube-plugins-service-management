@@ -3,6 +3,7 @@ package com.webank.servicemanagement.support.core.dto;
 import java.util.List;
 
 import com.webank.servicemanagement.dto.JsonResponse;
+import com.webank.servicemanagement.dto.OperationEventResultDto;
 
 public class CoreResponse<DATATYPE> extends JsonResponse {
 
@@ -11,6 +12,10 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
     private DATATYPE data;
 
     public static class DefaultCoreResponse extends CoreResponse<Object> {
+    }
+    
+    public static class OperationEventResultResponse extends CoreResponse<OperationEventResultDto>{
+        
     }
 
     public static class IntegerCoreResponse extends CoreResponse<Integer> {
