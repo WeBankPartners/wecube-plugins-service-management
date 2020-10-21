@@ -3,7 +3,7 @@
     "less_filter": "更少条件", 
     "search": "搜索", 
     "reset": "重置",
-    "template_definition": "模板定义",
+    "template_definition": "模板管理",
     "template_attribute": "模板属性",
     "delete_attribute": "删除属性",
     "attribute_name": "属性名称",
@@ -56,5 +56,6 @@
     "receive": "领取",
     "deal_with": "处理",
     "add": "新增",
-    "over_time": "过期时间"
+    "over_time": "过期时间",
+    "target_object": "目标对象"
 }

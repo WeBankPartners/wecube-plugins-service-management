@@ -28,8 +28,13 @@
       <div style="width:600px;margin:0 auto;">
         <Form ref="requestForm" :rules="ruleValidate" :model="requestForm" :label-width="110">
           <FormItem :label="$t('template')">
-            <Select @on-open-change="getTemplates" v-model="requestForm.templateId">
+            <Select @on-open-change="getTemplates" @on-change="templateChanged" v-model="requestForm.templateId">
               <Option v-for="tem in allTemplates" :key="tem.id" :value="tem.id">{{tem.name}}</Option>
+            </Select>
+          </FormItem>
+          <FormItem :label="$t('target_object')">
+            <Select @on-open-change="getEntityDataByTemplateId" v-model="requestForm.rootDataId">
+              <Option v-for="tem in entityData" :key="tem.guid" :value="tem.guid">{{tem.displayName}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('service_request_name')" prop="name">
@@ -89,7 +94,8 @@ import {
   updateServiceRequest,
   getAllAvailableServiceTemplate,
   queryMyTask,
-  getCurrentUserRoles
+  getCurrentUserRoles,
+  getEntityDataByTemplateId
 } from "../api/server";
 
 export default {
@@ -111,6 +117,7 @@ export default {
       },
       currentUserRoles: [],
       allTemplates: [],
+      entityData: [],
       requestForm: {
         name: "",
         emergency: "",
@@ -118,6 +125,7 @@ export default {
         attachFileId: null,
         templateId:'',
         roleName:'',
+        rootDataId: ''
       },
       requestModalVisible: false,
       currentTab: "requset",
@@ -327,7 +335,19 @@ export default {
     requestModalHide() {
       this.requestModalVisible = false;
     },
-    
+    templateChanged (v) {
+      this.entityData = []
+      this.requestForm.rootDataId = ""
+    },
+    async getEntityDataByTemplateId (v) {
+      if (v && this.requestForm.templateId && this.requestForm.templateId.length > 0) {
+        const { data, status } = await getEntityDataByTemplateId(this.requestForm.templateId)
+        this.entityData = []
+        if (status === "OK") {
+          this.entityData = data
+        }
+      }
+    },
     requestCancel() {
       this.requestModalVisible = false;
       this.requestForm.name = "";
@@ -335,6 +355,7 @@ export default {
       this.requestForm.description = "";
       this.requestForm.templateId = "";
       this.requestForm.roleId = "";
+      this.requestForm.rootDataId = "";
     },
     requestSubmit() {
       this.$refs.requestForm.validate(async valid => {
