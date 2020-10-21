@@ -66,8 +66,25 @@ public class ServiceRequestService {
     private final static String IS_NOTIFY_REQUIRED = "Y";
     
     public List<Map<String, Object>> queryTemplateRootEntities(String serviceRequestTemplateId){
-        //TODO
-        return null;
+        if(StringUtils.isBlank(serviceRequestTemplateId)){
+            throw new ServiceMgmtException("Template ID cannot be empty.");
+        }
+        
+        Optional<ServiceRequestTemplate> templateOpt = serviceRequestTemplateRepository.findById(serviceRequestTemplateId);
+        if(!templateOpt.isPresent()){
+            throw new ServiceMgmtException("Such template ID is not available.");
+        }
+        
+        ServiceRequestTemplate templateEntity = templateOpt.get();
+        String processDefinitionKey = templateEntity.getProcessDefinitionKey();
+        if(StringUtils.isBlank(processDefinitionKey)){
+            throw new ServiceMgmtException("Such template ID is not available.");
+        }
+        return queryRootEntitiesFromPlatformByProcessDefKey(processDefinitionKey);
+    }
+    
+    private List<Map<String, Object>> queryRootEntitiesFromPlatformByProcessDefKey(String processDefinitionKey){
+        return coreServiceStub.getRootEntitiesByProcDefKey(processDefinitionKey);
     }
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {

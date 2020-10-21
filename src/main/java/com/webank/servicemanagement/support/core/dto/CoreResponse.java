@@ -24,6 +24,10 @@ public class CoreResponse<DATATYPE> extends JsonResponse {
 
     public static class GetAllRolesResponse extends CoreResponse<List<RolesDataResponse>> {
     }
+    
+    public static class GetRootEntitiesResponse extends CoreResponse<Object> {
+        
+    }
 
     public static class GetAllProcessKeysResponse extends CoreResponse<List<CoreProcessDefinitionDto>> {
         @Override
