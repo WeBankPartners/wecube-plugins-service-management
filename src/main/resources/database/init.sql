@@ -98,4 +98,5 @@ ALTER TABLE `task` ADD COLUMN `due_date` VARCHAR(32) NULL DEFAULT NULL ;
 ALTER TABLE `service_request` ADD COLUMN `root_data_id` VARCHAR(255) NULL DEFAULT NULL;
 ALTER TABLE `service_request` ADD COLUMN `proc_inst_id` VARCHAR(255) NULL DEFAULT NULL;
 ALTER TABLE `service_request_template` ADD COLUMN `proc_def_name` VARCHAR(255) NULL DEFAULT NULL;
+ALTER TABLE `task` modify service_request_id varchar(32);
 #@v0.6.3.0-end@;

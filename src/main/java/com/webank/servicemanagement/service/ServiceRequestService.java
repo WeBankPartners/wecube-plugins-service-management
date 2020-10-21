@@ -126,9 +126,19 @@ public class ServiceRequestService {
         reportServiceRequest.setOperationMode(OPER_MODE_INSTANT);
         try {
             //#162 proc inst id
-            OperationEventResultDto result = coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
-            serviceRequest.setProcInstId(result.getProcInstId());
+            Object result = coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            
+            log.info("result type:{}", result.getClass().getName());
+            if(result instanceof OperationEventResultDto) {
+                OperationEventResultDto eventDto = (OperationEventResultDto)result;
+                serviceRequest.setProcInstId(eventDto.getProcInstId());
+            }else if(result instanceof Map) {
+                Map<String, Object> resultMap = (Map<String, Object>)result;
+                String procInstId = (String) resultMap.get("procInstId");
+                serviceRequest.setProcInstId(procInstId);
+            }
         } catch (Exception e) {
+            log.error("errors while reporting operation event", e);
             serviceRequest.setStatus(STATUS_DONE);
             serviceRequest.setResult("Report to Core Error: " + e.getMessage());
             serviceRequestRepository.save(serviceRequest);
