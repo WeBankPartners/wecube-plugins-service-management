@@ -120,8 +120,8 @@ public class TaskService {
         taskDto.setTaskId(task.getId());
         taskDto.setTaskName(task.getName());
         taskPreviewResultDto.setTask(taskDto);
-        //TODO
-        return new TaskPreviewDto();
+        
+        return taskPreviewResultDto;
     }
 
     @SuppressWarnings("rawtypes")
