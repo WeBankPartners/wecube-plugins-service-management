@@ -8,6 +8,9 @@ public class CreateTaskRequestInputDto {
     private String callbackParameter;
     private String reporter;
     private Integer overTime;
+    
+    //#162
+    private String procInstId;
 
     public String getCallbackUrl() {
         return callbackUrl;
@@ -60,4 +63,14 @@ public class CreateTaskRequestInputDto {
     public Integer getOverTime() { return overTime;}
 
     public void setOverTime(Integer overTime) { this.overTime = overTime; }
+
+    public String getProcInstId() {
+        return procInstId;
+    }
+
+    public void setProcInstId(String procInstId) {
+        this.procInstId = procInstId;
+    }
+    
+    
 }
