@@ -104,7 +104,7 @@
       </Card>
       <br />
       <List border>
-        <ListItem v-for="task in processData.otherTask" :key="task.taskId">
+        <ListItem v-for="task in processData.otherTasks" :key="task.taskId">
           <span style="margin-right: 25px">
             <strong>
               {{$t("task_name")}}:
