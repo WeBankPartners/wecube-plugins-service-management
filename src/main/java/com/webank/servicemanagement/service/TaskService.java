@@ -86,7 +86,7 @@ public class TaskService {
 
                     @Override
                     public int compare(Task o1, Task o2) {
-                        return o1.getOperateTime().compareTo(o2.getOperateTime());
+                        return o1.getReportTime().compareTo(o2.getReportTime());
                     }
                     
                 });
@@ -153,7 +153,8 @@ public class TaskService {
                 serviceRequest = serviceRequests.get(0);
             }
             task.setServiceRequest(serviceRequest);
-            Task savedTask = taskRepository.save(task);
+            task.setOperateTime(new Date());
+            Task savedTask = taskRepository.saveAndFlush(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
             savedTasks.add(taskResult);
@@ -180,7 +181,7 @@ public class TaskService {
         task = taskResult.get();
         task.setOperator(operator);
         task.setStatus(STATUS_PROCESSING);
-        taskRepository.save(task);
+        taskRepository.saveAndFlush(task);
     }
 
     public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {

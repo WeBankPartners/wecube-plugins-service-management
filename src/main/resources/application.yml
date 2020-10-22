@@ -36,7 +36,7 @@ service:
     s3-endpoint: http://127.0.0.1:9000
     s3-access-key: access_key
     s3-secret-key: secret_key
-    s3-default-bucket: service-mgmt 
+    s3-default-bucket: ${MGMT_S3_DEFAULT_BUCKET:service-mgmt}
     system-code: SYS_SRV_MGMT
     jwt-signing-key: ${JWT_SIGNING_KEY:}
     property-encrypt-key-path: ${PROPERTY_ENCRYPT_KEY_PATH:/data/certs/rsa_key}
