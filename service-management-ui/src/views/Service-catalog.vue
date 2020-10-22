@@ -2,7 +2,18 @@
   <div>
     <Tabs type="card" :value="currentTab" closable @on-click="handleTabClick">
       <TabPane :closable="false" name="templateDefinition" :label="$t('template_definition')">
-        <Card style="width:600px;margin:0 auto;">
+        <div style="margin-bottom:10px;">
+          <Button type="success" @click="addTemplateHandler">{{$t('add')}}</Button>
+        </div>
+        <Table border :data="temData" :columns="temColumns"></Table>
+        <Modal 
+          v-model="addTemplateVisible"
+          :title="$t('add')"
+          footer-hide
+          width="50"
+          @on-cancel="addTemplateModalHide"
+        >
+          <Card style="width:600px;margin:0 auto;">
           <Row slot="title">
             <Col span="18">
               <p>{{$t('template_attribute')}}</p>
@@ -78,10 +89,10 @@
             </Select>
           </FormItem>
           <FormItem :label="$t('process')" prop="attrName">
-            <Select @on-open-change="getAllProcessDefinitionKeys" v-model="form.procDefKey">
+            <Select @on-open-change="getAllProcessDefinitionKeys" @on-change="processChanged" v-model="form.procDefKey">
               <Option
                 v-for="process in allProcessDefinitionKeys"
-                :key="process.procDefKey"
+                :key="process.procDefId"
                 :value="process.procDefKey"
               >{{process.procDefName}}</Option>
             </Select>
@@ -93,6 +104,8 @@
         <div style="margin:30px auto;text-align:center">
           <Button type="primary" @click="createServiceRequestTemplate">{{$t('submit')}}</Button>
         </div>
+        </Modal>
+        
       </TabPane>
       <TabPane :closable="false" name="serviceCatalog" :label="$t('service_directory_mgmt')">
         <Card style="width:900px;margin:0 auto;">
@@ -207,13 +220,38 @@ import {
   createServiceRequestTemplate,
   createServiceCatalogue,
   createServicePipeline,
-  getAllRoles
+  getAllRoles,
+  getAllAvailableServiceTemplate
 } from "../api/server";
 
 export default {
   name: "home",
   data() {
     return {
+      addTemplateVisible: false,
+      temData: [],
+      temColumns: [
+        {
+          title: this.$t("template_name"),
+          key: "name",
+        },
+        {
+          title: this.$t("service_directory"),
+          key: "serviceCatalogue",
+        },
+        {
+          title: this.$t("service_channel"),
+          key: "pipeline",
+        },
+        {
+          title: this.$t("process"),
+          key: "procDefName",
+        },
+        {
+          title: this.$t("status"),
+          key: "status",
+        }
+      ],
       currentTab: "templateDefinition",
       templateAttrs: [
         {
@@ -287,11 +325,25 @@ export default {
         name: "",
         description: "",
         procDefKey: "",
-        servicePipelineId: ""
+        servicePipelineId: "",
+        procDefName: ""
       }
     };
   },
   methods: {
+    addTemplateHandler () {
+      this.addTemplateVisible = true
+    },
+    addTemplateModalHide () {
+      this.addTemplateVisible = false
+      this.form = {
+        name: "",
+        description: "",
+        procDefKey: "",
+        servicePipelineId: "",
+        procDefName: ""
+      }
+    },
     handleTabClick() {},
     deleteAttr() {},
     addAttr() {},
@@ -337,6 +389,11 @@ export default {
         this.getPipelineByCatalogueId([this.currentCatalog])
       }
     },
+    processChanged (v) {
+      if (v) {
+        this.form.procDefName = this.allProcessDefinitionKeys.find(_ => _.procDefKey === v).procDefName
+      }
+    },
     async createServiceRequestTemplate() {
       const { data, status, message } = await createServiceRequestTemplate(
         this.form
@@ -346,8 +403,11 @@ export default {
           name: "",
           description: "",
           procDefKey: "",
-          servicePipelineId: ""
+          servicePipelineId: "",
+          procDefName: ""
         };
+        this.addTemplateModalHide()
+        this.getAllAvailableServiceTemplate()
       }
     },
     async getAllProcessDefinitionKeys() {
@@ -394,11 +454,24 @@ export default {
         this.allRoles = data
       }
     },
+    async getAllAvailableServiceTemplate () {
+      const { data, status } = await getAllAvailableServiceTemplate()
+      if(status === 'OK') {
+        this.temData = data.map(_ => {
+          return {
+            ..._,
+            serviceCatalogue: _.servicePipeline.serviceCatalogue.name,
+            pipeline: _.servicePipeline.name
+          }
+        })
+      }
+    }
   },
   mounted() {
     this.getAllProcessDefinitionKeys();
     this.getAllAvailableServiceCatalogues();
     this.getAllRoles()
+    this.getAllAvailableServiceTemplate()
   }
 };
 </script>

@@ -82,6 +82,15 @@ public class AppProperties {
         private String s3DefaultBucket = "";
         private String systemCode = "";
         private String jwtSigningKey = "Platform+Auth+Server+Secret";
+        private String propertyEncryptKeyPath;
+
+        public String getPropertyEncryptKeyPath() {
+            return propertyEncryptKeyPath;
+        }
+
+        public void setPropertyEncryptKeyPath(String propertyEncryptKeyPath) {
+            this.propertyEncryptKeyPath = propertyEncryptKeyPath;
+        }
 
         public String getWecubeCoreAddress() {
             return wecubeCoreAddress;

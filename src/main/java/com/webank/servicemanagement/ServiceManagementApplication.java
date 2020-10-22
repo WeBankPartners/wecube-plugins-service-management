@@ -4,10 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import com.webank.servicemanagement.config.SpringAppConfig;
 import com.webank.servicemanagement.config.SpringWebConfig;
 
 @SpringBootApplication
+@EnableEncryptableProperties
 public class ServiceManagementApplication extends AbstractAnnotationConfigDispatcherServletInitializer{
 
 	public static void main(String[] args) {

@@ -17,8 +17,8 @@ export const createServiceRequestTemplate = data => request.post(`/service-mgmt/
 export const createServiceCatalogue = data => request.post(`/service-mgmt/v1/service-catalogues`, data);
 export const createServicePipeline = data => request.post(`/service-mgmt/v1/service-pipelines`, data);
 export const getAllRoles = () => request.get(`/service-mgmt/v1/core-resources/roles`);
-
-
+export const getEntityDataByTemplateId = id => request.get(`/service-mgmt/v1/service-requests/service-templates/${id}/root-entities`);
+export const getPreprocessDataByTaskId = id => request.get(`/service-mgmt/v1/tasks/${id}/preprocess`);
 
 
 
