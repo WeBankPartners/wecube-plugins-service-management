@@ -86,7 +86,7 @@ public class TaskService {
 
                     @Override
                     public int compare(Task o1, Task o2) {
-                        return o1.getOperateTime().compareTo(o2.getOperateTime());
+                        return o1.getReportTime().compareTo(o2.getReportTime());
                     }
                     
                 });
