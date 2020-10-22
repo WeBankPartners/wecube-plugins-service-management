@@ -28,12 +28,12 @@
       <div style="width:600px;margin:0 auto;">
         <Form ref="requestForm" :rules="ruleValidate" :model="requestForm" :label-width="110">
           <FormItem :label="$t('template')">
-            <Select @on-open-change="getTemplates" @on-change="templateChanged" v-model="requestForm.templateId">
+            <Select filterable @on-open-change="getTemplates" @on-change="templateChanged" v-model="requestForm.templateId">
               <Option v-for="tem in allTemplates" :key="tem.id" :value="tem.id">{{tem.name}}</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('target_object')">
-            <Select @on-open-change="getEntityDataByTemplateId" v-model="requestForm.rootDataId">
+            <Select filterable @on-open-change="getEntityDataByTemplateId" v-model="requestForm.rootDataId">
               <Option v-for="tem in entityData" :key="tem.guid" :value="tem.guid">{{tem.displayName}}</Option>
             </Select>
           </FormItem>
