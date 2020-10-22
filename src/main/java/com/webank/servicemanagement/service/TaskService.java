@@ -78,6 +78,7 @@ public class TaskService {
             taskPreviewResultDto.setRequestName(serviceRequest.getName());
             taskPreviewResultDto.setRequestNo(serviceRequest.getRequestNo());
             taskPreviewResultDto.setStatus(serviceRequest.getStatus());
+            taskPreviewResultDto.setReportTime(DateUtils.formatDateToString(serviceRequest.getReportTime()));
             
             List<Task> previousTasks = taskRepository.findAllByServiceRequestId(serviceRequest.getId());
             List<SimpleTaskDto> otherTasks = new ArrayList<>();
