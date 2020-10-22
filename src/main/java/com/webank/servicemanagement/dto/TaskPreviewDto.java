@@ -13,6 +13,7 @@ public class TaskPreviewDto {
     private String requestName;
     private String reportRole;
     private String reporter;
+    private String reportTime;
     private long requestNo;
     private String status;
     private List<SimpleTaskDto> otherTasks = new ArrayList<SimpleTaskDto>();
@@ -115,4 +116,11 @@ public class TaskPreviewDto {
         this.task = task;
     }
 
+    public String getReportTime() {
+        return reportTime;
+    }
+
+    public void setReportTime(String reportTime) {
+        this.reportTime = reportTime;
+    }
 }
