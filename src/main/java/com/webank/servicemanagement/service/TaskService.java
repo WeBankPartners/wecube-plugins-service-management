@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.commons.ServiceMgmtException;
+import com.webank.servicemanagement.domain.AttachFile;
 import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
+import com.webank.servicemanagement.dto.AttachFileDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
@@ -31,6 +33,7 @@ import com.webank.servicemanagement.dto.TaskDto;
 import com.webank.servicemanagement.dto.TaskPreviewDto;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
+import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
@@ -54,6 +57,9 @@ public class TaskService {
     EntityRepository entityRepository;
     @Autowired
     CoreServiceStub coreServiceStub;
+    
+    @Autowired
+    AttachFileRepository attachFileRepository;
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
@@ -109,6 +115,9 @@ public class TaskService {
                 }
             }
             
+            AttachFileDto attachFile = tryFindAttachFile(serviceRequest);
+            taskPreviewResultDto.setAttachFile(attachFile);
+            
             taskPreviewResultDto.setOtherTasks(otherTasks);
         }
         
@@ -123,6 +132,28 @@ public class TaskService {
         taskPreviewResultDto.setTask(taskDto);
         
         return taskPreviewResultDto;
+    }
+    
+    private AttachFileDto tryFindAttachFile(ServiceRequest serviceRequest) {
+        if(StringUtils.isBlank(serviceRequest.getAttachFileId())) {
+            return null;
+        }
+        
+        String attachFileId = serviceRequest.getAttachFileId();
+        Optional<AttachFile> attachFileOpt = attachFileRepository.findById(attachFileId);
+        if(!attachFileOpt.isPresent()) {
+            return null;
+        }
+        
+        AttachFile entity = attachFileOpt.get();
+        AttachFileDto dto = new AttachFileDto();
+        dto.setAttachFileName(entity.getAttachFileName());
+        dto.setFileUrl(entity.getS3Url());
+        dto.setId(entity.getId());
+        dto.setBucketName(entity.getS3BucketName());
+        dto.setKeyName(entity.getS3_KeyName());
+        
+        return dto;
     }
 
     @SuppressWarnings("rawtypes")
