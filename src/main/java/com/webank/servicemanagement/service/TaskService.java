@@ -147,7 +147,7 @@ public class TaskService {
         
         AttachFile entity = attachFileOpt.get();
         AttachFileDto dto = new AttachFileDto();
-        dto.setAttachFileName(entity.getAttachFileName());
+        dto.setFileName(entity.getAttachFileName());
         dto.setFileUrl(entity.getS3Url());
         dto.setId(entity.getId());
         dto.setBucketName(entity.getS3BucketName());
