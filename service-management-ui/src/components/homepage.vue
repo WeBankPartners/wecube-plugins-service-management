@@ -87,7 +87,7 @@
               </strong>
             </div>
             <div class="process-value">
-              <a :href="processData.attachFile ? processData.attachFile.fileUrl : ''">{{processData.attachFile ? processData.attachFile.fileName : ''}}</a>
+              <a target="_blank" :href="processData.attachFile ? processData.attachFile.fileUrl : ''">{{processData.attachFile ? processData.attachFile.fileName : ''}}</a>
             </div>
           </Col>
           <Col span="6">
