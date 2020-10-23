@@ -20,11 +20,16 @@ export default {
       form: {},
       selectedRows: [],
       data: [],
-      isShowHiddenFilters: false
+      isShowHiddenFilters: false,
+      timer: null
     };
   },
   mounted() {
-
+    this.timer = setInterval(this.handleSubmit("form"), 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer  = null;
   },
   watch: {
     tableColumns: {
