@@ -25,7 +25,7 @@ export default {
     };
   },
   mounted() {
-    this.timer = setInterval(this.handleSubmit("form"), 60000);
+    this.timer = setInterval(() => {this.handleSubmit("form")}, 60000);
   },
   beforeDestroy() {
     clearInterval(this.timer);
