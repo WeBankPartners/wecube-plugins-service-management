@@ -4,6 +4,9 @@ public class AttachFileDto {
     private String id;
     private String attachFileName;
     private String fileUrl;
+    private String bucketName;
+    private String keyName;
+    
 
     public String getId() {
         return id;
@@ -29,4 +32,21 @@ public class AttachFileDto {
         this.fileUrl = fileUrl;
     }
 
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+    }
+
+    public String getKeyName() {
+        return keyName;
+    }
+
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
+
+    
 }
