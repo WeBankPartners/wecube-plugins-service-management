@@ -173,9 +173,9 @@ public class ServiceRequestService {
         }
 
         String fileExtension = FilenameUtils.getExtension(attachFile.getOriginalFilename());
-        if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
-            throw new ServiceMgmtException("3009", "Only support Excel file");
-        }
+//        if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
+//            throw new ServiceMgmtException("3009", "Only support Excel file");
+//        }
 
         String tmpFileName = String.valueOf(System.currentTimeMillis());
         File tempUploadFile = new File(SystemUtils.getTempFolderPath() + tmpFileName);

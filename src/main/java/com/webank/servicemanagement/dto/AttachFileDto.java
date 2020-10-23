@@ -2,7 +2,7 @@ package com.webank.servicemanagement.dto;
 
 public class AttachFileDto {
     private String id;
-    private String attachFileName;
+    private String fileName;
     private String fileUrl;
     private String bucketName;
     private String keyName;
@@ -16,12 +16,12 @@ public class AttachFileDto {
         this.id = id;
     }
 
-    public String getAttachFileName() {
-        return attachFileName;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setAttachFileName(String attachFileName) {
-        this.attachFileName = attachFileName;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getFileUrl() {
