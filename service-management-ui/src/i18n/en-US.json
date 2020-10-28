@@ -37,6 +37,8 @@
     "template": "Template",
     "service_request_name": "Name",
     "service_request_role": "Role",
+    "service_request_data": "Request",
+    "task_data": "Task",
     "emergency": "Urgent",
     "not_urgent": "Normal",
     "reqest_attachment": "Attachment",

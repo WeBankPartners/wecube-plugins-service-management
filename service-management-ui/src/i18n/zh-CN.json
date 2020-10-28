@@ -37,6 +37,8 @@
     "template": "模板",
     "service_request_name": "服务请求名称",
     "service_request_role": "服务请求角色",
+    "service_request_data": "服务请求信息",
+    "task_data": "任务信息",
     "emergency": "紧急",
     "not_urgent": "一般",
     "reqest_attachment": "请求附件",

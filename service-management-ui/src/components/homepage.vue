@@ -18,7 +18,8 @@
       width="70"
       @on-cancel="handlerModalHide"
     >
-      <Card>
+      <div style="background:rgb(205 206 206);margin-bottom: -1px;font-weight: 600;border-radius: 3px 3px 0 0;" v-if="processData.requestId">{{$t('service_request_data')}}</div>
+      <Card v-if="processData.requestId">
         <Row>
           <Col style="margin-bottom:10px" span="6">
             <div class="process-title">
@@ -102,8 +103,8 @@
           </Col>
         </Row>
       </Card>
-      <br />
-      <List border>
+      <br v-if="processData.requestId" />
+      <List v-if="processData.requestId && processData.otherTasks.length > 0" border>
         <ListItem v-for="task in processData.otherTasks" :key="task.taskId">
           <span style="margin-right: 25px">
             <strong>
@@ -143,6 +144,82 @@
           </span>
         </ListItem>
       </List>
+      <br v-if="processData.requestId && processData.otherTasks.length > 0" />
+      <div style="background:rgb(190 217 233);margin-bottom: -1px;font-weight: 600;border-radius: 3px 3px 0 0;">{{$t('task_data')}}</div>
+      <Card>
+        <Row>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("task_name")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.name}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("status")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.status}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporter")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.reporter}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporting_time")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.reportTime}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("operator")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.operator}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("over_time")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.overTime}}
+            </div>
+          </Col>
+          <Col span="12">
+            <div class="process-title">
+              <strong>
+                {{$t("describe")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.description}}
+            </div>
+          </Col>
+        </Row>
+      </Card>
       <br />
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="handlerForm" :label-width="100">
@@ -182,6 +259,7 @@ export default {
         normal: this.$t("not_urgent"),
         urgent: this.$t("emergency")
       },
+      taskData: {},
       handlerForm: {
         result: "",
         resultMessage: "",
@@ -366,6 +444,7 @@ export default {
                       size="small"
                       onClick={() => {
                         this.handlerForm.taskId = params.row.id;
+                        this.taskData = params.row
                         this.nextActions = params.row.allowedOptions;
                         this.handlerModalVisible = true;
                         this.getPreprocessDataByTaskId()
@@ -494,6 +573,7 @@ export default {
   padding-top: 10px;
   padding-left: 18px;
   padding-right: 18px;
+  // background-color: rgb(126, 196, 240);
 }
 .reporter-container {
   .ivu-table-cell {

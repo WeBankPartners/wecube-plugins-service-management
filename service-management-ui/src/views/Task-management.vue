@@ -75,7 +75,7 @@
             </Upload>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="requestSubmit">{{$t('submit')}}</Button>
+            <Button type="primary" :loading="requestLoading" @click="requestSubmit">{{$t('submit')}}</Button>
             <Button style="margin-left: 8px" @click="requestCancel">{{$t('cancle')}}</Button>
           </FormItem>
         </Form>
@@ -115,6 +115,7 @@ export default {
           }
         ]
       },
+      requestLoading: false,
       currentUserRoles: [],
       allTemplates: [],
       entityData: [],
@@ -360,12 +361,18 @@ export default {
     requestSubmit() {
       this.$refs.requestForm.validate(async valid => {
         if (valid) {
+          this.requestLoading = true
           const { status } = await createServiceRequest(this.requestForm);
+          this.requestLoading = false
           if (status === "OK") {
             this.requestCancel();
             this.getData();
             this.requestForm.attachFileId = null;
             this.$refs.upload.clearFiles();
+            this.$Notice.success({
+              title: 'Success',
+              desc: 'Success'
+            })
           }
         }
       });
