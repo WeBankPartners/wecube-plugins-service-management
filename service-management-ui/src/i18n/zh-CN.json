@@ -3,7 +3,7 @@
     "less_filter": "更少条件", 
     "search": "搜索", 
     "reset": "重置",
-    "template_definition": "模板定义",
+    "template_definition": "模板管理",
     "template_attribute": "模板属性",
     "delete_attribute": "删除属性",
     "attribute_name": "属性名称",
@@ -37,6 +37,8 @@
     "template": "模板",
     "service_request_name": "服务请求名称",
     "service_request_role": "服务请求角色",
+    "service_request_data": "服务请求信息",
+    "task_data": "任务信息",
     "emergency": "紧急",
     "not_urgent": "一般",
     "reqest_attachment": "请求附件",
@@ -56,5 +58,6 @@
     "receive": "领取",
     "deal_with": "处理",
     "add": "新增",
-    "over_time": "过期时间"
+    "over_time": "过期时间",
+    "target_object": "目标对象"
 }

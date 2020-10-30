@@ -15,9 +15,212 @@
       v-model="handlerModalVisible"
       :title="$t('task_processing')"
       footer-hide
-      width="50"
+      width="70"
       @on-cancel="handlerModalHide"
     >
+      <div style="background:rgb(205 206 206);margin-bottom: -1px;font-weight: 600;border-radius: 3px 3px 0 0;" v-if="processData.requestId">{{$t('service_request_data')}}</div>
+      <Card v-if="processData.requestId">
+        <Row>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("service_request_name")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.requestName}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporter")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.reporter}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporting_time")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.reportTime}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("status")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.status}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("environment_type")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.envType}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("emergency_level")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{emergency[processData.emergency]}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reqest_attachment")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              <a target="_blank" :href="processData.attachFile ? processData.attachFile.fileUrl : ''">{{processData.attachFile ? processData.attachFile.fileName : ''}}</a>
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("describe")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{processData.description}}
+            </div>
+          </Col>
+        </Row>
+      </Card>
+      <br v-if="processData.requestId" />
+      <List v-if="processData.requestId && processData.otherTasks.length > 0" border>
+        <ListItem v-for="task in processData.otherTasks" :key="task.taskId">
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("task_name")}}:
+            </strong>
+            {{task.taskName}}
+          </span>
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("operator")}}:
+            </strong>
+            {{task.operator}}
+          </span>
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("status")}}:
+            </strong>
+            {{task.status}}
+          </span>
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("process_result")}}:
+            </strong>
+            {{task.result}}
+          </span>
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("operate_time")}}:
+            </strong>
+            {{task.operateTime}}
+          </span>
+          <span style="margin-right: 25px">
+            <strong>
+              {{$t("describe")}}:
+            </strong>
+            {{task.resultMessage}}
+          </span>
+        </ListItem>
+      </List>
+      <br v-if="processData.requestId && processData.otherTasks.length > 0" />
+      <div style="background:rgb(190 217 233);margin-bottom: -1px;font-weight: 600;border-radius: 3px 3px 0 0;">{{$t('task_data')}}</div>
+      <Card>
+        <Row>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("task_name")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.name}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("status")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.status}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporter")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.reporter}}
+            </div>
+          </Col>
+          <Col style="margin-bottom:10px" span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("reporting_time")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.reportTime}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("operator")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.operator}}
+            </div>
+          </Col>
+          <Col span="6">
+            <div class="process-title">
+              <strong>
+                {{$t("over_time")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.overTime}}
+            </div>
+          </Col>
+          <Col span="12">
+            <div class="process-title">
+              <strong>
+                {{$t("describe")}}
+              </strong>
+            </div>
+            <div class="process-value">
+              {{taskData.description}}
+            </div>
+          </Col>
+        </Row>
+      </Card>
+      <br />
       <div style="width:600px;margin:0 auto;">
         <Form ref="request" :model="handlerForm" :label-width="100">
           <FormItem :label="$t('process_result')">
@@ -43,7 +246,8 @@ import ColorHash from "../util/hash.js"
 import {
   taskProcess,
   queryMyTask,
-  taskTakeover
+  taskTakeover,
+  getPreprocessDataByTaskId
 } from "../api/server";
 export default {
   components: {
@@ -51,11 +255,17 @@ export default {
   },
   data() {
     return {
+      emergency: {
+        normal: this.$t("not_urgent"),
+        urgent: this.$t("emergency")
+      },
+      taskData: {},
       handlerForm: {
         result: "",
         resultMessage: "",
         taskId: 0
       },
+      processData: {},
       nextActions: [],
       handlerModalVisible: false,
       handlerPagination: {
@@ -234,8 +444,10 @@ export default {
                       size="small"
                       onClick={() => {
                         this.handlerForm.taskId = params.row.id;
+                        this.taskData = params.row
                         this.nextActions = params.row.allowedOptions;
                         this.handlerModalVisible = true;
+                        this.getPreprocessDataByTaskId()
                       }}
                     >
                       {this.$t("deal_with")}
@@ -259,6 +471,13 @@ export default {
     this.getProcessData()
   },
   methods: {
+    async getPreprocessDataByTaskId () {
+      this.processData = {}
+      const { data, status } = await getPreprocessDataByTaskId(this.handlerForm.taskId)
+      if(status === 'OK') {
+        this.processData = data
+      }
+    },
      getColor(reportTime,overTime) {
       if (!reportTime || !overTime) {
         return '#fff'
@@ -354,6 +573,7 @@ export default {
   padding-top: 10px;
   padding-left: 18px;
   padding-right: 18px;
+  // background-color: rgb(126, 196, 240);
 }
 .reporter-container {
   .ivu-table-cell {

@@ -27,6 +27,7 @@ import com.webank.servicemanagement.domain.ServiceRequestTemplate;
 import com.webank.servicemanagement.dto.CreateServiceRequestRequest;
 import com.webank.servicemanagement.dto.DoneServiceRequestRequest;
 import com.webank.servicemanagement.dto.DownloadAttachFileResponse;
+import com.webank.servicemanagement.dto.OperationEventResultDto;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
 import com.webank.servicemanagement.dto.ServiceRequestDto;
@@ -64,6 +65,29 @@ public class ServiceRequestService {
     private final static String STATUS_PROCESSING = "Processing";
     private final static String STATUS_DONE = "Done";
     private final static String IS_NOTIFY_REQUIRED = "Y";
+    public static final String OPER_MODE_INSTANT = "instant";
+    
+    public List<Map<String, Object>> queryTemplateRootEntities(String serviceRequestTemplateId){
+        if(StringUtils.isBlank(serviceRequestTemplateId)){
+            throw new ServiceMgmtException("Template ID cannot be empty.");
+        }
+        
+        Optional<ServiceRequestTemplate> templateOpt = serviceRequestTemplateRepository.findById(serviceRequestTemplateId);
+        if(!templateOpt.isPresent()){
+            throw new ServiceMgmtException("Such template ID is not available.");
+        }
+        
+        ServiceRequestTemplate templateEntity = templateOpt.get();
+        String processDefinitionKey = templateEntity.getProcessDefinitionKey();
+        if(StringUtils.isBlank(processDefinitionKey)){
+            throw new ServiceMgmtException("Such template ID is not available.");
+        }
+        return queryRootEntitiesFromPlatformByProcessDefKey(processDefinitionKey);
+    }
+    
+    private List<Map<String, Object>> queryRootEntitiesFromPlatformByProcessDefKey(String processDefinitionKey){
+        return coreServiceStub.getRootEntitiesByProcDefKey(processDefinitionKey);
+    }
 
     public void createNewServiceRequest(CreateServiceRequestRequest request) throws Exception {
         if(StringUtils.isBlank(request.getEnvType())){
@@ -89,16 +113,32 @@ public class ServiceRequestService {
         ServiceRequest serviceRequest = serviceRequestRepository.save(new ServiceRequest(serviceRequestTemplate,
                 request.getName(), currentUserName, request.getEmergency(), request.getDescription(), STATUS_SUBMITTED,
                 attachFileId, request.getEnvType(), request.getRoleName()));
+        //
+        serviceRequest.setRootDataId(request.getRootDataId());
 
+        //#162 root entity data
         ReportServiceRequest reportServiceRequest = new ReportServiceRequest(serviceRequest.getId(),
                 serviceRequestTemplate.getName(), serviceManagementProperties.getSystemCode(),
-                serviceRequestTemplate.getProcessDefinitionKey(), serviceRequest.getId(), IS_NOTIFY_REQUIRED,
+                serviceRequestTemplate.getProcessDefinitionKey(), request.getRootDataId(), IS_NOTIFY_REQUIRED,
                 ApiInfo.API_PREFIX + ApiInfo.CALLBACK_URL_OF_REPORT_SERVICE_REQUEST, serviceRequest.getReporter(),
                 DateUtils.formatDateToString(serviceRequest.getReportTime()), serviceRequest.getEnvType());
 
+        reportServiceRequest.setOperationMode(OPER_MODE_INSTANT);
         try {
-            coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            //#162 proc inst id
+            Object result = coreServiceStub.reportOperationEventsToCore(reportServiceRequest);
+            
+            log.info("result type:{}", result.getClass().getName());
+            if(result instanceof OperationEventResultDto) {
+                OperationEventResultDto eventDto = (OperationEventResultDto)result;
+                serviceRequest.setProcInstId(eventDto.getProcInstId());
+            }else if(result instanceof Map) {
+                Map<String, Object> resultMap = (Map<String, Object>)result;
+                String procInstId = (String) resultMap.get("procInstId");
+                serviceRequest.setProcInstId(procInstId);
+            }
         } catch (Exception e) {
+            log.error("errors while reporting operation event", e);
             serviceRequest.setStatus(STATUS_DONE);
             serviceRequest.setResult("Report to Core Error: " + e.getMessage());
             serviceRequestRepository.save(serviceRequest);
@@ -133,9 +173,9 @@ public class ServiceRequestService {
         }
 
         String fileExtension = FilenameUtils.getExtension(attachFile.getOriginalFilename());
-        if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
-            throw new ServiceMgmtException("3009", "Only support Excel file");
-        }
+//        if (!fileExtension.equals("xlsx") && !fileExtension.equals("xls")) {
+//            throw new ServiceMgmtException("3009", "Only support Excel file");
+//        }
 
         String tmpFileName = String.valueOf(System.currentTimeMillis());
         File tempUploadFile = new File(SystemUtils.getTempFolderPath() + tmpFileName);

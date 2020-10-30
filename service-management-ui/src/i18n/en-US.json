@@ -3,7 +3,7 @@
     "less_filter": "Less Filters", 
     "search": "Search", 
     "reset": "Reset",
-    "template_definition": "Template Definition",
+    "template_definition": "Template Management",
     "template_attribute": "Template Attribute",
     "delete_attribute": "Delete Attribute",
     "attribute_name": "Attribute Name",
@@ -37,6 +37,8 @@
     "template": "Template",
     "service_request_name": "Name",
     "service_request_role": "Role",
+    "service_request_data": "Request",
+    "task_data": "Task",
     "emergency": "Urgent",
     "not_urgent": "Normal",
     "reqest_attachment": "Attachment",
@@ -56,5 +58,6 @@
     "receive": "Assign to me",
     "deal_with": "Action",
     "add": "Add",
-    "over_time": "Expired"
+    "over_time": "Expired",
+    "target_object": "Target"
 }

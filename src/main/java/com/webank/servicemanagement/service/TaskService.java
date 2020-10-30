@@ -1,6 +1,8 @@
 package com.webank.servicemanagement.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +18,22 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.webank.servicemanagement.commons.AuthenticationContextHolder;
 import com.webank.servicemanagement.commons.ServiceMgmtException;
+import com.webank.servicemanagement.domain.AttachFile;
+import com.webank.servicemanagement.domain.ServiceRequest;
 import com.webank.servicemanagement.domain.Task;
+import com.webank.servicemanagement.dto.AttachFileDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestDto;
 import com.webank.servicemanagement.dto.CreateTaskRequestInputDto;
 import com.webank.servicemanagement.dto.ProcessTaskRequest;
 import com.webank.servicemanagement.dto.QueryRequest;
 import com.webank.servicemanagement.dto.QueryResponse;
+import com.webank.servicemanagement.dto.SimpleTaskDto;
 import com.webank.servicemanagement.dto.Sorting;
 import com.webank.servicemanagement.dto.TaskDto;
+import com.webank.servicemanagement.dto.TaskPreviewDto;
 import com.webank.servicemanagement.dto.UpdateTaskRequest;
 import com.webank.servicemanagement.dto.WorkflowResultDataJsonResponse.WorkflowResultDataOutputJsonResponse;
+import com.webank.servicemanagement.jpa.AttachFileRepository;
 import com.webank.servicemanagement.jpa.EntityRepository;
 import com.webank.servicemanagement.jpa.ServiceRequestRepository;
 import com.webank.servicemanagement.jpa.TaskRepository;
@@ -49,9 +57,104 @@ public class TaskService {
     EntityRepository entityRepository;
     @Autowired
     CoreServiceStub coreServiceStub;
+    
+    @Autowired
+    AttachFileRepository attachFileRepository;
 
     private final static String STATUS_PENDING = "Pending";
     private final static String STATUS_PROCESSING = "Processing";
+    
+    public TaskPreviewDto preprocess(String taskId){
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+        if (!taskOpt.isPresent()) {
+            throw new ServiceMgmtException("3013", "Can not found the specified task, please check !");
+        }
+        
+        TaskPreviewDto taskPreviewResultDto = new TaskPreviewDto();
+        
+        Task task = taskOpt.get();
+        
+        ServiceRequest serviceRequest = task.getServiceRequest();
+        if(serviceRequest != null){
+            taskPreviewResultDto.setDescription(serviceRequest.getDescription());
+            taskPreviewResultDto.setEmergency(serviceRequest.getEmergency());
+            taskPreviewResultDto.setEnvType(serviceRequest.getEnvType());
+            taskPreviewResultDto.setReporter(serviceRequest.getReporter());
+            taskPreviewResultDto.setRequestId(serviceRequest.getId());
+            taskPreviewResultDto.setRequestName(serviceRequest.getName());
+            taskPreviewResultDto.setRequestNo(serviceRequest.getRequestNo());
+            taskPreviewResultDto.setStatus(serviceRequest.getStatus());
+            taskPreviewResultDto.setReportTime(DateUtils.formatDateToString(serviceRequest.getReportTime()));
+            
+            List<Task> previousTasks = taskRepository.findAllByServiceRequestId(serviceRequest.getId());
+            List<SimpleTaskDto> otherTasks = new ArrayList<>();
+            if(previousTasks != null){
+                Collections.sort(previousTasks, new Comparator<Task>(){
+
+                    @Override
+                    public int compare(Task o1, Task o2) {
+                        return o1.getReportTime().compareTo(o2.getReportTime());
+                    }
+                    
+                });
+                for(Task t : previousTasks){
+                    if(t.getId().equals(taskId)){
+                        continue;
+                    }
+                    
+                    SimpleTaskDto td = new SimpleTaskDto();
+                    td.setOperateTime(DateUtils.formatDateToString(t.getOperateTime()));
+                    td.setOperator(t.getOperator());
+                    td.setResult(t.getResult());
+                    td.setResultMessage(t.getResultMessage());
+                    td.setStatus(t.getStatus());
+                    td.setTaskId(t.getId());
+                    td.setTaskName(t.getName());
+                    
+                    otherTasks.add(td);
+                }
+            }
+            
+            AttachFileDto attachFile = tryFindAttachFile(serviceRequest);
+            taskPreviewResultDto.setAttachFile(attachFile);
+            
+            taskPreviewResultDto.setOtherTasks(otherTasks);
+        }
+        
+        SimpleTaskDto taskDto = new SimpleTaskDto();
+        taskDto.setOperateTime(DateUtils.formatDateToString(task.getOperateTime()));
+        taskDto.setOperator(task.getOperator());
+        taskDto.setResult(task.getResult());
+        taskDto.setResultMessage(task.getResultMessage());
+        taskDto.setStatus(task.getStatus());
+        taskDto.setTaskId(task.getId());
+        taskDto.setTaskName(task.getName());
+        taskPreviewResultDto.setTask(taskDto);
+        
+        return taskPreviewResultDto;
+    }
+    
+    private AttachFileDto tryFindAttachFile(ServiceRequest serviceRequest) {
+        if(StringUtils.isBlank(serviceRequest.getAttachFileId())) {
+            return null;
+        }
+        
+        String attachFileId = serviceRequest.getAttachFileId();
+        Optional<AttachFile> attachFileOpt = attachFileRepository.findById(attachFileId);
+        if(!attachFileOpt.isPresent()) {
+            return null;
+        }
+        
+        AttachFile entity = attachFileOpt.get();
+        AttachFileDto dto = new AttachFileDto();
+        dto.setFileName(entity.getAttachFileName());
+        dto.setFileUrl(entity.getS3Url());
+        dto.setId(entity.getId());
+        dto.setBucketName(entity.getS3BucketName());
+        dto.setKeyName(entity.getS3_KeyName());
+        
+        return dto;
+    }
 
     @SuppressWarnings("rawtypes")
     public List<WorkflowResultDataOutputJsonResponse> createTask(CreateTaskRequestDto createTaskRequest) {
@@ -74,7 +177,16 @@ public class TaskService {
                     input.getRoleName(), input.getReporter(), reportTime, input.getTaskDescription(), STATUS_PENDING,
                     createTaskRequest.getRequestId(), input.getCallbackParameter(), allowedOptionsString, overTime,
                     dueDate);
-            Task savedTask = taskRepository.save(task);
+            
+            String procInstId = input.getProcInstId();
+            ServiceRequest serviceRequest = null;
+            List<ServiceRequest> serviceRequests = serviceRequestRepository.findAllByProcInstId(procInstId);
+            if(StringUtils.isNoneBlank(procInstId) && serviceRequests != null && !serviceRequests.isEmpty()){
+                serviceRequest = serviceRequests.get(0);
+            }
+            task.setServiceRequest(serviceRequest);
+            task.setOperateTime(new Date());
+            Task savedTask = taskRepository.saveAndFlush(task);
             WorkflowResultDataOutputJsonResponse<?> taskResult = WorkflowResultDataOutputJsonResponse
                     .okay(input.getCallbackParameter(), savedTask);
             savedTasks.add(taskResult);
@@ -101,7 +213,7 @@ public class TaskService {
         task = taskResult.get();
         task.setOperator(operator);
         task.setStatus(STATUS_PROCESSING);
-        taskRepository.save(task);
+        taskRepository.saveAndFlush(task);
     }
 
     public void processTask(String taskId, ProcessTaskRequest processTaskRequest) throws Exception {

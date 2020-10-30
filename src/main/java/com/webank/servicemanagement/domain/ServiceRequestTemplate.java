@@ -31,6 +31,10 @@ public class ServiceRequestTemplate {
     private String processDefinitionKey;
     @Column(name = "status")
     private String status = "active";
+    
+    //#162
+    @Column(name = "proc_def_name")
+    private String procDefName;
 
     public ServiceRequestTemplate() {
     }
@@ -91,4 +95,14 @@ public class ServiceRequestTemplate {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getProcDefName() {
+        return procDefName;
+    }
+
+    public void setProcDefName(String procDefName) {
+        this.procDefName = procDefName;
+    }
+    
+    
 }
