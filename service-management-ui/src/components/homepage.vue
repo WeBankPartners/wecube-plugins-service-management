@@ -348,8 +348,9 @@ export default {
           className: "reporter-container",
           sortable: 'custom',
           render: (h, params) => {
+            const bgColor = this.colorHash.hex(params.row.reporter)
             return (
-              <div class="reporter" style={`background: ${this.colorHash.hex(params.row.reporter)};`}>{params.row.reporter}</div>
+              <div class="reporter" style={`background: ${bgColor}; color: ${this.ColorReverse(bgColor)}`}>{params.row.reporter}</div>
             )
           }
         },
@@ -471,6 +472,13 @@ export default {
     this.getProcessData()
   },
   methods: {
+    ColorReverse(colorValue){
+      colorValue="0x"+colorValue.replace(/#/g,"");
+      console.log(colorValue,11)
+      let str=(0xFFFFFF-colorValue).toString(16);
+      console.log(str,22)
+      return  '#' + str;
+    },
     async getPreprocessDataByTaskId () {
       this.processData = {}
       const { data, status } = await getPreprocessDataByTaskId(this.handlerForm.taskId)
