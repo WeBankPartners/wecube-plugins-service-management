@@ -4,7 +4,7 @@
 
     <!-- 1.依赖分析 - 描述运行本插件包需要的其他插件包 -->
     <packageDependencies>
-        <packageDependency name="platform" version="v2.5.0"/>
+        <packageDependency name="platform" version="v2.7.1"/>
     </packageDependencies>
 
     <!-- 2.菜单注入 - 描述运行本插件包需要注入的菜单 -->
@@ -99,8 +99,8 @@
         <docker imageName="service-mgmt:{{VERSION}}" 
         containerName="service-mgmt-{{VERSION}}" 
         portBindings="{{ALLOCATE_PORT}}:21000,{{MONITOR_PORT}}:18081" 
-        volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log,/etc/localtime:/etc/localtime,{{BASE_MOUNT_PATH}}/data/certs:/data/certs" 
-        envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{CORE_ADDR}},S3_ENDPOINT={{S3_SERVER_URL}},S3_ACCESS_KEY={{S3_ACCESS_KEY}},S3_SECRET_KEY={{S3_SECRET_KEY}},JWT_SIGNING_KEY={{JWT_SIGNING_KEY}}"/>
+        volumeBindings="{{BASE_MOUNT_PATH}}/service-mgmt/log:/log,/etc/localtime:/etc/localtime,{{BASE_MOUNT_PATH}}/certs:/data/certs" 
+        envVariables="DB_HOST={{DB_HOST}},DB_PORT={{DB_PORT}},DB_SCHEMA={{DB_SCHEMA}},DB_USER={{DB_USER}},DB_PWD={{DB_PWD}},CORE_ADDR={{GATEWAY_URL}},S3_ENDPOINT={{S3_SERVER_URL}},S3_ACCESS_KEY={{S3_ACCESS_KEY}},S3_SECRET_KEY={{S3_SECRET_KEY}},JWT_SIGNING_KEY={{JWT_SIGNING_KEY}}"/>
         <mysql schema="service_mgmt" initFileName="init.sql" upgradeFileName="upgrade.sql"/>
         <s3 bucketName="service-mgmt"/>
     </resourceDependencies>
