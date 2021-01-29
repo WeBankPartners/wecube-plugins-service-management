@@ -259,6 +259,9 @@ public class TaskService {
         if (queryRequest.getSorting() == null || queryRequest.getSorting().getField() == null) {
             queryRequest.setSorting(new Sorting(false, "reportTime"));
         }
+        if(AuthenticationContextHolder.getCurrentUserRoles() == null){
+            throw new ServiceMgmtException("Current user did not log in.");
+        }
         List<String> currentRoles = new ArrayList<>(AuthenticationContextHolder.getCurrentUserRoles());
 
         queryRequest.addInFilter("operatorRole", currentRoles);
